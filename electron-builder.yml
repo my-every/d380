@@ -1,0 +1,57 @@
+appId: com.myevery.d380
+productName: D380
+executableName: D380
+directories:
+  output: release
+files:
+  - dist-electron/**
+  - package.json
+npmRebuild: false
+asar: true
+extraResources:
+  - from: .next/standalone
+    to: app/.next/standalone
+    filter:
+      - "**/*"
+      - "!release"
+      - "!release/**"
+  - from: .next/static
+    to: app/.next/static
+  - from: public
+    to: app/public
+  - from: Share
+    to: app/Share
+win:
+  icon: public/windows/icon.ico
+  requestedExecutionLevel: asInvoker
+  target:
+    - target: nsis
+      arch:
+        - x64
+  artifactName: ${productName}-Setup-${version}.${ext}
+mac:
+  icon: public/macos/icon.icns
+  category: public.app-category.productivity
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+    - target: zip
+      arch:
+        - x64
+        - arm64
+  artifactName: ${productName}-${version}-mac-${arch}.${ext}
+linux:
+  icon: public/linux/icons
+  target:
+    - AppImage
+    - deb
+  artifactName: ${productName}-${version}-linux-${arch}.${ext}
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  perMachine: false
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  shortcutName: D380
