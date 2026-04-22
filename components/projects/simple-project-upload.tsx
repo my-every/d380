@@ -315,17 +315,7 @@ export function SimpleProjectUpload({
             }),
         }).catch(() => null);
 
-        // Reload the manifest into context so the card grid picks it up
-        const { manifest } = (await response.json()) as { manifest: unknown };
-
-        const brandingWorkspaceResponse = await fetch(
-            `/api/project-context/${encodeURIComponent(projectModel.id)}/branding-workspace`,
-            { method: "POST" },
-        ).catch(() => null);
-
-        if (!brandingWorkspaceResponse?.ok) {
-            console.warn("Branding workspace assignment generation failed (non-blocking).");
-        }
+        await response.json().catch(() => null);
 
         // Process layout PDF if provided
         const layoutFile = files.find((entry) => entry.type === "layout");
@@ -360,6 +350,19 @@ export function SimpleProjectUpload({
                 );
                 // Layout failure is non-blocking — continue with project creation
             }
+        }
+
+        const printSchemasResponse = await fetch(
+            `/api/project-context/${encodeURIComponent(projectModel.id)}/wire-list-print-schemas`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ mode: "all" }),
+            },
+        ).catch(() => null);
+
+        if (!printSchemasResponse?.ok) {
+            console.warn("Print and branding schema generation failed (non-blocking).");
         }
 
         loadProject(projectModel.id);

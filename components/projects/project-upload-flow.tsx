@@ -61,7 +61,6 @@ import { buildUploadPropsManifest } from "@/lib/workbook/upload-props";
 import type { FileRevision } from "@/lib/revision/types";
 import { canPerformAction } from "@/types/d380-user-session";
 import { getPermissionDeniedMessage } from "@/lib/session/session-feedback";
-import { buildAllSheetSchemas, buildProjectManifest } from "@/lib/project-state/schema-generators";
 
 interface FileEntry {
   id: string;
@@ -505,35 +504,15 @@ export function ProjectUploadFlow({
     }
 
     setProcessingStatusMessage("Saving project state to Share...");
-    const manifest = buildProjectManifest(projectModel, []);
-    const sheetSchemas = buildAllSheetSchemas(projectModel, []);
-
     const projectResponse = await fetch(`/api/project-context/${encodeURIComponent(projectModel.id)}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(manifest),
+      body: JSON.stringify({ projectModel }),
     });
 
     if (!projectResponse.ok) {
       throw new Error("Failed to persist project state");
     }
-
-    await Promise.all(
-      sheetSchemas.map(async (schema) => {
-        const sheetResponse = await fetch(
-          `/api/project-context/${encodeURIComponent(projectModel.id)}/sheets/${encodeURIComponent(schema.slug)}`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(schema),
-          },
-        );
-
-        if (!sheetResponse.ok) {
-          throw new Error(`Failed to persist sheet schema: ${schema.slug}`);
-        }
-      }),
-    );
     await fetch(`/api/project-context/${encodeURIComponent(projectModel.id)}/state/upload-props`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -545,56 +524,17 @@ export function ProjectUploadFlow({
     }).catch(() => null);
 
     saveProject(projectModel);
-    const [brandingExportsResponse, wireListExportsResponse, printSchemasResponse] = await Promise.all([
-      fetch(`/api/project-context/${encodeURIComponent(projectModel.id)}/exports?kind=branding`, { method: "POST" }),
-      fetch(`/api/project-context/${encodeURIComponent(projectModel.id)}/exports?kind=wire-lists`, { method: "POST" })
-        .catch(() => null),
-      fetch(`/api/project-context/${encodeURIComponent(projectModel.id)}/wire-list-print-schemas`, {
+    const printSchemasResponse = await fetch(
+      `/api/project-context/${encodeURIComponent(projectModel.id)}/wire-list-print-schemas`,
+      {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mode: "all" }),
-      })
-        .catch(() => null),
-    ]);
-
-    if (!brandingExportsResponse.ok) {
-      throw new Error("Failed to generate branding CSV exports");
-    }
-
-    const brandingWorkspaceResponse = await fetch(
-      `/api/project-context/${encodeURIComponent(projectModel.id)}/branding-workspace`,
-      { method: "POST" },
+      },
     ).catch(() => null);
 
-    if (!brandingWorkspaceResponse?.ok) {
-      console.warn(
-        "Branding workspace assignment generation failed (non-blocking). It can be regenerated from the branding workspace endpoint.",
-      );
-    }
-
-    if (!wireListExportsResponse?.ok) {
-      console.warn("Wire list PDF export generation failed (non-blocking). PDFs can be regenerated from the Project Exports panel.");
-    }
     if (!printSchemasResponse?.ok) {
       console.warn("Print schema generation failed (non-blocking). Schemas can be regenerated from the print modal.");
-    }
-
-    // Seed initial files into Legal Drawings so they appear in the revision history sidebar
-    try {
-      const seedFormData = new FormData();
-      const excelFile = files.find((entry) => entry.type === "excel");
-      const pdfFile = files.find((entry) => entry.type === "pdf");
-      if (excelFile) seedFormData.append("workbook", excelFile.file);
-      if (pdfFile) seedFormData.append("layout", pdfFile.file);
-      seedFormData.append("baseRevision", revision || projectModel.revision || "");
-      seedFormData.append("pdNumber", pdNumber || projectModel.pdNumber || "");
-      await fetch(`/api/project-context/revisions/${encodeURIComponent(projectModel.id)}/files`, {
-        method: "POST",
-        body: seedFormData,
-      });
-    } catch {
-      // Non-blocking: seeding Legal Drawings is best-effort
-      console.warn("Failed to seed initial files into Legal Drawings (non-blocking)");
     }
 
     setTimeout(() => {

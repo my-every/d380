@@ -8,6 +8,8 @@ import type {
   ManifestAssignmentNode,
   ProjectManifest,
 } from '@/types/project-manifest'
+import type { ParsedSheetRow } from '@/lib/workbook/types'
+import type { SheetSchema } from '@/types/sheet-schema'
 
 function normalize(value: string | undefined | null): string {
   return (value ?? '').trim()
@@ -44,6 +46,18 @@ async function readJson<T>(filePath: string): Promise<T | null> {
   } catch {
     return null
   }
+}
+
+async function readSheetRows(stateRoot: string, slug: string): Promise<Record<string, unknown>[]> {
+  const schema = await readJson<SheetSchema>(path.join(stateRoot, 'sheets', `${slug}.json`))
+  if (Array.isArray(schema?.rawRows)) {
+    return schema.rawRows as ParsedSheetRow[] as Record<string, unknown>[]
+  }
+  return []
+}
+
+async function fileExists(filePath: string): Promise<boolean> {
+  return fs.stat(filePath).then(() => true).catch(() => false)
 }
 
 function collectLabelsFromRows(rows: Record<string, unknown>[], sheetName: string, unitType?: string): string[] {
@@ -102,12 +116,10 @@ export async function buildManifestAssignmentSummaries(
   }>(path.join(stateRoot, 'device-part-numbers.json'))
   const devices = devicePartsDoc?.devices ?? {}
 
-  const whiteSheet = await readJson<{ data?: { rows?: Record<string, unknown>[] } }>(
-    path.join(stateRoot, 'reference-sheets', 'white-labels', 'white-labels.json'),
-  )
-  const blueSheet = await readJson<{ data?: { rows?: Record<string, unknown>[] } }>(
-    path.join(stateRoot, 'reference-sheets', 'blue-labels', 'blue-labels.json'),
-  )
+  const [whiteRows, blueRows] = await Promise.all([
+    readSheetRows(stateRoot, 'white-labels'),
+    readSheetRows(stateRoot, 'blue-labels'),
+  ])
 
   const brandingExports = await readJson<{
     combinedRelativePath?: string
@@ -115,9 +127,6 @@ export async function buildManifestAssignmentSummaries(
   const wireExports = await readJson<{
     sheetExports?: Array<{ sheetName?: string; relativePath?: string }>
   }>(path.join(projectRoot, 'exports', 'wire-lists', 'manifest.json'))
-
-  const brandListSchemaPath = path.join(stateRoot, 'reference-sheets', 'cable-part-numbers', 'cable-part-numbers.json')
-  const hasBrandListSchema = await fs.stat(brandListSchemaPath).then(() => true).catch(() => false)
 
   const updatedNodes: Record<string, ManifestAssignmentNode> = { ...manifest.assignments }
 
@@ -146,8 +155,6 @@ export async function buildManifestAssignmentSummaries(
     )
     const panducts = Array.from(new Set((mappedPage?.panducts ?? []).map(panduct => normalize(panduct.label)).filter(Boolean)))
 
-    const whiteRows = Array.isArray(whiteSheet?.data?.rows) ? whiteSheet.data.rows : []
-    const blueRows = Array.isArray(blueSheet?.data?.rows) ? blueSheet.data.rows : []
     const whiteLabels = collectLabelsFromRows(whiteRows, assignment.sheetName, unitType)
     const blueLabels = collectLabelsFromRows(blueRows, assignment.sheetName, unitType)
 
@@ -164,6 +171,12 @@ export async function buildManifestAssignmentSummaries(
     const wireListPDFPath = wireExports?.sheetExports
       ?.find(entry => normalizeUpper(entry.sheetName) === assignmentSheetUpper)
       ?.relativePath
+    const brandListSchemaRelativePath = `state/wire-brand-list/${assignment.sheetSlug}.json`
+    const buildUpSWSSchemaRelativePath = `state/build-up-sws-schema/${assignment.sheetSlug}.json`
+    const [hasBrandListSchema, hasBuildUpSchema] = await Promise.all([
+      fileExists(path.join(projectRoot, brandListSchemaRelativePath)),
+      fileExists(path.join(projectRoot, buildUpSWSSchemaRelativePath)),
+    ])
 
     const estimates = deriveEstimateMinutes(assignment)
 
@@ -178,9 +191,9 @@ export async function buildManifestAssignmentSummaries(
       files: {
         wireListPDFPath,
         wireListSchemaPath: `state/sheets/${assignment.sheetSlug}.json`,
-        brandListSchemaPath: hasBrandListSchema,
+        brandListSchemaPath: hasBrandListSchema ? brandListSchemaRelativePath : undefined,
         brandListExcelPath: brandingExports?.combinedRelativePath,
-        buildUpSWSSchemaPath: `state/sheets/${assignment.sheetSlug}.json`,
+        buildUpSWSSchemaPath: hasBuildUpSchema ? buildUpSWSSchemaRelativePath : undefined,
       },
       buildUpEstTime: formatMinutes(estimates.buildUp),
       wireListEstTime: formatMinutes(estimates.wireList),

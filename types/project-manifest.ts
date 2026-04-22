@@ -28,6 +28,17 @@ export interface ManifestReferenceSheet extends ManifestSheetBase {
     kind: 'reference'
 }
 
+export interface ManifestSheetListEntry {
+    slug: string
+    name: string
+    kind: 'operational' | 'reference' | 'unknown'
+    sheetPath?: string
+    rowCount: number
+    columnCount?: number
+    sheetIndex?: number
+    hasData?: boolean
+}
+
 // ── Assignment files ──────────────────────────────────────────────────────
 
 export interface ManifestAssignmentFiles {
@@ -123,6 +134,9 @@ export interface ProjectManifest {
     status?: ProjectStatus
     /** ISO timestamp */
     createdAt: string
+
+    /** Lightweight sheet index used by schema and export generators. */
+    sheets: ManifestSheetListEntry[]
 
     // ── Timeline ─────────────────────────────────────────────────────────
     dueDate?: string

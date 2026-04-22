@@ -4012,7 +4012,7 @@ export function PrintModal({
     return filterEmptyDeviceChangeSections([...sameLocationRows, ...otherLocationRows])
       .filter((row) => !detectDeviceChange(row).isDeviceChange)
       .map((row) => {
-        const baseLength = getRowLength?.(row.__rowId)?.roundedInches;
+        const baseLength = effectiveGetRowLength(row.__rowId)?.roundedInches;
         const localMeasurement = brandingMeasurements[row.__rowId];
         const persistedEdit = persistedBrandingEdits[row.__rowId];
         const persistedLength = typeof persistedEdit?.length === "number"
@@ -4037,7 +4037,7 @@ export function PrintModal({
           isExternal: Boolean(normalizedSheetName) && !location.toUpperCase().includes(normalizedSheetName),
         };
       });
-  }, [brandingMeasurements, currentSheetName, getRowLength, persistedBrandingEdits, rows]);
+  }, [brandingMeasurements, currentSheetName, effectiveGetRowLength, persistedBrandingEdits, rows]);
 
   const brandingPreviewRowMap = useMemo(
     () => new Map(brandingPreviewRows.map((entry) => [entry.row.__rowId, entry])),
@@ -4288,6 +4288,13 @@ export function PrintModal({
     return hydrateSchemaForRender(loadedSchema);
   }, [loadedSchema]);
 
+  const effectivePartNumberMap = schemaHydration?.partNumberMap ?? partNumberMap;
+
+  const effectiveGetRowLength = useCallback(
+    (rowId: string) => schemaHydration?.rowLengthsById?.[rowId] ?? getRowLength?.(rowId) ?? null,
+    [getRowLength, schemaHydration?.rowLengthsById],
+  );
+
   // Print preview should follow the same section membership as the live identity filter.
   // When a saved schema is loaded, use its hydrated groups instead.
   const processedLocationGroups = useMemo((): PrintLocationGroup[] => {
@@ -4299,17 +4306,17 @@ export function PrintModal({
       sectionOrder: settings.sectionOrder,
       currentSheetName,
       blueLabels: effectiveBlueLabels,
-      partNumberMap,
+      partNumberMap: effectivePartNumberMap,
       sortMode: settings.mode === "branding" ? settings.brandingSortMode : settings.wireListSortMode,
     }) as PrintLocationGroup[];
-  }, [schemaHydration, rows, settings.mode, settings.enabledSections, settings.sectionOrder, settings.brandingSortMode, settings.wireListSortMode, currentSheetName, effectiveBlueLabels, partNumberMap]);
+  }, [schemaHydration, rows, settings.mode, settings.enabledSections, settings.sectionOrder, settings.brandingSortMode, settings.wireListSortMode, currentSheetName, effectiveBlueLabels, effectivePartNumberMap]);
 
   const externalSectionContext = useMemo(() => ({
     assignmentMappings: assignmentMappings.length > 0 ? assignmentMappings : undefined,
     currentSheetName,
     internalRows: rows,
-    partNumberMap,
-  }), [assignmentMappings, currentSheetName, rows, partNumberMap]);
+    partNumberMap: effectivePartNumberMap,
+  }), [assignmentMappings, currentSheetName, rows, effectivePartNumberMap]);
 
   const defaultBrandingHiddenSections = useMemo(() => {
     return buildDefaultBrandingHiddenSections(processedLocationGroups as never, externalSectionContext);
@@ -4528,10 +4535,10 @@ export function PrintModal({
       activeHiddenSections,
       brandingPreviewRowMap: brandingPreviewRowMap as never,
       currentSheetName,
-      partNumberMap,
+      partNumberMap: effectivePartNumberMap,
       hiddenRows: settings.hiddenRows,
     }) as BrandingVisibleSection[];
-  }, [activeHiddenSections, brandingPreviewRowMap, currentSheetName, processedLocationGroups, settings.hiddenRows]);
+  }, [activeHiddenSections, brandingPreviewRowMap, currentSheetName, processedLocationGroups, effectivePartNumberMap, settings.hiddenRows]);
 
   const brandingVisibleRowCount = useMemo(
     () => brandingVisibleSections.reduce((sum, section) => sum + section.rows.length, 0),
@@ -4625,7 +4632,7 @@ export function PrintModal({
         brandingVisibleSections,
         currentSheetName,
         sectionColumnVisibility: settings.sectionColumnVisibility,
-        partNumberMap,
+        partNumberMap: effectivePartNumberMap,
         brandingSortMode: settings.brandingSortMode,
         projectInfo: {
           pdNumber: projectInfo.pdNumber,
@@ -4683,7 +4690,7 @@ export function PrintModal({
       const location = group.location || "";
 
       for (const row of visibleRows) {
-        const lengthDisplay = getRowLength?.(row.__rowId)?.display || "";
+        const lengthDisplay = effectiveGetRowLength(row.__rowId)?.display || "";
         const csvRow = [
           row.fromDeviceId || "",
           row.wireNo || "",
@@ -4730,9 +4737,9 @@ export function PrintModal({
   }, [
     brandingVisibleSections,
     currentSheetName,
-    getRowLength,
+    effectiveGetRowLength,
     metadata?.controlsDE,
-    partNumberMap,
+    effectivePartNumberMap,
     projectInfo.pdNumber,
     projectInfo.projectName,
     projectInfo.revision,
@@ -4753,7 +4760,7 @@ export function PrintModal({
       brandingVisibleSections,
       currentSheetName,
       sectionColumnVisibility: settings.sectionColumnVisibility,
-      partNumberMap,
+      partNumberMap: effectivePartNumberMap,
       brandingSortMode: settings.brandingSortMode,
       projectInfo: {
         pdNumber: projectInfo.pdNumber,
@@ -4846,7 +4853,7 @@ export function PrintModal({
     brandingVisibleSections,
     currentSheetName,
     metadata?.controlsDE,
-    partNumberMap,
+    effectivePartNumberMap,
     projectInfo.pdNumber,
     projectInfo.projectName,
     projectInfo.revision,
@@ -6416,7 +6423,7 @@ export function PrintModal({
                                         sectionLabel={subsection.label}
                                         sectionKind={subsection.sectionKind}
                                         sectionColumnVisibility={settings.sectionColumnVisibility}
-                                        partNumberMap={partNumberMap}
+                                        partNumberMap={effectivePartNumberMap}
                                         matchMetadata={subsection.matchMetadata}
                                         brandingSortMode={settings.brandingSortMode}
                                         selection={brandingSelection}
@@ -6535,9 +6542,9 @@ export function PrintModal({
                                                         sectionKind={subsection.sectionKind}
                                                         sectionLabel={subsection.label}
                                                         matchMetadata={subsection.matchMetadata}
-                                                        partNumberMap={partNumberMap}
+                                                        partNumberMap={effectivePartNumberMap}
                                                         cablePartNumberMap={cablePartNumberMap}
-                                                        getRowLength={getRowLength}
+                                                        getRowLength={effectiveGetRowLength}
                                                         hiddenRows={settings.hiddenRows}
                                                         onToggleRowHidden={toggleRowHidden}
                                                       />
@@ -6687,9 +6694,9 @@ export function PrintModal({
                                                     sectionKind={section.subsection.sectionKind}
                                                     sectionLabel={section.subsection.label}
                                                     matchMetadata={section.subsection.matchMetadata}
-                                                    partNumberMap={partNumberMap}
+                                                    partNumberMap={effectivePartNumberMap}
                                                     cablePartNumberMap={cablePartNumberMap}
-                                                    getRowLength={getRowLength}
+                                                    getRowLength={effectiveGetRowLength}
                                                   />
                                                 </div>
                                               )}

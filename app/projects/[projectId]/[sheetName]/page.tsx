@@ -18,6 +18,7 @@ import { SWS_TYPE_REGISTRY, type SwsTypeId } from "@/lib/assignment/sws-detectio
 
 import { WireList } from "@/components/wire-list/wire-list";
 import { SemanticWireList } from "@/components/wire-list/semantic-wire-list";
+import { WireListSchemaView } from "@/components/wire-list/wire-list-schema-view";
 import { ProjectSheetSubheader } from "@/components/wire-list/project-sheet-subheader";
 import { useRevisionPanel } from "@/components/revision";
 import { WorkspaceLayout } from "@/components/layout/workspace-layout";
@@ -32,7 +33,7 @@ interface SheetDetailPageProps {
 
 export default function SheetDetailPage({ params }: SheetDetailPageProps) {
   const resolvedParams = use(params);
-  const { project, sheetEntry, sheetSchema, isLoading, error, found } = useSheetRoute({
+  const { project, sheetEntry, sheetSchema, wireListSchema, isLoading, error, found } = useSheetRoute({
     projectId: resolvedParams.projectId,
     sheetName: resolvedParams.sheetName,
   });
@@ -62,6 +63,7 @@ export default function SheetDetailPage({ params }: SheetDetailPageProps) {
   }, [currentAssignment?.matchedLayoutPage, currentAssignment?.matchedLayoutTitle]);
 
   const semanticRows = sheetSchema?.rows ?? [];
+  const hasSchemaFallback = Boolean(wireListSchema);
 
   // Get SWS type info for this sheet from assignment mappings
   const swsType = useMemo(() => {
@@ -114,7 +116,7 @@ export default function SheetDetailPage({ params }: SheetDetailPageProps) {
   }
 
   // Error state
-  if (error || !found || !project || !sheetEntry || !sheetSchema) {
+  if (error || !found || !project || !sheetEntry || (!sheetSchema && !hasSchemaFallback)) {
     return (
       <main className="min-h-screen bg-background">
         <div className="container mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -146,7 +148,7 @@ export default function SheetDetailPage({ params }: SheetDetailPageProps) {
           layoutPage={matchedLayoutPage}
           layoutMatch={layoutMatch}
           allPages={layoutPages}
-          metadata={sheetSchema.metadata}
+          metadata={sheetSchema?.metadata}
           swsType={swsType}
           activeRevisionLabel={activeWireListRevision?.revisionInfo.displayVersion}
           activeRowCount={activeRows.length}
@@ -177,7 +179,7 @@ export default function SheetDetailPage({ params }: SheetDetailPageProps) {
       )}
 
       <div className={`flex flex-col gap-4 pb-6 transition-opacity duration-200 ${isRevisionLoading ? "opacity-30" : "opacity-100"}`}>
-        {sheetEntry.kind !== "reference" && sheetSchema.rows && sheetSchema.rows.length > 0 ? (
+        {sheetEntry.kind !== "reference" && sheetSchema?.rows && sheetSchema.rows.length > 0 ? (
           <div onClick={clearActiveRow}>
             <SemanticWireList
               rows={activeRows}
@@ -202,14 +204,24 @@ export default function SheetDetailPage({ params }: SheetDetailPageProps) {
               showFloatingToolbar={false}
             />
           </div>
+        ) : sheetEntry.kind !== "reference" && wireListSchema ? (
+          <div onClick={clearActiveRow}>
+            <WireListSchemaView
+              schema={wireListSchema}
+              title={sheetEntry.name}
+              projectId={resolvedParams.projectId}
+              sheetSlug={sheetEntry.slug}
+              swsType={swsType}
+            />
+          </div>
         ) : (
           <WireList
             projectId={resolvedParams.projectId}
             sheetSlug={sheetEntry.slug}
             title={sheetEntry.name}
-            rows={sheetSchema.rawRows ?? sheetSchema.rows}
-            headers={sheetSchema.headers}
-            sheetMetadata={sheetSchema.metadata}
+            rows={sheetSchema?.rawRows ?? sheetSchema?.rows ?? []}
+            headers={sheetSchema?.headers ?? []}
+            sheetMetadata={sheetSchema?.metadata}
           />
         )}
       </div>

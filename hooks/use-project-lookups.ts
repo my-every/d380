@@ -24,6 +24,7 @@ import { extractPrefixCombinations, extractUniquePrefixes, type PrefixCombinatio
 import { extractGaugeSizes, type GaugeSizeOption } from "@/lib/wiring-identification/gauge-filter";
 import type { CablePartNumberLookupResult, PartNumberLookupResult } from "@/lib/part-number-list";
 import type { SemanticWireListRow, ParsedWorkbookSheet } from "@/lib/workbook/types";
+import type { SheetSchema } from "@/types/sheet-schema";
 
 // ============================================================================
 // Types
@@ -153,7 +154,7 @@ export function useProjectBlueLabels() {
 // ============================================================================
 
 /**
- * Hook to fetch a reference sheet as a ParsedWorkbookSheet.
+ * Hook to fetch a sheet schema as a ParsedWorkbookSheet-like object.
  * Used by wire length estimation and blue label parsing.
  */
 function useReferenceSheet(slug: string): ParsedWorkbookSheet | null {
@@ -178,13 +179,30 @@ function useReferenceSheet(slug: string): ParsedWorkbookSheet | null {
     let cancelled = false;
 
     fetch(
-      `/api/project-context/${encodeURIComponent(currentProject.id)}/reference-sheets/${encodeURIComponent(slug)}`,
+      `/api/project-context/${encodeURIComponent(currentProject.id)}/sheets/${encodeURIComponent(slug)}`,
       { cache: "no-store" },
     )
       .then(res => (res.ok ? res.json() : null))
-      .then((data: { sheet?: ParsedWorkbookSheet } | null) => {
+      .then((data: { schema?: SheetSchema } | null) => {
         if (!cancelled) {
-          setSheet(data?.sheet ?? null);
+          const schema = data?.schema;
+          if (!schema) {
+            setSheet(null);
+            return;
+          }
+
+          setSheet({
+            originalName: schema.name,
+            slug: schema.slug,
+            headers: schema.headers,
+            rows: schema.rawRows ?? [],
+            semanticRows: schema.rows,
+            rowCount: schema.rowCount,
+            columnCount: schema.headers.length,
+            sheetIndex: schema.sheetIndex,
+            warnings: schema.warnings,
+            metadata: schema.metadata,
+          });
         }
       })
       .catch(() => {

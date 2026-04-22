@@ -4,13 +4,12 @@ import { promises as fs } from 'node:fs'
 import path from 'node:path'
 
 import type { MappedAssignment } from '@/lib/assignment/mapped-assignment'
-import type { ProjectModel } from '@/lib/workbook/types'
+import type { ParsedWorkbookSheet, ProjectModel, ProjectSheetSummary } from '@/lib/workbook/types'
 import type { StoredProject } from '@/types/d380-shared'
 import type { ProjectManifest } from '@/types/project-manifest'
 import type { SheetSchema } from '@/types/sheet-schema'
 import { generateDevicePartNumbersMap, saveDevicePartNumbersMap } from '@/lib/project-state/device-part-numbers-generator'
 import { ingestStoredProjectPartNumbers } from '@/lib/project-state/parts-ingest-service'
-import { generateReferenceSheetsManifest, saveReferenceSheets } from '@/lib/project-state/reference-sheets-generator'
 import { buildManifestAssignmentSummaries } from '@/lib/project-state/manifest-assignment-summaries'
 import { buildManifestAssignmentNode } from '@/lib/project-state/schema-generators'
 import { generateCleanProjectId } from '@/lib/workbook/normalize-sheet-name'
@@ -304,7 +303,7 @@ export async function writeProjectManifest(manifest: ProjectManifest): Promise<P
 }
 
 /**
- * Write the full project (manifest + sheet schemas + part numbers + reference sheets).
+ * Write the full project (manifest + sheet schemas + part numbers).
  * Called during project creation from upload flow.
  */
 export async function writeFullProject(
@@ -351,14 +350,6 @@ export async function writeFullProject(
   } catch (error) {
     console.error('Failed to ingest workbook parts for project:', manifest.id, error)
   }
-
-  // Generate and save reference sheets
-  try {
-    const referenceManifest = await generateReferenceSheetsManifest(storedProject)
-    await saveReferenceSheets(paths.projectDirectory, storedProject, referenceManifest)
-  } catch (error) {
-    console.error('Failed to generate reference sheet files for project:', manifest.id, error)
-  }
 }
 
 export async function deleteStoredProject(projectId: string) {
@@ -377,52 +368,8 @@ export async function readSheetSchema(projectId: string, sheetSlug: string): Pro
   const paths = await resolveExistingStatePaths(projectId)
   if (!paths) return null
 
-  // 1. Try the operational sheets directory first
   const schemaPath = path.join(paths.sheetsDirectory, `${sheetSlug}.json`)
-  const schema = await readJsonFile<SheetSchema>(schemaPath)
-  if (schema) return schema
-
-  // 2. Fall back to reference-sheets directory
-  const refPath = path.join(paths.stateDirectory, 'reference-sheets', sheetSlug, `${sheetSlug}.json`)
-  const refData = await readJsonFile<{
-    sheet?: { name?: string; slug?: string; kind?: string; sheetIndex?: number; headers?: string[]; rowCount?: number; warnings?: string[] }
-    data?: { rows?: Record<string, unknown>[]; semanticRows?: unknown[] }
-    generatedAt?: string
-  }>(refPath)
-  if (!refData?.sheet) return null
-
-  // Convert reference sheet data into SheetSchema shape
-  const sheet = refData.sheet
-  const rawRows = (refData.data?.rows ?? []).map((row, i) => ({
-    ...row,
-    __rowId: (row.__rowId as string) ?? `raw-${i}`,
-  })) as import('@/lib/workbook/types').ParsedSheetRow[]
-
-  return {
-    slug: sheet.slug ?? sheetSlug,
-    name: sheet.name ?? sheetSlug,
-    kind: (sheet.kind ?? 'reference') as SheetSchema['kind'],
-    sheetIndex: sheet.sheetIndex ?? 0,
-    headers: sheet.headers ?? [],
-    rows: [],
-    rawRows,
-    rowCount: sheet.rowCount ?? rawRows.length,
-    metadata: undefined,
-    assignment: {
-      swsType: 'UNDECIDED',
-      stage: 'READY_TO_LAY',
-      status: 'NOT_STARTED',
-      isOverride: false,
-      overrideReason: '',
-      detectedSwsType: 'UNDECIDED',
-      detectedConfidence: 0,
-      detectedReasons: [],
-      requiresWireSws: false,
-      requiresCrossWireSws: false,
-    },
-    warnings: sheet.warnings ?? [],
-    generatedAt: refData.generatedAt ?? new Date().toISOString(),
-  } satisfies SheetSchema
+  return readJsonFile<SheetSchema>(schemaPath)
 }
 
 export async function writeSheetSchema(projectId: string, schema: SheetSchema): Promise<void> {
@@ -469,6 +416,110 @@ export async function readProjectBundle(projectId: string): Promise<ProjectBundl
 
   const sheetSchemas = await readAllSheetSchemas(projectId)
   return { manifest, sheetSchemas }
+}
+
+export async function readStoredProjectFromState(
+  projectId: string,
+): Promise<{ root: string; project: StoredProject } | null> {
+  const manifest = await readProjectManifest(projectId)
+  if (!manifest) {
+    return null
+  }
+
+  const projectRoot = await resolveProjectRootDirectory(projectId, {
+    pdNumber: manifest.pdNumber,
+    projectName: manifest.name,
+  })
+  if (!projectRoot) {
+    return null
+  }
+
+  const sheetSchemas = await readAllSheetSchemas(projectId)
+  if (sheetSchemas.length === 0) {
+    return null
+  }
+
+  const summaryBySlug = new Map(
+    (manifest.sheets ?? []).map((sheet) => [sheet.slug, sheet]),
+  )
+
+  const orderedSchemas = [...sheetSchemas].sort((a, b) => {
+    const aIndex = summaryBySlug.get(a.slug)?.sheetIndex ?? a.sheetIndex ?? 0
+    const bIndex = summaryBySlug.get(b.slug)?.sheetIndex ?? b.sheetIndex ?? 0
+    return aIndex - bIndex
+  })
+
+  const sheets: ProjectSheetSummary[] = orderedSchemas.map((schema) => {
+    const summary = summaryBySlug.get(schema.slug)
+    return {
+      id: schema.slug,
+      name: schema.name,
+      slug: schema.slug,
+      kind: schema.kind,
+      rowCount: schema.rowCount,
+      columnCount: summary?.columnCount ?? schema.headers.length,
+      headers: schema.headers ?? [],
+      sheetIndex: summary?.sheetIndex ?? schema.sheetIndex ?? 0,
+      hasData: summary?.hasData ?? schema.rowCount > 0,
+      warnings: schema.warnings ?? [],
+    }
+  })
+
+  const sheetData = Object.fromEntries(
+    orderedSchemas.map((schema) => {
+      const parsedSheet: ParsedWorkbookSheet = {
+        originalName: schema.name,
+        slug: schema.slug,
+        headers: schema.headers ?? [],
+        rows: schema.rawRows ?? [],
+        semanticRows: schema.rows ?? [],
+        rowCount: schema.rowCount,
+        columnCount: summaryBySlug.get(schema.slug)?.columnCount ?? schema.headers.length,
+        sheetIndex: summaryBySlug.get(schema.slug)?.sheetIndex ?? schema.sheetIndex ?? 0,
+        warnings: schema.warnings ?? [],
+        metadata: schema.metadata,
+      }
+      return [schema.slug, parsedSheet]
+    }),
+  )
+
+  const projectModel: ProjectModel = {
+    id: manifest.id,
+    filename: manifest.filename,
+    name: manifest.name,
+    pdNumber: manifest.pdNumber,
+    unitNumber: manifest.unitNumber,
+    revision: manifest.revision,
+    lwcType: manifest.lwcType,
+    dueDate: manifest.dueDate ? new Date(manifest.dueDate) : undefined,
+    planConlayDate: manifest.planConlayDate ? new Date(manifest.planConlayDate) : undefined,
+    planConassyDate: manifest.planConassyDate ? new Date(manifest.planConassyDate) : undefined,
+    shipDate: manifest.shipDate ? new Date(manifest.shipDate) : undefined,
+    deptTargetDate: manifest.deptTargetDate ? new Date(manifest.deptTargetDate) : undefined,
+    color: manifest.color,
+    sheets,
+    sheetData,
+    createdAt: new Date(manifest.createdAt),
+    warnings: [],
+    activeWorkbookRevisionId: manifest.activeWorkbookRevisionId,
+    activeLayoutRevisionId: manifest.activeLayoutRevisionId,
+    status: manifest.status,
+    lifecycleGates: manifest.lifecycleGates,
+    estimatedTotalHours: manifest.estimatedTotalHours,
+    estimatedPanelCount: manifest.estimatedPanelCount,
+    daysLate: manifest.daysLate,
+  }
+
+  return {
+    root: projectRoot,
+    project: {
+      id: projectModel.id,
+      name: projectModel.name,
+      filename: projectModel.filename,
+      createdAt: projectModel.createdAt.toISOString(),
+      projectModel,
+    },
+  }
 }
 
 // ── Assignment mappings (update sheet schemas + manifest) ──────────────────
@@ -550,46 +601,6 @@ export async function writeAssignmentMappings(projectId: string, _pdNumber: stri
   }
 
   return mappings
-}
-
-// ── Reference sheet readers ────────────────────────────────────────────────
-
-interface StoredReferenceSheet {
-  generatedAt: string
-  projectId: string
-  sheet: {
-    id: string
-    name: string
-    slug: string
-    kind: string
-    referenceType: string
-    rowCount: number
-    columnCount: number
-    headers: string[]
-    sheetIndex?: number
-    warnings?: string[]
-  }
-  data: {
-    rows: Record<string, unknown>[]
-    semanticRows?: unknown[]
-    introRows?: Record<string, unknown>[]
-    footerRows?: Record<string, unknown>[]
-    metadata?: unknown
-    headerDetection?: unknown
-    parserDiagnostics?: unknown
-  }
-}
-
-export async function readReferenceSheetData(
-  projectId: string,
-  referenceSlug: string,
-): Promise<StoredReferenceSheet | null> {
-  const paths = await resolveExistingStatePaths(projectId)
-  if (!paths) return null
-
-  const refDir = path.join(paths.stateDirectory, 'reference-sheets', referenceSlug)
-  const filePath = path.join(refDir, `${referenceSlug}.json`)
-  return readJsonFile<StoredReferenceSheet>(filePath)
 }
 
 // End of share-project-state-handlers.ts

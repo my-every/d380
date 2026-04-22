@@ -63,7 +63,6 @@ export function ProjectExportsPanel({ projectId, onError, onSuccess }: ProjectEx
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [isRegeneratingBranding, setIsRegeneratingBranding] = useState(false);
   const [isGeneratingPartNumbers, setIsGeneratingPartNumbers] = useState(false);
-  const [isGeneratingReferenceSheets, setIsGeneratingReferenceSheets] = useState(false);
   const [isGeneratingBrandingSchemas, setIsGeneratingBrandingSchemas] = useState(false);
   const [isGeneratingBuildUpSwsSchemas, setIsGeneratingBuildUpSwsSchemas] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -197,30 +196,6 @@ export function ProjectExportsPanel({ projectId, onError, onSuccess }: ProjectEx
     }
   }, [onError, onSuccess, projectId]);
 
-  const handleGenerateReferenceSheets = useCallback(async () => {
-    setIsGeneratingReferenceSheets(true);
-
-    try {
-      const response = await fetch(
-        `/api/project-context/${encodeURIComponent(projectId)}/reference-sheets/generate`,
-        { method: "POST" },
-      );
-
-      if (!response.ok) {
-        const body = await response.json().catch(() => ({}));
-        throw new Error(body.error || "Failed to generate reference sheet files");
-      }
-
-      const result = await response.json() as { sheetCount?: number };
-      const count = typeof result.sheetCount === "number" ? result.sheetCount : 0;
-      onSuccess?.(`Generated ${count} reference sheet files.`);
-    } catch (error) {
-      onError?.(error instanceof Error ? error.message : "Failed to generate reference sheet files");
-    } finally {
-      setIsGeneratingReferenceSheets(false);
-    }
-  }, [onError, onSuccess, projectId]);
-
   const handleGenerateBrandingSchemas = useCallback(async () => {
     setIsGeneratingBrandingSchemas(true);
 
@@ -310,7 +285,6 @@ export function ProjectExportsPanel({ projectId, onError, onSuccess }: ProjectEx
     isRegenerating ||
     isRegeneratingBranding ||
     isGeneratingPartNumbers ||
-    isGeneratingReferenceSheets ||
     isGeneratingBrandingSchemas ||
     isGeneratingBuildUpSwsSchemas;
   const hasExports = totalBrandingCount + totalWireListCount > 0;
@@ -399,16 +373,6 @@ export function ProjectExportsPanel({ projectId, onError, onSuccess }: ProjectEx
               >
                 {isGeneratingPartNumbers ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <HardDrive className="h-3.5 w-3.5" />}
                 <span className="hidden sm:inline">Part Numbers</span>
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 gap-1.5 px-2.5 text-xs"
-                onClick={() => void handleGenerateReferenceSheets()}
-                disabled={isGeneratingReferenceSheets}
-              >
-                {isGeneratingReferenceSheets ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Archive className="h-3.5 w-3.5" />}
-                <span className="hidden sm:inline">Ref Sheets</span>
               </Button>
               <Button
                 variant="ghost"

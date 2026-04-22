@@ -111,6 +111,17 @@ export function buildProjectManifest(
         return d instanceof Date ? d.toISOString() : d
     }
 
+    const sheets = model.sheets.map((sheet) => ({
+        slug: sheet.slug,
+        name: sheet.name,
+        kind: sheet.kind,
+        sheetPath: `state/sheets/${sheet.slug}.json`,
+        rowCount: sheet.rowCount,
+        columnCount: sheet.columnCount,
+        sheetIndex: sheet.sheetIndex,
+        hasData: sheet.hasData,
+    }))
+
     return {
         id: model.id,
         name: model.name,
@@ -122,6 +133,7 @@ export function buildProjectManifest(
         color: model.color,
         status: model.status,
         createdAt: toIso(model.createdAt) ?? new Date().toISOString(),
+        sheets,
         dueDate: toIso(model.dueDate),
         planConlayDate: toIso(model.planConlayDate),
         planConassyDate: toIso(model.planConassyDate),
