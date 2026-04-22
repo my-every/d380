@@ -21,8 +21,8 @@ import {
   resolveActiveHiddenSections,
 } from "@/lib/wire-list-print/model";
 import { buildWireLengthEstimatesFromSheets, estimateToRowLength } from "@/lib/wire-length";
-import { readReferenceSheetData } from "@/lib/project-state/share-project-state-handlers";
 import type { ParsedWorkbookSheet } from "@/lib/workbook/types";
+import type { SheetSchema } from "@/types/sheet-schema";
 
 /** Minimum branding length in inches — any computed or persisted value below this floor is raised to it. */
 const BRANDING_MINIMUM_LENGTH_INCHES = 60;
@@ -30,6 +30,23 @@ const BRANDING_MINIMUM_LENGTH_INCHES = 60;
 function applyBrandingMinimumLength(length: number | undefined): number | undefined {
   if (typeof length !== "number") return undefined;
   return Math.max(length, BRANDING_MINIMUM_LENGTH_INCHES);
+}
+
+function sheetSchemaToWorkbookSheet(schema: SheetSchema | null): ParsedWorkbookSheet | null {
+  if (!schema) return null;
+
+  return {
+    originalName: schema.name,
+    slug: schema.slug,
+    headers: schema.headers,
+    rows: (schema.rawRows ?? []) as ParsedWorkbookSheet["rows"],
+    semanticRows: schema.rows,
+    rowCount: schema.rowCount,
+    columnCount: schema.headers.length,
+    sheetIndex: schema.sheetIndex,
+    warnings: schema.warnings ?? [],
+    metadata: schema.metadata,
+  };
 }
 
 export async function buildProjectSheetPrintDocument(options: {
@@ -95,27 +112,13 @@ export async function buildProjectSheetPrintDocument(options: {
   const cablePartNumberMap = new Map<string, { partNumber: string }>();
 
   // Load reference sheets for wire length estimation
-  const [blueLabelsRef, partListRef] = await Promise.all([
-    readReferenceSheetData(options.projectId, "blue-labels"),
-    readReferenceSheetData(options.projectId, "part-number-list"),
+  const [blueLabelsSheetSchema, partListSheetSchema] = await Promise.all([
+    readSheetSchema(options.projectId, "blue-labels"),
+    readSheetSchema(options.projectId, "part-number-list"),
   ]);
 
-  function toWorkbookSheet(ref: Awaited<ReturnType<typeof readReferenceSheetData>>): ParsedWorkbookSheet | null {
-    if (!ref) return null;
-    return {
-      originalName: ref.sheet.name,
-      slug: ref.sheet.slug,
-      headers: ref.sheet.headers,
-      rows: (ref.data.rows ?? []) as ParsedWorkbookSheet["rows"],
-      rowCount: ref.sheet.rowCount,
-      columnCount: ref.sheet.columnCount,
-      sheetIndex: ref.sheet.sheetIndex ?? 0,
-      warnings: ref.sheet.warnings ?? [],
-    };
-  }
-
-  const blueLabelsSheet = toWorkbookSheet(blueLabelsRef);
-  const partListSheet = toWorkbookSheet(partListRef);
+  const blueLabelsSheet = sheetSchemaToWorkbookSheet(blueLabelsSheetSchema);
+  const partListSheet = sheetSchemaToWorkbookSheet(partListSheetSchema);
 
   const semanticRows = schema.rows ?? [];
   const computedLengths = new Map<string, number>();
@@ -132,6 +135,7 @@ export async function buildProjectSheetPrintDocument(options: {
     for (const [rowId, estimate] of estimationResult.estimates) {
       const rowLength = estimateToRowLength(estimate);
       if (rowLength) {
+        computedLengths.set(rowId, rowLength.roundedInches);
         rowLengthsById[rowId] = {
           display: rowLength.display,
           roundedInches: rowLength.roundedInches,

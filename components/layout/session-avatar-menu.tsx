@@ -65,7 +65,7 @@ export function SessionAvatarMenu({
 
     const handleSignOut = useCallback(async () => {
         await signOut()
-        router.push('/auth')
+        router.push('/380')
     }, [signOut, router])
 
     const handlePinChangeDone = useCallback(

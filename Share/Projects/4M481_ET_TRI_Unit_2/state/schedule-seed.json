@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.273Z",
+  "pdNumber": "4M481",
+  "projectName": "ET-TRI",
+  "displayName": "ET-TRI - Unit 2",
+  "unitNumber": "2",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "3/30/2026",
+    "PROJ_KITTED": "3/28/2026",
+    "CONLAY": "4/1/2026",
+    "CONASY": "4/3/2026",
+    "PWRCHK": "4/7/2026",
+    "D380_FINAL_BIQ": "4/8/2026",
+    "DEPT_380_TARGET": "3/27/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

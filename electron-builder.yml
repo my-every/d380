@@ -28,6 +28,7 @@ win:
     - target: nsis
       arch:
         - x64
+        - arm64
   artifactName: ${productName}-Setup-${version}.${ext}
 mac:
   icon: public/macos/icon.icns

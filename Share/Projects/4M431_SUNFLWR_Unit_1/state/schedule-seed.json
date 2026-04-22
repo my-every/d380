@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.745Z",
+  "pdNumber": "4M431",
+  "projectName": "SUNFLWR",
+  "displayName": "SUNFLWR - Unit 1",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "7/6/2026",
+    "BRAND_LIST": "7/13/2026",
+    "BRAND_WIRE": "7/20/2026",
+    "PROJ_KITTED": "7/21/2026",
+    "CONLAY": "7/22/2026",
+    "CONASY": "7/31/2026",
+    "PWRCHK": "8/10/2026",
+    "D380_FINAL_BIQ": "8/11/2026",
+    "DEPT_380_TARGET": "8/12/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

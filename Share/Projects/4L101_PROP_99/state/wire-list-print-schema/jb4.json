@@ -1,0 +1,590 @@
+{
+  "generatedAt": "2026-04-22T20:41:18.861Z",
+  "sheetName": "JB4",
+  "mode": "standardize",
+  "totalPages": 3,
+  "totalRows": 1,
+  "settings": {
+    "showEstTime": false,
+    "showFromCheckbox": true,
+    "showToCheckbox": true,
+    "showIPV": true,
+    "showComments": true,
+    "showLength": false,
+    "showCoverPage": true,
+    "showTableOfContents": true,
+    "showIPVCodes": false,
+    "showFeedbackSection": false,
+    "showDeviceSubheaders": false,
+    "enableBlueDeviceIDColumns": false,
+    "sectionColumnVisibility": {},
+    "feedbackRenderMode": "BLANK",
+    "feedbackSections": [
+      {
+        "id": "header",
+        "title": "Header",
+        "enabled": true,
+        "order": 0
+      },
+      {
+        "id": "accuracy",
+        "title": "Accuracy & Usability",
+        "enabled": true,
+        "order": 10
+      },
+      {
+        "id": "termination",
+        "title": "Termination Clarity",
+        "enabled": true,
+        "order": 20
+      },
+      {
+        "id": "routing",
+        "title": "Routing & Layout Alignment",
+        "enabled": true,
+        "order": 30
+      },
+      {
+        "id": "buildOrder",
+        "title": "Build Sequence & Efficiency",
+        "enabled": true,
+        "order": 40
+      },
+      {
+        "id": "materials",
+        "title": "Hardware & Materials",
+        "enabled": true,
+        "order": 50
+      },
+      {
+        "id": "quality",
+        "title": "Quality & Rework",
+        "enabled": true,
+        "order": 60
+      },
+      {
+        "id": "time",
+        "title": "Time & Effort",
+        "enabled": true,
+        "order": 70
+      },
+      {
+        "id": "safety",
+        "title": "Safety & Compliance",
+        "enabled": true,
+        "order": 80
+      },
+      {
+        "id": "documentation",
+        "title": "Documentation Quality",
+        "enabled": true,
+        "order": 90
+      },
+      {
+        "id": "automation",
+        "title": "Automation Checks",
+        "enabled": true,
+        "order": 100
+      },
+      {
+        "id": "final",
+        "title": "Final Sign-Off",
+        "enabled": true,
+        "order": 110
+      },
+      {
+        "id": "footer",
+        "title": "Footer",
+        "enabled": true,
+        "order": 999
+      }
+    ],
+    "customQuestions": {
+      "accuracyBlueLabelsClear": {
+        "key": "accuracyBlueLabelsClear",
+        "label": "Blue labels clear and legible?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "accuracy",
+        "isCustom": false
+      },
+      "accuracySequenceMatchedLayout": {
+        "key": "accuracySequenceMatchedLayout",
+        "label": "Sequence matched layout?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "accuracy",
+        "isCustom": false
+      },
+      "accuracyMissingDuplicateIncorrectEntries": {
+        "key": "accuracyMissingDuplicateIncorrectEntries",
+        "label": "Any missing/duplicate/incorrect entries?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "accuracy",
+        "isCustom": false
+      },
+      "accuracyLocationColumnCorrect": {
+        "key": "accuracyLocationColumnCorrect",
+        "label": "Location column correct?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "accuracy",
+        "isCustom": false
+      },
+      "terminationTypesClear": {
+        "key": "terminationTypesClear",
+        "label": "Termination types clear?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "termination",
+        "isCustom": false
+      },
+      "terminationLengthsAccurate": {
+        "key": "terminationLengthsAccurate",
+        "label": "Wire lengths accurate?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "termination",
+        "isCustom": false
+      },
+      "terminationReworkDueToInstructionClarity": {
+        "key": "terminationReworkDueToInstructionClarity",
+        "label": "Rework due to unclear instructions?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "termination",
+        "isCustom": false
+      },
+      "terminationJumperRulesEasyToFollow": {
+        "key": "terminationJumperRulesEasyToFollow",
+        "label": "Jumper rules easy to follow?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "termination",
+        "isCustom": false
+      },
+      "routingAlignedWithLayout": {
+        "key": "routingAlignedWithLayout",
+        "label": "Routing aligned with layout?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "routing",
+        "isCustom": false
+      },
+      "routingLengthFit": {
+        "key": "routingLengthFit",
+        "label": "Wire length fit properly?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "routing",
+        "isCustom": false
+      },
+      "routingConflictsPanduct": {
+        "key": "routingConflictsPanduct",
+        "label": "Conflicts with panduct?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "routing",
+        "isCustom": false
+      },
+      "routingConflictsRails": {
+        "key": "routingConflictsRails",
+        "label": "Conflicts with rails?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "routing",
+        "isCustom": false
+      },
+      "routingConflictsAdjacentDevices": {
+        "key": "routingConflictsAdjacentDevices",
+        "label": "Conflicts with adjacent devices?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "routing",
+        "isCustom": false
+      },
+      "routingEfficientOrder": {
+        "key": "routingEfficientOrder",
+        "label": "Build order efficient?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "routing",
+        "isCustom": false
+      },
+      "buildOrderHelpful": {
+        "key": "buildOrderHelpful",
+        "label": "Build order helpful?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "buildOrder",
+        "isCustom": false
+      },
+      "buildRequiredDeviation": {
+        "key": "buildRequiredDeviation",
+        "label": "Required deviation from order?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "buildOrder",
+        "isCustom": false
+      },
+      "buildDeviationReason": {
+        "key": "buildDeviationReason",
+        "label": "Reason for deviation",
+        "type": "text",
+        "enabled": true,
+        "sectionId": "buildOrder",
+        "isCustom": false
+      },
+      "buildCausedDelays": {
+        "key": "buildCausedDelays",
+        "label": "Caused delays?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "buildOrder",
+        "isCustom": false
+      },
+      "materialsFerrulesAvailable": {
+        "key": "materialsFerrulesAvailable",
+        "label": "Ferrules available?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "materials",
+        "isCustom": false
+      },
+      "materialsLugsAvailable": {
+        "key": "materialsLugsAvailable",
+        "label": "Lugs available?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "materials",
+        "isCustom": false
+      },
+      "materialsJumpersAvailable": {
+        "key": "materialsJumpersAvailable",
+        "label": "Jumpers available?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "materials",
+        "isCustom": false
+      },
+      "materialsWireTypesAvailable": {
+        "key": "materialsWireTypesAvailable",
+        "label": "Wire types available?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "materials",
+        "isCustom": false
+      },
+      "materialsIssuesNotes": {
+        "key": "materialsIssuesNotes",
+        "label": "Material issues notes",
+        "type": "text",
+        "enabled": true,
+        "sectionId": "materials",
+        "isCustom": false
+      },
+      "qualityErrorsCaughtDuringWiring": {
+        "key": "qualityErrorsCaughtDuringWiring",
+        "label": "Errors caught during wiring?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "quality",
+        "isCustom": false
+      },
+      "qualityReterminatedWires": {
+        "key": "qualityReterminatedWires",
+        "label": "Re-terminated wires?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "quality",
+        "isCustom": false
+      },
+      "qualityReroutedWires": {
+        "key": "qualityReroutedWires",
+        "label": "Re-routed wires?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "quality",
+        "isCustom": false
+      },
+      "qualityReplacedWires": {
+        "key": "qualityReplacedWires",
+        "label": "Replaced wires?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "quality",
+        "isCustom": false
+      },
+      "qualityCommonIssues": {
+        "key": "qualityCommonIssues",
+        "label": "Common issues",
+        "type": "text",
+        "enabled": true,
+        "sectionId": "quality",
+        "isCustom": false
+      },
+      "estimatedWiringTimeHours": {
+        "key": "estimatedWiringTimeHours",
+        "label": "Estimated time (hours)",
+        "type": "number",
+        "enabled": true,
+        "sectionId": "time",
+        "isCustom": false
+      },
+      "actualWiringTimeHours": {
+        "key": "actualWiringTimeHours",
+        "label": "Actual time (hours)",
+        "type": "number",
+        "enabled": true,
+        "sectionId": "time",
+        "isCustom": false
+      },
+      "timeVarianceReason": {
+        "key": "timeVarianceReason",
+        "label": "Reason for variance",
+        "type": "text",
+        "enabled": true,
+        "sectionId": "time",
+        "isCustom": false
+      },
+      "safetyGroundsClearlyIdentified": {
+        "key": "safetyGroundsClearlyIdentified",
+        "label": "Grounds clearly identified?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "safety",
+        "isCustom": false
+      },
+      "safetyTerminationsCompliant": {
+        "key": "safetyTerminationsCompliant",
+        "label": "Terminations compliant?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "safety",
+        "isCustom": false
+      },
+      "safetyConcernsNotes": {
+        "key": "safetyConcernsNotes",
+        "label": "Safety concerns",
+        "type": "text",
+        "enabled": true,
+        "sectionId": "safety",
+        "isCustom": false
+      },
+      "documentationDifficulty": {
+        "key": "documentationDifficulty",
+        "label": "Documentation difficulty",
+        "type": "difficulty",
+        "enabled": true,
+        "sectionId": "documentation",
+        "isCustom": false
+      },
+      "documentationImprovementAreas": {
+        "key": "documentationImprovementAreas",
+        "label": "Areas for improvement",
+        "type": "improvement",
+        "enabled": true,
+        "sectionId": "documentation",
+        "isCustom": false
+      },
+      "documentationOtherImprovementArea": {
+        "key": "documentationOtherImprovementArea",
+        "label": "Other improvement area",
+        "type": "text",
+        "enabled": true,
+        "sectionId": "documentation",
+        "isCustom": false
+      },
+      "documentationSpecificSuggestions": {
+        "key": "documentationSpecificSuggestions",
+        "label": "Specific suggestions",
+        "type": "text",
+        "enabled": true,
+        "sectionId": "documentation",
+        "isCustom": false
+      },
+      "automationJumperPredictionCorrect": {
+        "key": "automationJumperPredictionCorrect",
+        "label": "Jumper prediction correct?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "automation",
+        "isCustom": false
+      },
+      "automationBlueLabelSequencesCorrect": {
+        "key": "automationBlueLabelSequencesCorrect",
+        "label": "Blue label sequences correct?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "automation",
+        "isCustom": false
+      },
+      "automationKtRulesCorrect": {
+        "key": "automationKtRulesCorrect",
+        "label": "KT rules correct?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "automation",
+        "isCustom": false
+      },
+      "automationReusableTemplateCandidate": {
+        "key": "automationReusableTemplateCandidate",
+        "label": "Reusable template candidate?",
+        "type": "boolean",
+        "enabled": true,
+        "sectionId": "automation",
+        "isCustom": false
+      },
+      "finalQualityRating": {
+        "key": "finalQualityRating",
+        "label": "Overall quality rating",
+        "type": "quality",
+        "enabled": true,
+        "sectionId": "final",
+        "isCustom": false
+      },
+      "finalComments": {
+        "key": "finalComments",
+        "label": "Final comments",
+        "type": "text",
+        "enabled": true,
+        "sectionId": "final",
+        "isCustom": false
+      }
+    },
+    "crossWireSections": [],
+    "hiddenRows": [],
+    "hiddenSections": []
+  },
+  "pages": [
+    {
+      "pageType": "cover",
+      "pageNumber": 1,
+      "projectInfo": {
+        "projectNumber": "4L101",
+        "projectName": "PROP-99",
+        "revision": "C.4 M.5",
+        "pdNumber": "4L101",
+        "unitNumber": "1",
+        "preparedBy": "",
+        "badgeNumber": "",
+        "date": "",
+        "time": "",
+        "personnel": [
+          {
+            "id": "1",
+            "badgeNumber": "",
+            "date": "",
+            "time": "",
+            "isAssembler": false,
+            "isInspector": false
+          },
+          {
+            "id": "2",
+            "badgeNumber": "",
+            "date": "",
+            "time": "",
+            "isAssembler": false,
+            "isInspector": false
+          },
+          {
+            "id": "3",
+            "badgeNumber": "",
+            "date": "",
+            "time": "",
+            "isAssembler": false,
+            "isInspector": false
+          },
+          {
+            "id": "4",
+            "badgeNumber": "",
+            "date": "",
+            "time": "",
+            "isAssembler": false,
+            "isInspector": false
+          },
+          {
+            "id": "5",
+            "badgeNumber": "",
+            "date": "",
+            "time": "",
+            "isAssembler": false,
+            "isInspector": false
+          },
+          {
+            "id": "6",
+            "badgeNumber": "",
+            "date": "",
+            "time": "",
+            "isAssembler": false,
+            "isInspector": false
+          }
+        ]
+      },
+      "sheetTitle": "JB4"
+    },
+    {
+      "pageType": "toc",
+      "pageNumber": 2,
+      "locationGroups": [
+        {
+          "location": "JB4",
+          "isExternal": false,
+          "sections": [
+            {
+              "index": 1,
+              "label": "Grounds",
+              "rowCount": 1,
+              "estimatedPage": 3,
+              "subEntries": []
+            }
+          ]
+        }
+      ],
+      "summary": {
+        "locations": 1,
+        "sections": 1,
+        "rows": 1,
+        "pages": 3
+      }
+    },
+    {
+      "pageType": "wire-list",
+      "pageNumber": 3,
+      "locationGroups": [
+        {
+          "location": "JB4",
+          "isExternal": false,
+          "totalRows": 1,
+          "subsections": [
+            {
+              "label": "Grounds",
+              "sectionKind": "grounds",
+              "rowCount": 1,
+              "rows": [
+                {
+                  "rowId": "row-0",
+                  "rowIndex": 11,
+                  "fromDeviceId": "GR1250",
+                  "toDeviceId": "FRAME",
+                  "wireType": "SC",
+                  "wireNo": "GR1250",
+                  "wireId": "GRN/YEL",
+                  "gaugeSize": "14",
+                  "fromLocation": "JB4",
+                  "toLocation": "JB4",
+                  "fromPageZone": "64.D3",
+                  "toPageZone": "64.D3",
+                  "lengthDisplay": "60 in",
+                  "lengthInches": 60
+                }
+              ],
+              "deviceToDeviceSubsections": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

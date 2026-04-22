@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.659Z",
+  "pdNumber": "4P012",
+  "projectName": "BBS-B2",
+  "displayName": "BBS-B2 - Unit 2 - Slot 1",
+  "unitNumber": "2",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "6/25/2026",
+    "PROJ_KITTED": "6/26/2026",
+    "CONLAY": "6/29/2026",
+    "CONASY": "7/9/2026",
+    "PWRCHK": "7/17/2026",
+    "D380_FINAL_BIQ": "7/20/2026",
+    "DEPT_380_TARGET": "7/23/2026",
+    "LWC": "NTB",
+    "UNIT_TYPE": "CS"
+  }
+}

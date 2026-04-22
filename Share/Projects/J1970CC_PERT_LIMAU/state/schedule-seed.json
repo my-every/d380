@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.445Z",
+  "pdNumber": "J1970CC",
+  "projectName": "PERT LIMAU",
+  "displayName": "PERT LIMAU",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "04/07/26",
+    "BRAND_LIST": "4/17/2026",
+    "BRAND_WIRE": "4/24/2026",
+    "PROJ_KITTED": "4/25/2026",
+    "CONLAY": "4/28/2026",
+    "CONASY": "5/7/2026",
+    "PWRCHK": "5/15/2026",
+    "D380_FINAL_BIQ": "5/18/2026",
+    "DEPT_380_TARGET": "5/15/2026",
+    "LWC": "New",
+    "UNIT_TYPE": "CON"
+  }
+}

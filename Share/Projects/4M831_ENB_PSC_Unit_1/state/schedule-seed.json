@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.728Z",
+  "pdNumber": "4M831",
+  "projectName": "ENB-PSC",
+  "displayName": "ENB-PSC - Unit 1",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "6/25/2026",
+    "BRAND_LIST": "7/2/2026",
+    "BRAND_WIRE": "7/10/2026",
+    "PROJ_KITTED": "7/11/2026",
+    "CONLAY": "7/14/2026",
+    "CONASY": "7/23/2026",
+    "PWRCHK": "7/31/2026",
+    "D380_FINAL_BIQ": "8/3/2026",
+    "DEPT_380_TARGET": "8/28/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

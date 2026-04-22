@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.666Z",
+  "pdNumber": "J3070CC",
+  "projectName": "KINDER MORGAN GOOD",
+  "displayName": "KINDER MORGAN GOOD",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "6/15/2026",
+    "BRAND_LIST": "6/22/2026",
+    "BRAND_WIRE": "6/29/2026",
+    "PROJ_KITTED": "6/30/2026",
+    "CONLAY": "7/1/2026",
+    "CONASY": "7/13/2026",
+    "PWRCHK": "7/21/2026",
+    "D380_FINAL_BIQ": "7/22/2026",
+    "DEPT_380_TARGET": "7/22/2026",
+    "LWC": "New",
+    "UNIT_TYPE": "CON"
+  }
+}

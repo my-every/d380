@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.166Z",
+  "pdNumber": "4M582",
+  "projectName": "GPM-D",
+  "displayName": "GPM-D - Unit 1",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "02/16/26",
+    "BRAND_LIST": "2/23/2026",
+    "BRAND_WIRE": "3/2/2026",
+    "PROJ_KITTED": "2/25/2026",
+    "CONLAY": "2/25/2026",
+    "CONASY": "3/10/2026",
+    "PWRCHK": "3/18/2026",
+    "D380_FINAL_BIQ": "3/19/2026",
+    "DEPT_380_TARGET": "4/1/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

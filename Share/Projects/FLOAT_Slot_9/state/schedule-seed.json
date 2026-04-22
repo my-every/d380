@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.613Z",
+  "pdNumber": "FLOAT",
+  "projectName": "FLOAT",
+  "displayName": "FLOAT - Slot 9",
+  "unitNumber": "",
+  "scheduleSnapshot": {
+    "LEGALS": "5/28/2026",
+    "BRAND_LIST": "6/4/2026",
+    "BRAND_WIRE": "6/11/2026",
+    "PROJ_KITTED": "6/12/2026",
+    "CONLAY": "6/15/2026",
+    "CONASY": "6/24/2026",
+    "PWRCHK": "7/2/2026",
+    "D380_FINAL_BIQ": "7/6/2026",
+    "DEPT_380_TARGET": "",
+    "LWC": "Offskid",
+    "UNIT_TYPE": ""
+  }
+}

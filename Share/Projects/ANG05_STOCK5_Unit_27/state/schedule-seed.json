@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.746Z",
+  "pdNumber": "ANG05",
+  "projectName": "STOCK5",
+  "displayName": "STOCK5 - Unit 27",
+  "unitNumber": "27",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "7/20/2026",
+    "PROJ_KITTED": "7/21/2026",
+    "CONLAY": "7/22/2026",
+    "CONASY": "7/31/2026",
+    "PWRCHK": "8/10/2026",
+    "D380_FINAL_BIQ": "8/11/2026",
+    "DEPT_380_TARGET": "8/21/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

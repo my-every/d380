@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.286Z",
+  "pdNumber": "4M575",
+  "projectName": "TRP-NAU",
+  "displayName": "TRP-NAU",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "03/23/26",
+    "BRAND_LIST": "3/27/2026",
+    "BRAND_WIRE": "4/3/2026",
+    "PROJ_KITTED": "4/4/2026",
+    "CONLAY": "4/7/2026",
+    "CONASY": "4/16/2026",
+    "PWRCHK": "4/24/2026",
+    "D380_FINAL_BIQ": "4/27/2026",
+    "DEPT_380_TARGET": "4/27/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

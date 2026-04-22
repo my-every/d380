@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.115Z",
+  "pdNumber": "4M471",
+  "projectName": "ET-DE",
+  "displayName": "ET-DE - Unit 1",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "02/03/26",
+    "BRAND_LIST": "2/4/2026",
+    "BRAND_WIRE": "2/11/2026",
+    "PROJ_KITTED": "2/10/2026",
+    "CONLAY": "2/11/2026",
+    "CONASY": "2/21/2026",
+    "PWRCHK": "2/24/2026",
+    "D380_FINAL_BIQ": "2/26/2026",
+    "DEPT_380_TARGET": "4/14/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

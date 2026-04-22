@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.875Z",
+  "pdNumber": "4P044",
+  "projectName": "MBYA-P",
+  "displayName": "MBYA-P - Unit 2",
+  "unitNumber": "2",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "8/17/2026",
+    "PROJ_KITTED": "8/18/2026",
+    "CONLAY": "8/19/2026",
+    "CONASY": "8/28/2026",
+    "PWRCHK": "9/8/2026",
+    "D380_FINAL_BIQ": "9/9/2026",
+    "DEPT_380_TARGET": "9/10/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

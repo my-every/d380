@@ -280,7 +280,7 @@ function LayoutScaffoldShell({
 
             <CompositeFloatingActions className={classNames?.bottomRail}>
                 <div className="flex items-center gap-2">
-                    {floatingActions ?? <RootRail navItems={navItems} activeRootId={activeRootId} />}
+                    {floatingActions}
                     {showStartUpButton ? (
                         <Link
                             href="/startup?revisit=1"

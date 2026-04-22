@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.912Z",
+  "pdNumber": "4P701",
+  "projectName": "MITSY-W",
+  "displayName": "MITSY-W",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "8/24/2026",
+    "BRAND_LIST": "8/31/2026",
+    "BRAND_WIRE": "9/8/2026",
+    "PROJ_KITTED": "9/9/2026",
+    "CONLAY": "9/10/2026",
+    "CONASY": "9/21/2026",
+    "PWRCHK": "9/29/2026",
+    "D380_FINAL_BIQ": "9/30/2026",
+    "DEPT_380_TARGET": "9/30/2026",
+    "LWC": "NTB",
+    "UNIT_TYPE": "CS"
+  }
+}

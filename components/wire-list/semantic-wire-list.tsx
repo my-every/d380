@@ -4,7 +4,7 @@ import { FullScreenSearch } from "./full-screen-search";
 import { RelayPluginJumperRuns } from "./relay-plugin-jumper-runs";
 import { SemanticWireListShell } from "./semantic-wire-list-shell";
 import { SemanticWireListTable } from "./semantic-wire-list-table";
-import { SemanticWireListToolbar } from "./semantic-wire-list-toolbar";
+import { SemanticWireListToolbar, type SemanticWireListToolbarOptions } from "./semantic-wire-list-toolbar";
 import { WireListFloatingToolbar } from "./wire-list-floating-toolbar";
 import { ALL_LOCATIONS, SEMANTIC_COLUMNS, useSemanticWireListViewModel } from "@/hooks/use-semantic-wire-list-view-model";
 import type { GaugeSortOrder } from "@/lib/wiring-identification/gauge-filter";
@@ -70,6 +70,14 @@ interface SemanticWireListProps {
   };
   /** Show floating toolbar at bottom */
   showFloatingToolbar?: boolean;
+  /** Render toolbar above or below the table shell */
+  toolbarPlacement?: "top" | "bottom";
+  /** Toggle individual toolbar controls */
+  toolbarOptions?: SemanticWireListToolbarOptions;
+  /** Hide the metadata panel above the table */
+  hideMetadataPanel?: boolean;
+  /** Tighter embedded layout spacing */
+  compactSpacing?: boolean;
 }
 
 export function SemanticWireList({
@@ -90,6 +98,10 @@ export function SemanticWireList({
   hideFooter = false,
   swsType,
   showFloatingToolbar = false,
+  toolbarPlacement = "top",
+  toolbarOptions,
+  hideMetadataPanel = false,
+  compactSpacing = false,
 }: SemanticWireListProps) {
   // Extract print mode from feature config
   const isPrintMode = featureConfig.printMode ?? false;
@@ -164,6 +176,58 @@ export function SemanticWireList({
     activeRowId,
   });
 
+  const toolbarContent = (
+    <SemanticWireListToolbar
+      searchValue={searchValue}
+      onSearchValueChange={setSearchValue}
+      selectedFilter={selectedFilter}
+      filterOptions={filterOptions}
+      onSelectedFilterChange={setSelectedFilter}
+      hasBlueLabels={hasBlueLabels}
+      prefixRows={locationFilteredRows}
+      filterRows={preFilteredRows}
+      fromPrefix={fromPrefix}
+      toPrefix={toPrefix}
+      onFromPrefixChange={setFromPrefix}
+      onToPrefixChange={setToPrefix}
+      selectedGauge={selectedGauge}
+      gaugeSortOrder={gaugeSortOrder}
+      onSelectedGaugeChange={setSelectedGauge}
+      onGaugeSortOrderChange={setGaugeSortOrder}
+      wireNoSearchValue={wireNoSearchValue}
+      onWireNoSearchValueChange={setWireNoSearchValue}
+      onClearWireNoSearch={clearWireNoSearch}
+      wireNoMatchCount={wireNoMatchCount}
+      locationDisplayRows={locationDisplayRows}
+      isWireNoSearchActive={isWireNoSearchActive}
+      searchModeEnabled={searchModeEnabled}
+      onToggleSearchMode={toggleSearchMode}
+      onWireNoInputFocusChange={setWireNoInputFocused}
+      onOpenFullScreenSearch={() => setIsFullScreenSearchOpen(true)}
+      rows={displaySourceRows}
+      blueLabels={blueLabels}
+      currentSheetName={currentSheetName}
+      projectId={projectId}
+      sheetSlug={sheetSlug}
+      title={title}
+      metadata={metadata}
+      showFrom={showFrom}
+      showTo={showTo}
+      showIPV={showIPV}
+      showComments={showComments}
+      columnVisibility={columnVisibility}
+      setColumnVisibility={setColumnVisibility}
+      semanticColumns={availableSemanticColumns}
+      onResetVisibility={handleResetVisibility}
+      filteredDisplayRows={filteredDisplayRows}
+      showDeviceSubheaders={showDeviceSubheaders}
+      onShowDeviceSubheadersChange={setShowDeviceSubheaders}
+      getRowLength={getRowLength}
+      swsType={swsType}
+      options={toolbarOptions}
+    />
+  );
+
   return (
     <SemanticWireListShell
       metadata={metadata}
@@ -173,59 +237,12 @@ export function SemanticWireList({
       allLocationsLabel={ALL_LOCATIONS}
       totalDisplayRows={totalDisplayRows}
       onLocationChange={setSelectedLocation}
-      hideToolbar={hideToolbar || isPrintMode}
+      hideToolbar={hideToolbar || isPrintMode || toolbarPlacement === "bottom"}
       hideFooter={hideFooter || isPrintMode}
       hideLocationTabs={isPrintMode}
-      toolbar={
-        <SemanticWireListToolbar
-          searchValue={searchValue}
-          onSearchValueChange={setSearchValue}
-          selectedFilter={selectedFilter}
-          filterOptions={filterOptions}
-          onSelectedFilterChange={setSelectedFilter}
-          hasBlueLabels={hasBlueLabels}
-          prefixRows={locationFilteredRows}
-          filterRows={preFilteredRows}
-          fromPrefix={fromPrefix}
-          toPrefix={toPrefix}
-          onFromPrefixChange={setFromPrefix}
-          onToPrefixChange={setToPrefix}
-          selectedGauge={selectedGauge}
-          gaugeSortOrder={gaugeSortOrder}
-          onSelectedGaugeChange={setSelectedGauge}
-          onGaugeSortOrderChange={setGaugeSortOrder}
-          wireNoSearchValue={wireNoSearchValue}
-          onWireNoSearchValueChange={setWireNoSearchValue}
-          onClearWireNoSearch={clearWireNoSearch}
-          wireNoMatchCount={wireNoMatchCount}
-          locationDisplayRows={locationDisplayRows}
-          isWireNoSearchActive={isWireNoSearchActive}
-          searchModeEnabled={searchModeEnabled}
-          onToggleSearchMode={toggleSearchMode}
-          onWireNoInputFocusChange={setWireNoInputFocused}
-          onOpenFullScreenSearch={() => setIsFullScreenSearchOpen(true)}
-          rows={displaySourceRows}
-          blueLabels={blueLabels}
-          currentSheetName={currentSheetName}
-          projectId={projectId}
-          sheetSlug={sheetSlug}
-          title={title}
-          metadata={metadata}
-          showFrom={showFrom}
-          showTo={showTo}
-          showIPV={showIPV}
-          showComments={showComments}
-          columnVisibility={columnVisibility}
-          setColumnVisibility={setColumnVisibility}
-          semanticColumns={availableSemanticColumns}
-          onResetVisibility={handleResetVisibility}
-          filteredDisplayRows={filteredDisplayRows}
-          showDeviceSubheaders={showDeviceSubheaders}
-          onShowDeviceSubheadersChange={setShowDeviceSubheaders}
-          getRowLength={getRowLength}
-          swsType={swsType}
-        />
-      }
+      hideMetadataPanel={hideMetadataPanel}
+      compactSpacing={compactSpacing}
+      toolbar={toolbarPlacement === "top" ? toolbarContent : null}
       relayPluginRuns={
         selectedFilter === "ka_relay_plugin_jumpers" && relayPluginJumperRuns.length > 0 ? (
           <RelayPluginJumperRuns runs={relayPluginJumperRuns} className="mb-4" />
@@ -264,29 +281,36 @@ export function SemanticWireList({
         />
       }
       footer={
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>
-            Showing {visibleColumnCount} of {availableSemanticColumns.length} columns
-            {selectedFilter !== "default" && <span className="ml-2 text-secondary-foreground">({currentFilterMeta.label})</span>}
-            {(fromPrefix || toPrefix) && (
-              <span className="ml-2 text-secondary-foreground">({fromPrefix || "All"} -&gt; {toPrefix || "All"})</span>
-            )}
-            {selectedGauge && <span className="ml-2 text-secondary-foreground">(Gauge: {selectedGauge})</span>}
-            {gaugeSortOrder !== "default" && (
-              <span className="ml-2 text-secondary-foreground">
-                ({gaugeSortOrder === "smallest-first" ? "Small→Large" : "Large→Small"})
-              </span>
-            )}
-            {appliedOrderingProfile && <span className="ml-2 text-secondary-foreground">({appliedOrderingProfile.label} order)</span>}
-          </span>
-          <span>
-            {selectedLocation !== ALL_LOCATIONS && <span className="mr-2 text-secondary-foreground">{selectedLocation}</span>}
-            {filteredDisplayRows === locationDisplayRows
-              ? `${locationDisplayRows} rows`
-              : `${filteredDisplayRows} of ${locationDisplayRows} rows`}
-            {(selectedFilter !== "default" || fromPrefix || toPrefix || selectedGauge || gaugeSortOrder !== "default") &&
-              ` of ${totalDisplayRows} total`}
-          </span>
+        <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+          {toolbarPlacement === "bottom" ? (
+            <div className="min-w-0 flex-1">
+              {toolbarContent}
+            </div>
+          ) : null}
+          <div className="flex items-center justify-between text-xs text-muted-foreground xl:justify-end xl:gap-6">
+            <span>
+              Showing {visibleColumnCount} of {availableSemanticColumns.length} columns
+              {selectedFilter !== "default" && <span className="ml-2 text-secondary-foreground">({currentFilterMeta.label})</span>}
+              {(fromPrefix || toPrefix) && (
+                <span className="ml-2 text-secondary-foreground">({fromPrefix || "All"} -&gt; {toPrefix || "All"})</span>
+              )}
+              {selectedGauge && <span className="ml-2 text-secondary-foreground">(Gauge: {selectedGauge})</span>}
+              {gaugeSortOrder !== "default" && (
+                <span className="ml-2 text-secondary-foreground">
+                  ({gaugeSortOrder === "smallest-first" ? "Small→Large" : "Large→Small"})
+                </span>
+              )}
+              {appliedOrderingProfile && <span className="ml-2 text-secondary-foreground">({appliedOrderingProfile.label} order)</span>}
+            </span>
+            <span>
+              {selectedLocation !== ALL_LOCATIONS && <span className="mr-2 text-secondary-foreground">{selectedLocation}</span>}
+              {filteredDisplayRows === locationDisplayRows
+                ? `${locationDisplayRows} rows`
+                : `${filteredDisplayRows} of ${locationDisplayRows} rows`}
+              {(selectedFilter !== "default" || fromPrefix || toPrefix || selectedGauge || gaugeSortOrder !== "default") &&
+                ` of ${totalDisplayRows} total`}
+            </span>
+          </div>
         </div>
       }
       fullScreenSearch={

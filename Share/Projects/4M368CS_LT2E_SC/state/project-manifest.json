@@ -1,0 +1,74 @@
+{
+  "id": "4m368cs-lt2e-sc",
+  "name": "LT2E-SC",
+  "filename": "slots-seeded:4M368CS:1",
+  "pdNumber": "4M368CS",
+  "unitNumber": "1",
+  "revision": "O & G",
+  "lwcType": "OFFSKID",
+  "color": "#F4B400",
+  "unitType": "CON",
+  "unitTypes": [
+    "CON"
+  ],
+  "createdAt": "2026-04-23T06:54:31.298Z",
+  "dueDate": "2026-04-29T07:00:00.000Z",
+  "planConlayDate": "2026-04-09T07:00:00.000Z",
+  "planConassyDate": "2026-04-20T07:00:00.000Z",
+  "sheets": [],
+  "assignments": {},
+  "lifecycleGates": [
+    {
+      "gateId": "LEGALS_READY",
+      "status": "READY",
+      "targetDate": "2026-03-23T07:00:00.000Z",
+      "notes": "Seeded from SLOTS.json legals milestone."
+    },
+    {
+      "gateId": "BRANDLIST_COMPLETE",
+      "status": "READY",
+      "targetDate": "2026-03-31T07:00:00.000Z",
+      "notes": "Seeded from SLOTS.json brand-list milestone."
+    },
+    {
+      "gateId": "BRANDING_READY",
+      "status": "READY",
+      "targetDate": "2026-04-07T07:00:00.000Z",
+      "notes": "Seeded from SLOTS.json branding milestone."
+    },
+    {
+      "gateId": "KITTING_READY",
+      "status": "READY",
+      "targetDate": "2026-04-07T07:00:00.000Z",
+      "notes": "Seeded from SLOTS.json kitting milestone."
+    }
+  ],
+  "aggregates": {
+    "totalAssignments": 0,
+    "completedAssignments": 0,
+    "inProgressAssignments": 0,
+    "blockedAssignments": 0,
+    "totalEstimatedMinutes": 0,
+    "totalRemainingMinutes": 0,
+    "totalActualMinutes": 0,
+    "overallProgress": 0,
+    "highestPriority": "low",
+    "priorityCounts": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "stageCounts": {}
+  },
+  "panducts": 0,
+  "rails": 0,
+  "status": "legals_pending",
+  "estimatedTotalHours": null,
+  "estimatedPanelCount": null,
+  "daysLate": 0,
+  "deptTargetDate": "2026-04-29T07:00:00.000Z",
+  "shipDate": "2026-05-04T07:00:00.000Z",
+  "activeWorkbookRevisionId": null,
+  "activeLayoutRevisionId": null
+}

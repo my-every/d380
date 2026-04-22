@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.144Z",
+  "pdNumber": "J0960CC",
+  "projectName": "TITAN TIRE",
+  "displayName": "TITAN TIRE",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "01/16/26",
+    "BRAND_LIST": "2/13/2026",
+    "BRAND_WIRE": "2/20/2026",
+    "PROJ_KITTED": "2/17/2026",
+    "CONLAY": "2/18/2026",
+    "CONASY": "3/4/2026",
+    "PWRCHK": "3/13/2026",
+    "D380_FINAL_BIQ": "3/16/2026",
+    "DEPT_380_TARGET": "3/9/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "CON"
+  }
+}

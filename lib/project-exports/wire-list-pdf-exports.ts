@@ -34,6 +34,11 @@ export interface WireListPdfExportResult {
   skippedSheets: Array<{ sheetSlug: string; sheetName: string; reason: string }>;
 }
 
+export interface EnsuredWireListPdfSheetExport {
+  record: WireListPdfSheetExportRecord;
+  absoluteFilePath: string;
+}
+
 async function readJsonFile<T>(filePath: string): Promise<T | null> {
   try {
     const raw = await fs.readFile(filePath, "utf-8");
@@ -148,4 +153,122 @@ export async function generateWireListPdfExports(projectId: string, origin: stri
   );
 
   return result;
+}
+
+export async function ensureWireListPdfSheetExport(
+  projectId: string,
+  sheetSlug: string,
+  origin: string,
+): Promise<EnsuredWireListPdfSheetExport> {
+  const manifest = await readProjectManifest(projectId);
+  if (!manifest) {
+    throw new Error("Project not found");
+  }
+
+  const sheet = manifest.sheets.find((entry) => entry.kind === "operational" && entry.slug === sheetSlug);
+  if (!sheet) {
+    throw new Error("Operational sheet not found");
+  }
+
+  const unitNumber = manifest.unitNumber ?? "";
+  const unitExportsRoot = await resolveUnitExportsRoot(projectId, unitNumber);
+  if (!unitExportsRoot) {
+    throw new Error("Project exports directory not found");
+  }
+
+  const sanitizedUnit = sanitizeExportFileSegment(unitNumber);
+  const wireListExportsDirectory = path.join(unitExportsRoot, WIRE_LIST_EXPORTS_DIRECTORY);
+  const exportsManifestPath = path.join(wireListExportsDirectory, WIRE_LIST_EXPORTS_MANIFEST);
+  await fs.mkdir(wireListExportsDirectory, { recursive: true });
+
+  const exportsManifest =
+    await readJsonFile<WireListPdfExportResult>(exportsManifestPath) ??
+    {
+      projectId,
+      projectName: manifest.name,
+      generatedAt: new Date().toISOString(),
+      sheetExports: [],
+      skippedSheets: [],
+    };
+
+  const existingRecord = exportsManifest.sheetExports.find((entry) => entry.sheetSlug === sheetSlug);
+  if (existingRecord) {
+    const absoluteFilePath = path.join(wireListExportsDirectory, existingRecord.fileName);
+    try {
+      await fs.access(absoluteFilePath);
+      return {
+        record: existingRecord,
+        absoluteFilePath,
+      };
+    } catch {
+      exportsManifest.sheetExports = exportsManifest.sheetExports.filter((entry) => entry.sheetSlug !== sheetSlug);
+    }
+  }
+
+  const documentData = await buildProjectSheetPrintDocument({
+    projectId,
+    sheetSlug: sheet.slug,
+  });
+
+  if (!documentData) {
+    throw new Error("Unable to build print document");
+  }
+
+  const visibleRowCount = buildVisiblePreviewSections(
+    documentData.processedLocationGroups,
+    new Set(documentData.hiddenSectionKeys ?? []),
+    documentData.settings.sectionColumnVisibility,
+  ).reduce((sum, section) => sum + section.visibleRows.length, 0);
+
+  if (visibleRowCount === 0) {
+    throw new Error("No semantic wire rows");
+  }
+
+  const fileName = buildBrandingFilename({
+    pdNumber: manifest.pdNumber,
+    projectName: manifest.name,
+    revision: manifest.revision,
+    unitNumber: manifest.unitNumber,
+    sheetName: sheet.name,
+    extension: "pdf",
+  }).replace(/BRANDLIST/i, "WIRELIST");
+  const absoluteFilePath = path.join(wireListExportsDirectory, fileName);
+  const relativePath = path.posix.join(
+    EXPORTS_DIRECTORY,
+    UNITS_DIRECTORY,
+    sanitizedUnit,
+    WIRE_LIST_EXPORTS_DIRECTORY,
+    fileName,
+  );
+  const pdfBytes = await renderWireListPdfFromRoute({
+    origin,
+    projectId,
+    sheetSlug: sheet.slug,
+  });
+
+  await fs.writeFile(absoluteFilePath, pdfBytes);
+
+  const record: WireListPdfSheetExportRecord = {
+    sheetSlug: sheet.slug,
+    sheetName: sheet.name,
+    rowCount: visibleRowCount,
+    fileName,
+    relativePath,
+  };
+
+  exportsManifest.generatedAt = new Date().toISOString();
+  exportsManifest.projectId = projectId;
+  exportsManifest.projectName = manifest.name;
+  exportsManifest.sheetExports = [
+    ...exportsManifest.sheetExports.filter((entry) => entry.sheetSlug !== sheetSlug),
+    record,
+  ];
+  exportsManifest.skippedSheets = exportsManifest.skippedSheets.filter((entry) => entry.sheetSlug !== sheetSlug);
+
+  await fs.writeFile(exportsManifestPath, JSON.stringify(exportsManifest, null, 2), "utf-8");
+
+  return {
+    record,
+    absoluteFilePath,
+  };
 }

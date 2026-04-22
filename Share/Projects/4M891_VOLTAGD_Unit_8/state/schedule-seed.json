@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.681Z",
+  "pdNumber": "4M891",
+  "projectName": "VOLTAGD",
+  "displayName": "VOLTAGD - Unit 8",
+  "unitNumber": "8",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "7/2/2026",
+    "PROJ_KITTED": "7/3/2026",
+    "CONLAY": "7/7/2026",
+    "CONASY": "7/16/2026",
+    "PWRCHK": "7/24/2026",
+    "D380_FINAL_BIQ": "7/27/2026",
+    "DEPT_380_TARGET": "7/29/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

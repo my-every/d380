@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.888Z",
+  "pdNumber": "4P711",
+  "projectName": "DTM-BC",
+  "displayName": "DTM-BC - Unit 1",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "8/10/2026",
+    "BRAND_LIST": "8/17/2026",
+    "BRAND_WIRE": "8/24/2026",
+    "PROJ_KITTED": "8/25/2026",
+    "CONLAY": "8/26/2026",
+    "CONASY": "9/4/2026",
+    "PWRCHK": "9/15/2026",
+    "D380_FINAL_BIQ": "9/16/2026",
+    "DEPT_380_TARGET": "10/23/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

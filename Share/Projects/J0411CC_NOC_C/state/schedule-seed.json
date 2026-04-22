@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.129Z",
+  "pdNumber": "J0411CC",
+  "projectName": "NOC-C",
+  "displayName": "NOC-C",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "01/27/26",
+    "BRAND_LIST": "2/9/2026",
+    "BRAND_WIRE": "2/16/2026",
+    "PROJ_KITTED": "2/3/2026",
+    "CONLAY": "2/4/2026",
+    "CONASY": "3/6/2026",
+    "PWRCHK": "3/16/2026",
+    "D380_FINAL_BIQ": "3/18/2026",
+    "DEPT_380_TARGET": "3/19/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "CON"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.895Z",
+  "pdNumber": "4N231",
+  "projectName": "BWP-YOU",
+  "displayName": "BWP-YOU",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "8/13/2026",
+    "BRAND_LIST": "8/20/2026",
+    "BRAND_WIRE": "8/27/2026",
+    "PROJ_KITTED": "8/28/2026",
+    "CONLAY": "8/31/2026",
+    "CONASY": "9/10/2026",
+    "PWRCHK": "9/18/2026",
+    "D380_FINAL_BIQ": "9/21/2026",
+    "DEPT_380_TARGET": "9/23/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

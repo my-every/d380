@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.353Z",
+  "pdNumber": "4K761",
+  "projectName": "DTE-CAL",
+  "displayName": "DTE-CAL - Unit 1",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "3/18/2026",
+    "BRAND_LIST": "4/3/2026",
+    "BRAND_WIRE": "4/10/2026",
+    "PROJ_KITTED": "4/10/2026",
+    "CONLAY": "4/14/2026",
+    "CONASY": "4/23/2026",
+    "PWRCHK": "5/1/2026",
+    "D380_FINAL_BIQ": "5/4/2026",
+    "DEPT_380_TARGET": "5/4/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

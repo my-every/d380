@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { buildProjectSheetPrintDocument } from '@/lib/wire-list-print/build-project-sheet-print-document'
 import { readProjectManifest, readSheetSchema } from '@/lib/project-state/share-project-state-handlers'
-import { buildBrandListExportSchema, type BrandListSchemaProjectInfo } from '@/lib/wire-brand-list/schema'
+import {
+  buildBrandListExportSchema,
+  type BrandListExportSchema,
+  type BrandListSchemaProjectInfo,
+} from '@/lib/wire-brand-list/schema'
 import {
   saveWireBrandListSchema,
   readWireBrandListSchema,
@@ -181,6 +185,58 @@ export async function POST(
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to generate branding schema' },
+      { status: 500 },
+    )
+  }
+}
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ projectId: string }> },
+) {
+  const { projectId } = await params
+
+  try {
+    const body = await request.json() as {
+      sheetSlug?: string
+      schema?: BrandListExportSchema
+    }
+
+    if (!body.sheetSlug || typeof body.sheetSlug !== 'string') {
+      return NextResponse.json(
+        { error: "Missing or invalid 'sheetSlug' field — expected string" },
+        { status: 400 },
+      )
+    }
+
+    const schema = body.schema
+    if (!schema || schema.schemaVersion !== 1 || schema.mode !== 'branding-export') {
+      return NextResponse.json(
+        { error: "Missing or invalid 'schema' field — expected branding export schema" },
+        { status: 400 },
+      )
+    }
+
+    const normalizedSchema: BrandListExportSchema = {
+      ...schema,
+      sheetSlug: body.sheetSlug,
+      totalRows: schema.prefixGroups.reduce(
+        (sum, group) => sum + group.bundles.reduce((bundleSum, bundle) => bundleSum + bundle.rows.length, 0),
+        0,
+      ),
+      generatedAt: new Date().toISOString(),
+    }
+
+    const savedPath = await saveWireBrandListSchema(projectId, body.sheetSlug, normalizedSchema)
+
+    return NextResponse.json({
+      sheetSlug: body.sheetSlug,
+      schema: normalizedSchema,
+      savedPath,
+    })
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Failed to save branding schema' },
       { status: 500 },
     )
   }

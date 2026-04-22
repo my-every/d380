@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.670Z",
+  "pdNumber": "4M513",
+  "projectName": "ENI-KNH",
+  "displayName": "ENI-KNH - Unit 1 - Slot 2",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "6/16/2026",
+    "BRAND_LIST": "6/23/2026",
+    "BRAND_WIRE": "6/30/2026",
+    "PROJ_KITTED": "7/1/2026",
+    "CONLAY": "7/2/2026",
+    "CONASY": "7/14/2026",
+    "PWRCHK": "7/22/2026",
+    "D380_FINAL_BIQ": "7/23/2026",
+    "DEPT_380_TARGET": "8/3/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "CS"
+  }
+}

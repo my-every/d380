@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.438Z",
+  "pdNumber": "4M047CS",
+  "projectName": "WP-HAR STA",
+  "displayName": "WP-HAR STA",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "04/08/26",
+    "BRAND_LIST": "4/15/2026",
+    "BRAND_WIRE": "4/22/2026",
+    "PROJ_KITTED": "4/23/2026",
+    "CONLAY": "4/24/2026",
+    "CONASY": "5/5/2026",
+    "PWRCHK": "5/13/2026",
+    "D380_FINAL_BIQ": "5/14/2026",
+    "DEPT_380_TARGET": "5/14/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "CON"
+  }
+}

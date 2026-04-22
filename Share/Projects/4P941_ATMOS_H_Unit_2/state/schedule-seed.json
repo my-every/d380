@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.917Z",
+  "pdNumber": "4P941",
+  "projectName": "ATMOS-H",
+  "displayName": "ATMOS-H - Unit 2",
+  "unitNumber": "2",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "9/11/2026",
+    "PROJ_KITTED": "9/12/2026",
+    "CONLAY": "9/15/2026",
+    "CONASY": "9/24/2026",
+    "PWRCHK": "10/2/2026",
+    "D380_FINAL_BIQ": "10/5/2026",
+    "DEPT_380_TARGET": "10/6/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

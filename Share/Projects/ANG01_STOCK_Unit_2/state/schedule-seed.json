@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.194Z",
+  "pdNumber": "ANG01",
+  "projectName": "STOCK",
+  "displayName": "STOCK - Unit 2",
+  "unitNumber": "2",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "3/17/2026",
+    "PROJ_KITTED": "3/18/2026",
+    "CONLAY": "3/19/2026",
+    "CONASY": "3/31/2026",
+    "PWRCHK": "4/10/2026",
+    "D380_FINAL_BIQ": "4/10/2026",
+    "DEPT_380_TARGET": "6/11/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

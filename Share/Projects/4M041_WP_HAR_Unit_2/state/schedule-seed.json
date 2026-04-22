@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.178Z",
+  "pdNumber": "4M041",
+  "projectName": "WP-HAR",
+  "displayName": "WP-HAR - Unit 2",
+  "unitNumber": "2",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "3/5/2026",
+    "PROJ_KITTED": "3/3/2026",
+    "CONLAY": "3/5/2026",
+    "CONASY": "3/16/2026",
+    "PWRCHK": "3/20/2026",
+    "D380_FINAL_BIQ": "3/24/2026",
+    "DEPT_380_TARGET": "6/3/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

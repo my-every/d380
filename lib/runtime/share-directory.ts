@@ -1,14 +1,17 @@
 import 'server-only'
 
 import { promises as fs } from 'node:fs'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import {
   DEFAULT_APP_LAUNCH_MODE,
   type AppLaunchMode,
 } from '@/lib/runtime/app-mode-types'
 
-const RUNTIME_SETTINGS_PATH = path.join(process.cwd(), 'cache', 'runtime-settings.json')
+const DEFAULT_RUNTIME_STORAGE_DIRECTORY = path.join(process.cwd(), 'cache')
+const RUNTIME_STORAGE_DIRECTORY = resolveRuntimeStorageDirectory()
+const RUNTIME_SETTINGS_PATH = path.join(RUNTIME_STORAGE_DIRECTORY, 'runtime-settings.json')
+const STANDALONE_SHARE_DIRECTORY = path.join(RUNTIME_STORAGE_DIRECTORY, 'standalone-tool', 'Share')
 
 interface RuntimeSettings {
   shareDirectory?: string | null
@@ -16,7 +19,16 @@ interface RuntimeSettings {
   firstLaunchCompleted?: boolean
 }
 
-type ShareDirectorySource = 'env' | 'config' | 'default'
+type ShareDirectorySource = 'env' | 'config' | 'default' | 'standalone'
+
+function resolveRuntimeStorageDirectory(): string {
+  const configuredUserDataRoot = normalizeShareDirectory(process.env.D380_USER_DATA_DIR)
+  if (configuredUserDataRoot) {
+    return path.join(configuredUserDataRoot, 'runtime')
+  }
+
+  return DEFAULT_RUNTIME_STORAGE_DIRECTORY
+}
 
 async function readRuntimeSettings(): Promise<RuntimeSettings> {
   try {
@@ -63,6 +75,43 @@ function normalizeShareDirectory(value: string | null | undefined): string | nul
   return path.normalize(trimmed)
 }
 
+function repairLegacyMacSharedPrefix(value: string): string {
+  const normalized = path.normalize(value)
+  const legacyPrefix = path.join('/Users', 'Shared') + path.sep
+
+  if (!normalized.startsWith(legacyPrefix) || existsSync(normalized)) {
+    return normalized
+  }
+
+  const repaired = path.join('/Users', normalized.slice(legacyPrefix.length))
+  return existsSync(repaired) ? repaired : normalized
+}
+
+function normalizeResolvedShareDirectory(value: string | null | undefined): string | null {
+  const normalized = normalizeShareDirectory(value)
+  if (!normalized) {
+    return null
+  }
+
+  return repairLegacyMacSharedPrefix(normalized)
+}
+
+function resolveFallbackShareDirectory(configured: string | null): string | null {
+  if (!configured) {
+    return null
+  }
+
+  const defaultShare = path.join(process.cwd(), 'Share')
+  const configuredUsersCsv = path.join(configured, 'users', 'users.csv')
+  const defaultUsersCsv = path.join(defaultShare, 'users', 'users.csv')
+
+  if (!existsSync(configuredUsersCsv) && existsSync(defaultUsersCsv)) {
+    return defaultShare
+  }
+
+  return configured
+}
+
 function normalizeAppLaunchMode(value: string | null | undefined): AppLaunchMode {
   if (value === 'WORKSPACE' || value === 'STANDALONE_TOOL' || value === 'DEPARTMENT') {
     return value
@@ -71,14 +120,45 @@ function normalizeAppLaunchMode(value: string | null | undefined): AppLaunchMode
   return DEFAULT_APP_LAUNCH_MODE
 }
 
+async function resolveConfiguredAppMode(): Promise<AppLaunchMode> {
+  const settings = await readRuntimeSettings()
+  return normalizeAppLaunchMode(settings.appMode)
+}
+
+function resolveConfiguredAppModeSync(): AppLaunchMode {
+  const settings = readRuntimeSettingsSync()
+  return normalizeAppLaunchMode(settings.appMode)
+}
+
+export async function isStandaloneToolMode(): Promise<boolean> {
+  return (await resolveConfiguredAppMode()) === 'STANDALONE_TOOL'
+}
+
+export function isStandaloneToolModeSync(): boolean {
+  return resolveConfiguredAppModeSync() === 'STANDALONE_TOOL'
+}
+
+export async function resolveStandaloneShareDirectory(): Promise<string> {
+  await fs.mkdir(STANDALONE_SHARE_DIRECTORY, { recursive: true })
+  return STANDALONE_SHARE_DIRECTORY
+}
+
+export function resolveStandaloneShareDirectorySync(): string {
+  return STANDALONE_SHARE_DIRECTORY
+}
+
 export async function resolveShareDirectory(): Promise<string> {
-  const envShare = normalizeShareDirectory(process.env.SHARE_DIR)
+  if (await isStandaloneToolMode()) {
+    return resolveStandaloneShareDirectory()
+  }
+
+  const envShare = resolveFallbackShareDirectory(normalizeResolvedShareDirectory(process.env.SHARE_DIR))
   if (envShare) {
     return envShare
   }
 
   const settings = await readRuntimeSettings()
-  const configuredShare = normalizeShareDirectory(settings.shareDirectory)
+  const configuredShare = resolveFallbackShareDirectory(normalizeResolvedShareDirectory(settings.shareDirectory))
   if (configuredShare) {
     return configuredShare
   }
@@ -87,13 +167,17 @@ export async function resolveShareDirectory(): Promise<string> {
 }
 
 export function resolveShareDirectorySync(): string {
-  const envShare = normalizeShareDirectory(process.env.SHARE_DIR)
+  if (isStandaloneToolModeSync()) {
+    return resolveStandaloneShareDirectorySync()
+  }
+
+  const envShare = resolveFallbackShareDirectory(normalizeResolvedShareDirectory(process.env.SHARE_DIR))
   if (envShare) {
     return envShare
   }
 
   const settings = readRuntimeSettingsSync()
-  const configuredShare = normalizeShareDirectory(settings.shareDirectory)
+  const configuredShare = resolveFallbackShareDirectory(normalizeResolvedShareDirectory(settings.shareDirectory))
   if (configuredShare) {
     return configuredShare
   }
@@ -105,7 +189,14 @@ export async function getShareDirectorySettings(): Promise<{
   shareDirectory: string
   source: ShareDirectorySource
 }> {
-  const envShare = normalizeShareDirectory(process.env.SHARE_DIR)
+  if (await isStandaloneToolMode()) {
+    return {
+      shareDirectory: await resolveStandaloneShareDirectory(),
+      source: 'standalone',
+    }
+  }
+
+  const envShare = resolveFallbackShareDirectory(normalizeResolvedShareDirectory(process.env.SHARE_DIR))
   if (envShare) {
     return {
       shareDirectory: envShare,
@@ -114,7 +205,7 @@ export async function getShareDirectorySettings(): Promise<{
   }
 
   const settings = await readRuntimeSettings()
-  const configuredShare = normalizeShareDirectory(settings.shareDirectory)
+  const configuredShare = resolveFallbackShareDirectory(normalizeResolvedShareDirectory(settings.shareDirectory))
   if (configuredShare) {
     return {
       shareDirectory: configuredShare,

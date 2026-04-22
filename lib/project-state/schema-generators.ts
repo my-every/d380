@@ -12,6 +12,60 @@ import type { ProjectModel } from '@/lib/workbook/types'
 import type { ProjectManifest, ManifestAssignmentNode, ManifestReferenceSheet } from '@/types/project-manifest'
 import type { SheetSchema, SheetAssignmentState, SheetLayoutMatch } from '@/types/sheet-schema'
 import type { MappedAssignment } from '@/lib/assignment/mapped-assignment'
+import { detectSwsType, type SwsTypeId } from '@/lib/assignment/sws-detection'
+import { filterExecutableSheets } from '@/lib/assignment/sheet-classification'
+
+function getDefaultStageForSwsType(swsType: SwsTypeId): MappedAssignment['selectedStage'] {
+    switch (swsType) {
+        case 'BLANK':
+        case 'RAIL':
+        case 'BOX':
+        case 'PANEL':
+        case 'COMPONENT':
+        case 'UNDECIDED':
+        default:
+            return 'READY_TO_LAY'
+    }
+}
+
+export function buildDefaultMappedAssignments(model: ProjectModel): MappedAssignment[] {
+    const { assignments: executableSheets } = filterExecutableSheets(model.sheets, model.sheetData, {
+        hasLayoutMatch: () => true,
+    })
+
+    return executableSheets.map((sheet) => {
+        const parsedSheet = sheet.id ? model.sheetData[sheet.id] : undefined
+        const hasWireRows = Boolean(parsedSheet?.semanticRows?.some(row =>
+            (row.wireId && row.wireId.length > 0)
+            || (row.fromDeviceId && row.fromDeviceId.length > 0)
+            || (row.toDeviceId && row.toDeviceId.length > 0),
+        ))
+        const detection = detectSwsType(sheet, {
+            sheetData: parsedSheet,
+            hasWireRows,
+        })
+        const selectedStage = getDefaultStageForSwsType(detection.type)
+
+        return {
+            sheetSlug: sheet.slug ?? '',
+            sheetName: sheet.name ?? '',
+            rowCount: sheet.rowCount,
+            sheetKind: 'assignment',
+            detectedSwsType: detection.type,
+            detectedConfidence: detection.confidence,
+            detectedReasons: detection.reasons,
+            selectedSwsType: detection.type,
+            selectedStage,
+            selectedStatus: 'NOT_STARTED',
+            overrideReason: '',
+            isOverride: false,
+            requiresWireSws: detection.requiresWireSws ?? hasWireRows,
+            requiresCrossWireSws: detection.requiresCrossWireSws ?? false,
+            matchedLayoutPage: undefined,
+            matchedLayoutTitle: sheet.name ?? '',
+        }
+    })
+}
 
 // ── Assignment Node Builder ────────────────────────────────────────────────
 
@@ -64,8 +118,9 @@ export function buildManifestAssignmentNode(
                     score: 50,
                 }],
             }
-            : (existing?.layout ?? null),
+            : null,
         devices: existing?.devices ?? {},
+        boardAssignment: existing?.boardAssignment,
     }
 }
 
@@ -111,6 +166,17 @@ export function buildProjectManifest(
         return d instanceof Date ? d.toISOString() : d
     }
 
+    const sheets = model.sheets.map((sheet) => ({
+        slug: sheet.slug,
+        name: sheet.name,
+        kind: sheet.kind,
+        sheetPath: `state/sheets/${sheet.slug}.json`,
+        rowCount: sheet.rowCount,
+        columnCount: sheet.columnCount,
+        sheetIndex: sheet.sheetIndex,
+        hasData: sheet.hasData,
+    }))
+
     return {
         id: model.id,
         name: model.name,
@@ -122,6 +188,7 @@ export function buildProjectManifest(
         color: model.color,
         status: model.status,
         createdAt: toIso(model.createdAt) ?? new Date().toISOString(),
+        sheets,
         dueDate: toIso(model.dueDate),
         planConlayDate: toIso(model.planConlayDate),
         planConassyDate: toIso(model.planConassyDate),

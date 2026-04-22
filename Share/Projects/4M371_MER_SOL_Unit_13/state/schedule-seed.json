@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.442Z",
+  "pdNumber": "4M371",
+  "projectName": "MER-SOL",
+  "displayName": "MER-SOL - Unit 13",
+  "unitNumber": "13",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "4/23/2026",
+    "PROJ_KITTED": "4/24/2026",
+    "CONLAY": "4/27/2026",
+    "CONASY": "5/6/2026",
+    "PWRCHK": "5/14/2026",
+    "D380_FINAL_BIQ": "5/15/2026",
+    "DEPT_380_TARGET": "5/18/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

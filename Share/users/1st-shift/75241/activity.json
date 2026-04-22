@@ -1,0 +1,1340 @@
+{
+  "badge": "75241",
+  "shift": "1st",
+  "lastUpdated": "2026-04-23T00:44:42.450Z",
+  "activities": [
+    {
+      "id": "act_1776905082450_1ejqp",
+      "timestamp": "2026-04-23T00:44:42.450Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776893516397_aoxhy",
+      "timestamp": "2026-04-22T21:31:56.397Z",
+      "action": "COMPLETED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "profile_sign_out",
+        "event": "shift_ended"
+      }
+    },
+    {
+      "id": "act_1776893341224_g7fzd",
+      "timestamp": "2026-04-22T21:29:01.224Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776876124171_w2t37",
+      "timestamp": "2026-04-22T16:42:04.171Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "BRANDER",
+        "toRole": "DEVELOPER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776876109605_umi0t",
+      "timestamp": "2026-04-22T16:41:49.605Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776841508769_uj0gh",
+      "timestamp": "2026-04-22T07:05:08.769Z",
+      "action": "COMPLETED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "profile_sign_out",
+        "event": "shift_ended"
+      }
+    },
+    {
+      "id": "act_1776840671269_7ekl8",
+      "timestamp": "2026-04-22T06:51:11.269Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "QA",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776840664447_y6vru",
+      "timestamp": "2026-04-22T06:51:04.447Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "QA"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776840093248_m40or",
+      "timestamp": "2026-04-22T06:41:33.248Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "BRANDER",
+        "toRole": "DEVELOPER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776840065999_hhh9v",
+      "timestamp": "2026-04-22T06:41:05.999Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "BRANDER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776839809222_xa5oo",
+      "timestamp": "2026-04-22T06:36:49.222Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776839175736_ild8n",
+      "timestamp": "2026-04-22T06:26:15.736Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "ASSEMBLER",
+        "toRole": "DEVELOPER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776839171146_odlfx",
+      "timestamp": "2026-04-22T06:26:11.146Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "BRANDER",
+        "toRole": "ASSEMBLER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776838920868_xbftz",
+      "timestamp": "2026-04-22T06:22:00.868Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776828349829_zqa46",
+      "timestamp": "2026-04-22T03:25:49.830Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "TEAM_LEAD",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776826791222_r0ef7",
+      "timestamp": "2026-04-22T02:59:51.222Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "SUPERVISOR",
+        "toRole": "TEAM_LEAD"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776826787804_sb4hh",
+      "timestamp": "2026-04-22T02:59:47.804Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "SUPERVISOR"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776826783268_2lnxl",
+      "timestamp": "2026-04-22T02:59:43.268Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "BRANDER",
+        "toRole": "DEVELOPER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776824398076_snpby",
+      "timestamp": "2026-04-22T02:19:58.076Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776822945399_jtz54",
+      "timestamp": "2026-04-22T01:55:45.399Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776805110485_wnbp8",
+      "timestamp": "2026-04-21T20:58:30.485Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "QA",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776805108723_krr9q",
+      "timestamp": "2026-04-21T20:58:28.723Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "QA"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776797556662_571y8",
+      "timestamp": "2026-04-21T18:52:36.662Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776790551704_15sd2",
+      "timestamp": "2026-04-21T16:55:51.704Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776789983935_tu3ij",
+      "timestamp": "2026-04-21T16:46:23.935Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776779198464_qfc9f",
+      "timestamp": "2026-04-21T13:46:38.464Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776772119365_wkwai",
+      "timestamp": "2026-04-21T11:48:39.365Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776741982535_erb0n",
+      "timestamp": "2026-04-21T03:26:22.535Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776741761664_pr5uu",
+      "timestamp": "2026-04-21T03:22:41.664Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "MANAGER",
+        "toRole": "DEVELOPER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776741759436_xbkiz",
+      "timestamp": "2026-04-21T03:22:39.436Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "BRANDER",
+        "toRole": "MANAGER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776740382232_isr4l",
+      "timestamp": "2026-04-21T02:59:42.232Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776727747528_toe4p",
+      "timestamp": "2026-04-20T23:29:07.528Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776721188387_oa9jk",
+      "timestamp": "2026-04-20T21:39:48.387Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776716268992_dftk6",
+      "timestamp": "2026-04-20T20:17:48.993Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776641390955_6wjkc",
+      "timestamp": "2026-04-19T23:29:50.955Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "TEAM_LEAD"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776635426123_w60tr",
+      "timestamp": "2026-04-19T21:50:26.123Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "MANAGER",
+        "toRole": "TEAM_LEAD"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776635423889_5kro5",
+      "timestamp": "2026-04-19T21:50:23.889Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "MANAGER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776635421022_jjuga",
+      "timestamp": "2026-04-19T21:50:21.022Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "ASSEMBLER",
+        "toRole": "DEVELOPER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776635419496_s6nrg",
+      "timestamp": "2026-04-19T21:50:19.496Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "MANAGER",
+        "toRole": "ASSEMBLER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776635416189_hs1og",
+      "timestamp": "2026-04-19T21:50:16.189Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "MANAGER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776635400057_7pwh6",
+      "timestamp": "2026-04-19T21:50:00.057Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "MANAGER",
+        "toRole": "DEVELOPER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776635397984_4vg30",
+      "timestamp": "2026-04-19T21:49:57.984Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "MANAGER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776635376863_ulze8",
+      "timestamp": "2026-04-19T21:49:36.863Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "BRANDER",
+        "toRole": "DEVELOPER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776635375363_9m2ul",
+      "timestamp": "2026-04-19T21:49:35.363Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "MANAGER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776635373159_p1e55",
+      "timestamp": "2026-04-19T21:49:33.159Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "QA",
+        "toRole": "MANAGER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776635370844_ebrjr",
+      "timestamp": "2026-04-19T21:49:30.844Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "QA"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776635366858_39gwj",
+      "timestamp": "2026-04-19T21:49:26.858Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "TEAM_LEAD",
+        "toRole": "DEVELOPER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776634923152_oln56",
+      "timestamp": "2026-04-19T21:42:03.152Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "TEAM_LEAD"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776581920647_qqvtn",
+      "timestamp": "2026-04-19T06:58:40.647Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-access",
+        "key": "projectSchedule",
+        "enabled": true,
+        "description": "Enabled projectSchedule access",
+        "auditEntries": [
+          {
+            "id": "b4d93d8a-ce45-49c0-a1e3-912a17803d65",
+            "timestamp": "2026-04-19T06:58:40.645Z",
+            "performedBy": "75241",
+            "targetBadge": "69506",
+            "changeType": "grant",
+            "permissionKey": "projectSchedule",
+            "previousValue": false,
+            "newValue": true
+          }
+        ]
+      },
+      "comment": "Enabled projectSchedule access for badge #69506",
+      "targetBadge": "69506",
+      "result": "success"
+    },
+    {
+      "id": "act_1776581168294_sw7vi",
+      "timestamp": "2026-04-19T06:46:08.294Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-access",
+        "key": "catalogAccess",
+        "enabled": true,
+        "description": "Enabled catalogAccess access",
+        "auditEntries": [
+          {
+            "id": "7fff9e2d-7ef6-446b-8c2b-ceb2698b6192",
+            "timestamp": "2026-04-19T06:46:08.291Z",
+            "performedBy": "75241",
+            "targetBadge": "70061",
+            "changeType": "grant",
+            "permissionKey": "catalogAccess",
+            "previousValue": false,
+            "newValue": true
+          }
+        ]
+      },
+      "comment": "Enabled catalogAccess access for badge #70061",
+      "targetBadge": "70061",
+      "result": "success"
+    },
+    {
+      "id": "act_1776484335125_89n4m",
+      "timestamp": "2026-04-18T03:52:15.125Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "MANAGER",
+        "toRole": "DEVELOPER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776484332377_yhkqw",
+      "timestamp": "2026-04-18T03:52:12.377Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "MANAGER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776482850657_aio5z",
+      "timestamp": "2026-04-18T03:27:30.657Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-permission",
+        "key": "canViewProjects",
+        "enabled": false,
+        "description": "Revoked View Projects",
+        "auditEntries": [
+          {
+            "id": "db5eedde-475f-4ea8-aaf5-c76bbb8989b1",
+            "timestamp": "2026-04-18T03:27:30.656Z",
+            "performedBy": "75241",
+            "targetBadge": "75242",
+            "changeType": "revoke",
+            "permissionKey": "canViewProjects",
+            "previousValue": true,
+            "newValue": false
+          }
+        ]
+      },
+      "comment": "Revoked View Projects for badge #75242",
+      "targetBadge": "75242",
+      "result": "success"
+    },
+    {
+      "id": "act_1776482849161_8ose5",
+      "timestamp": "2026-04-18T03:27:29.161Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-permission",
+        "key": "canViewProjects",
+        "enabled": true,
+        "description": "Granted View Projects",
+        "auditEntries": [
+          {
+            "id": "74bd5a38-9a2e-4f12-81bd-56173a148e25",
+            "timestamp": "2026-04-18T03:27:29.158Z",
+            "performedBy": "75241",
+            "targetBadge": "75242",
+            "changeType": "grant",
+            "permissionKey": "canViewProjects",
+            "previousValue": false,
+            "newValue": true
+          }
+        ]
+      },
+      "comment": "Granted View Projects for badge #75242",
+      "targetBadge": "75242",
+      "result": "success"
+    },
+    {
+      "id": "act_1776470532057_wxfwf",
+      "timestamp": "2026-04-18T00:02:12.057Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "apply-preset",
+        "presetId": "viewer",
+        "description": "Applied permission preset: viewer",
+        "auditEntries": [
+          {
+            "id": "b81c1d42-7aee-45c2-88cd-cb041866e608",
+            "timestamp": "2026-04-18T00:02:12.056Z",
+            "performedBy": "75241",
+            "targetBadge": "70061",
+            "changeType": "preset-apply",
+            "permissionKey": "viewer",
+            "previousValue": false,
+            "newValue": true,
+            "reason": "Applied permission preset: viewer"
+          }
+        ]
+      },
+      "comment": "Applied permission preset: viewer for badge #70061",
+      "targetBadge": "70061",
+      "result": "success"
+    },
+    {
+      "id": "act_1776470528720_3fr9b",
+      "timestamp": "2026-04-18T00:02:08.720Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "apply-preset",
+        "presetId": "lead",
+        "description": "Applied permission preset: lead",
+        "auditEntries": [
+          {
+            "id": "522b7e61-8cd3-4ce1-866f-83de6e6b2dca",
+            "timestamp": "2026-04-18T00:02:08.719Z",
+            "performedBy": "75241",
+            "targetBadge": "70061",
+            "changeType": "preset-apply",
+            "permissionKey": "lead",
+            "previousValue": false,
+            "newValue": true,
+            "reason": "Applied permission preset: lead"
+          }
+        ]
+      },
+      "comment": "Applied permission preset: lead for badge #70061",
+      "targetBadge": "70061",
+      "result": "success"
+    },
+    {
+      "id": "act_1776470513008_w8zf4",
+      "timestamp": "2026-04-18T00:01:53.008Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-access",
+        "key": "catalogAccess",
+        "enabled": true,
+        "description": "Enabled catalogAccess access",
+        "auditEntries": [
+          {
+            "id": "513ad315-ff03-4f56-84d4-fa65a2fe0d2c",
+            "timestamp": "2026-04-18T00:01:53.007Z",
+            "performedBy": "75241",
+            "targetBadge": "70061",
+            "changeType": "grant",
+            "permissionKey": "catalogAccess",
+            "previousValue": false,
+            "newValue": true
+          }
+        ]
+      },
+      "comment": "Enabled catalogAccess access for badge #70061",
+      "targetBadge": "70061",
+      "result": "success"
+    },
+    {
+      "id": "act_1776465697107_pam2b",
+      "timestamp": "2026-04-17T22:41:37.107Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-access",
+        "key": "projectSchedule",
+        "enabled": false,
+        "description": "Disabled projectSchedule access"
+      },
+      "comment": "Disabled projectSchedule access for badge #75123",
+      "targetBadge": "75123",
+      "result": "success"
+    },
+    {
+      "id": "act_1776465694347_elsqb",
+      "timestamp": "2026-04-17T22:41:34.347Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-access",
+        "key": "projectSchedule",
+        "enabled": true,
+        "description": "Enabled projectSchedule access"
+      },
+      "comment": "Enabled projectSchedule access for badge #75123",
+      "targetBadge": "75123",
+      "result": "success"
+    },
+    {
+      "id": "act_1776463808360_w8k1q",
+      "timestamp": "2026-04-17T22:10:08.360Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-access",
+        "key": "projectSchedule",
+        "enabled": false,
+        "description": "Disabled projectSchedule access"
+      },
+      "comment": "Disabled projectSchedule access for badge #68511",
+      "targetBadge": "68511",
+      "result": "success"
+    },
+    {
+      "id": "act_1776463142059_0bo3k",
+      "timestamp": "2026-04-17T21:59:02.059Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "MANAGER",
+        "toRole": "DEVELOPER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776463138634_58p78",
+      "timestamp": "2026-04-17T21:58:58.634Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "MANAGER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776459919612_nc8ym",
+      "timestamp": "2026-04-17T21:05:19.612Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "MANAGER",
+        "toRole": "DEVELOPER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776459916951_im87s",
+      "timestamp": "2026-04-17T21:05:16.951Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "SUPERVISOR",
+        "toRole": "MANAGER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776459914787_6pt82",
+      "timestamp": "2026-04-17T21:05:14.787Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "TEAM_LEAD",
+        "toRole": "SUPERVISOR"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776459912519_uxvkw",
+      "timestamp": "2026-04-17T21:05:12.519Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "QA",
+        "toRole": "TEAM_LEAD"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776459909778_1eapy",
+      "timestamp": "2026-04-17T21:05:09.778Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "BRANDER",
+        "toRole": "QA"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776459907071_892i7",
+      "timestamp": "2026-04-17T21:05:07.071Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "ASSEMBLER",
+        "toRole": "BRANDER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776459903738_tbqph",
+      "timestamp": "2026-04-17T21:05:03.738Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "ASSEMBLER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776459576641_9inc0",
+      "timestamp": "2026-04-17T20:59:36.641Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "SUPERVISOR",
+        "toRole": "DEVELOPER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776459571091_5gx7n",
+      "timestamp": "2026-04-17T20:59:31.091Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "MANAGER",
+        "toRole": "SUPERVISOR"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776459567708_tn0gd",
+      "timestamp": "2026-04-17T20:59:27.708Z",
+      "action": "STAGE_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "role_switch",
+        "fromRole": "DEVELOPER",
+        "toRole": "MANAGER"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776171152456_zz46y",
+      "timestamp": "2026-04-14T12:52:32.456Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-role",
+        "role": "team-lead",
+        "enabled": true,
+        "description": "Granted Team Lead role"
+      },
+      "comment": "Granted Team Lead role for badge #43772",
+      "targetBadge": "43772",
+      "result": "success"
+    },
+    {
+      "id": "act_1776171149633_5uj75",
+      "timestamp": "2026-04-14T12:52:29.633Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-role",
+        "role": "manager",
+        "enabled": true,
+        "description": "Granted Manager role"
+      },
+      "comment": "Granted Manager role for badge #43772",
+      "targetBadge": "43772",
+      "result": "success"
+    },
+    {
+      "id": "act_1776171146888_m3e9q",
+      "timestamp": "2026-04-14T12:52:26.888Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-role",
+        "role": "developer",
+        "enabled": true,
+        "description": "Granted Developer role"
+      },
+      "comment": "Granted Developer role for badge #43772",
+      "targetBadge": "43772",
+      "result": "success"
+    },
+    {
+      "id": "act_1776170655341_8cwp8",
+      "timestamp": "2026-04-14T12:44:15.341Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-role",
+        "role": "brander",
+        "enabled": true,
+        "description": "Granted Brander role"
+      },
+      "comment": "Granted Brander role for badge #46590",
+      "targetBadge": "46590",
+      "result": "success"
+    },
+    {
+      "id": "act_1776170606017_b0bqg",
+      "timestamp": "2026-04-14T12:43:26.017Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-role",
+        "role": "qa",
+        "enabled": true,
+        "description": "Granted Quality Assurance role"
+      },
+      "comment": "Granted Quality Assurance role for badge #70061",
+      "targetBadge": "70061",
+      "result": "success"
+    },
+    {
+      "id": "act_1776170150717_t3ezs",
+      "timestamp": "2026-04-14T12:35:50.717Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-role",
+        "role": "qa",
+        "enabled": true,
+        "description": "Granted Quality Assurance role"
+      },
+      "comment": "Granted Quality Assurance role for badge #51600",
+      "targetBadge": "51600",
+      "result": "success"
+    },
+    {
+      "id": "act_1776170134668_iuuqf",
+      "timestamp": "2026-04-14T12:35:34.668Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-role",
+        "role": "team-lead",
+        "enabled": true,
+        "description": "Granted Team Lead role"
+      },
+      "comment": "Granted Team Lead role for badge #50646",
+      "targetBadge": "50646",
+      "result": "success"
+    },
+    {
+      "id": "act_1776167736431_3eiy5",
+      "timestamp": "2026-04-14T11:55:36.431Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-access",
+        "key": "projectSchedule",
+        "enabled": true,
+        "description": "Enabled projectSchedule access"
+      },
+      "comment": "Enabled projectSchedule access for badge #68511",
+      "targetBadge": "68511",
+      "result": "success"
+    },
+    {
+      "id": "act_1776167726837_62hmt",
+      "timestamp": "2026-04-14T11:55:26.837Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-role",
+        "role": "assembler",
+        "enabled": true,
+        "description": "Granted Assembler role"
+      },
+      "comment": "Granted Assembler role for badge #68511",
+      "targetBadge": "68511",
+      "result": "success"
+    },
+    {
+      "id": "act_1776167721983_evrq4",
+      "timestamp": "2026-04-14T11:55:21.983Z",
+      "action": "SETTINGS_CHANGED",
+      "performedBy": "75241",
+      "metadata": {
+        "settingsAction": "update-role",
+        "role": "brander",
+        "enabled": true,
+        "description": "Granted Brander role"
+      },
+      "comment": "Granted Brander role for badge #68511",
+      "targetBadge": "68511",
+      "result": "success"
+    },
+    {
+      "id": "act_1776091918540_rdn8r",
+      "timestamp": "2026-04-13T14:51:58.540Z",
+      "action": "status_changed",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "profile_settings",
+        "changedFields": [
+          "bio",
+          "department",
+          "email",
+          "location",
+          "phone",
+          "preferences",
+          "preferredName",
+          "title"
+        ],
+        "result": "success",
+        "performedBy": "75241"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1776080892245_onznm",
+      "timestamp": "2026-04-13T11:48:12.245Z",
+      "action": "status_changed",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "profile_settings",
+        "changedFields": [
+          "bio",
+          "department",
+          "email",
+          "location",
+          "phone",
+          "preferences",
+          "preferredName",
+          "title"
+        ],
+        "result": "success",
+        "performedBy": "75241"
+      },
+      "result": "success",
+      "comments": [
+        {
+          "id": "1776084061498-ns7gprr6a",
+          "text": "j",
+          "author": "75241",
+          "timestamp": "2026-04-13T12:41:01.498Z"
+        },
+        {
+          "id": "1776100714388-1l38xdg5z",
+          "text": "khbkh",
+          "author": "75241",
+          "timestamp": "2026-04-13T17:18:34.388Z"
+        }
+      ]
+    },
+    {
+      "id": "act_1776060751846_2f2ng",
+      "timestamp": "2026-04-13T06:12:31.846Z",
+      "action": "status_changed",
+      "performedBy": "75241",
+      "metadata": {
+        "source": "profile_settings",
+        "changedFields": [
+          "bio",
+          "department",
+          "email",
+          "location",
+          "phone",
+          "preferences",
+          "preferredName",
+          "title"
+        ],
+        "result": "success",
+        "performedBy": "75241"
+      },
+      "result": "success"
+    },
+    {
+      "id": "act_1712963132123_z9k2b",
+      "timestamp": "2026-04-12T14:45:32.123Z",
+      "action": "comment_added",
+      "comment": "Looks good! Ready for handoff to QA.",
+      "targetBadge": "75242",
+      "performedBy": "75241",
+      "metadata": {
+        "assignmentId": "ASG-2024-001",
+        "projectId": "PRJ-2024-001",
+        "stage": "wire_list_review"
+      }
+    },
+    {
+      "id": "act_1712962932000_m4l7x",
+      "timestamp": "2026-04-12T14:35:32.000Z",
+      "action": "assignment_completed",
+      "assignmentId": "ASG-2024-001",
+      "performedBy": "75241",
+      "durationSeconds": 1800,
+      "result": "success",
+      "metadata": {
+        "projectId": "PRJ-2024-001",
+        "stage": "wire_list_review",
+        "completionNotes": "All wire lists verified against CAD drawings"
+      }
+    },
+    {
+      "id": "act_1712961332000_p8q1y",
+      "timestamp": "2026-04-12T14:15:32.000Z",
+      "action": "assignment_started",
+      "assignmentId": "ASG-2024-001",
+      "performedBy": "75241",
+      "metadata": {
+        "projectId": "PRJ-2024-001",
+        "stage": "wire_list_review"
+      }
+    },
+    {
+      "id": "act_1712960732000_r2s3t",
+      "timestamp": "2026-04-12T14:05:32.000Z",
+      "action": "stage_completed",
+      "performedBy": "75241",
+      "result": "success",
+      "metadata": {
+        "projectId": "PRJ-2023-042",
+        "stage": "layout_matching",
+        "completedCount": 3
+      }
+    },
+    {
+      "id": "act_1712959932000_n9v4w",
+      "timestamp": "2026-04-12T13:59:00.000Z",
+      "action": "shift_started",
+      "performedBy": "75241",
+      "metadata": {
+        "workArea": "ASSEMBLY_FLOOR_1",
+        "lwc": "NEW_FLEX"
+      }
+    },
+    {
+      "id": "act_1712805932000_x5c1d",
+      "timestamp": "2026-04-11T10:12:12.000Z",
+      "action": "issue_reported",
+      "performedBy": "75241",
+      "result": "pending",
+      "metadata": {
+        "assignmentId": "ASG-2023-098",
+        "projectId": "PRJ-2023-031",
+        "issueType": "component_mismatch",
+        "severity": "high",
+        "description": "Wire gauge mismatch on sheet 3 found during QC"
+      },
+      "comments": []
+    },
+    {
+      "id": "act_1712805532000_k3f2e",
+      "timestamp": "2026-04-11T10:05:32.000Z",
+      "action": "photo_uploaded",
+      "performedBy": "75241",
+      "metadata": {
+        "assignmentId": "ASG-2023-098",
+        "photoType": "completion_verification",
+        "photoUrl": "/uploads/75241/2026-04-11/photo_001.jpg"
+      }
+    },
+    {
+      "id": "act_1712804732000_j1d6f",
+      "timestamp": "2026-04-11T09:52:12.000Z",
+      "action": "comment_added",
+      "comment": "Added note about connector pinout on page 2. Verify with supervisor.",
+      "performedBy": "75241",
+      "metadata": {
+        "assignmentId": "ASG-2023-098",
+        "projectId": "PRJ-2023-031",
+        "mentionedBadge": "75243"
+      }
+    },
+    {
+      "id": "act_1712803932000_h2e7g",
+      "timestamp": "2026-04-11T09:39:00.000Z",
+      "action": "assignment_paused",
+      "assignmentId": "ASG-2023-098",
+      "performedBy": "75241",
+      "durationSeconds": 900,
+      "metadata": {
+        "reason": "Waiting for supervisor clarification on connector spec",
+        "projectId": "PRJ-2023-031"
+      }
+    },
+    {
+      "id": "act_1712803332000_g4d8h",
+      "timestamp": "2026-04-11T09:28:52.000Z",
+      "action": "assignment_created",
+      "assignmentId": "ASG-2023-098",
+      "performedBy": "75243",
+      "metadata": {
+        "projectId": "PRJ-2023-031",
+        "stage": "wire_list_assembly",
+        "assignedTo": "75241",
+        "wireCount": 87,
+        "priority": "high"
+      }
+    }
+  ],
+  "stats": {
+    "totalActions": 95,
+    "actionsToday": 6,
+    "lastActionTime": "2026-04-23T00:44:42.450Z"
+  }
+}

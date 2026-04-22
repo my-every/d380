@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.884Z",
+  "pdNumber": "4N061",
+  "projectName": "PROP-99",
+  "displayName": "PROP-99",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "8/6/2026",
+    "BRAND_LIST": "8/13/2026",
+    "BRAND_WIRE": "8/20/2026",
+    "PROJ_KITTED": "8/21/2026",
+    "CONLAY": "8/24/2026",
+    "CONASY": "9/2/2026",
+    "PWRCHK": "9/11/2026",
+    "D380_FINAL_BIQ": "9/14/2026",
+    "DEPT_380_TARGET": "8/24/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

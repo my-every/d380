@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server'
 
 import { createSessionFeedback } from '@/lib/session/session-feedback'
 import {
-  readUserFromShare,
-  readUsersFromShare,
-  updateUserPinInShare,
-} from '@/lib/session/share-user-store'
+  readUserForRuntime,
+  readUsersForRuntime,
+  updateUserPinForRuntime,
+} from '@/lib/session/runtime-user-store'
 
 function stripPin<T extends { pinHash?: unknown }>(user: T): Omit<T, 'pinHash'> {
   const { pinHash: _stripped, ...safe } = user
@@ -18,11 +18,11 @@ export async function GET(request: Request) {
     const badge = searchParams.get('badge')
 
     if (badge) {
-      const user = await readUserFromShare(badge)
+      const user = await readUserForRuntime(badge)
       return NextResponse.json({ user: user ? stripPin(user) : null })
     }
 
-    const users = await readUsersFromShare()
+    const users = await readUsersForRuntime()
     return NextResponse.json({ users: users.map(stripPin) })
   } catch (error) {
     console.error('[session/users] GET failed', error)
@@ -60,7 +60,7 @@ export async function PATCH(request: Request) {
       )
     }
 
-    const user = await updateUserPinInShare(body.badge, body.currentPin, body.nextPin)
+    const user = await updateUserPinForRuntime(body.badge, body.currentPin, body.nextPin)
 
     if (!user) {
       return NextResponse.json(

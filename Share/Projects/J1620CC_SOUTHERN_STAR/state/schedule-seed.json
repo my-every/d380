@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.182Z",
+  "pdNumber": "J1620CC",
+  "projectName": "SOUTHERN STAR",
+  "displayName": "SOUTHERN STAR",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "02/18/26",
+    "BRAND_LIST": "3/3/2026",
+    "BRAND_WIRE": "3/10/2026",
+    "PROJ_KITTED": "3/6/2026",
+    "CONLAY": "3/9/2026",
+    "CONASY": "3/18/2026",
+    "PWRCHK": "3/25/2026",
+    "D380_FINAL_BIQ": "3/27/2026",
+    "DEPT_380_TARGET": "3/27/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "CON"
+  }
+}

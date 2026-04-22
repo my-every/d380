@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.922Z",
+  "pdNumber": "4P508CS",
+  "projectName": "LAKESSC",
+  "displayName": "LAKESSC",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "8/31/2026",
+    "BRAND_LIST": "9/8/2026",
+    "BRAND_WIRE": "9/15/2026",
+    "PROJ_KITTED": "9/16/2026",
+    "CONLAY": "9/17/2026",
+    "CONASY": "9/28/2026",
+    "PWRCHK": "10/6/2026",
+    "D380_FINAL_BIQ": "10/7/2026",
+    "DEPT_380_TARGET": "10/8/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "CON"
+  }
+}

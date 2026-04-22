@@ -1,10 +1,11 @@
 import type { D380ShellCommandActionViewModel, D380ShellNavItem, D380ShellViewModel } from '@/types/d380-shell'
 
 const navItems: D380ShellNavItem[] = [
-  { id: 'home', label: 'Home', href: '/projects' },
-  { id: 'board', label: 'Board', href: '/projects/board' },
-  { id: 'tools', label: 'Tools', href: '/projects/tools' },
-  { id: 'leader-board', label: 'Leaders', href: '/projects/leader-board' },
+  { id: 'home', label: 'Home', href: '/380' },
+  { id: 'board', label: 'Board', href: '/board' },
+  { id: 'projects', label: 'Projects', href: '/projects' },
+  { id: 'parts', label: 'Parts', href: '/parts' },
+  { id: 'training', label: 'Training', href: '/training' },
 
 ]
 

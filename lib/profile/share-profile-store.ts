@@ -35,6 +35,16 @@ export interface ShareUserProfile {
     hireDate: string | null
     yearsExperience: number
     skills: Record<string, number>
+    activeAssignments?: Array<Record<string, unknown>>
+    assignmentCompetency?: Record<string, unknown> | null
+    boardAvailability?: {
+        status: 'OFF_SHIFT' | 'AVAILABLE' | 'ON_ASSIGNMENT'
+        shiftId: '1st' | '2nd' | null
+        updatedAt: string
+        clockedInAt?: string | null
+        clockedOutAt?: string | null
+        activeAssignmentId?: string | null
+    } | null
     preferences: ShareUserPreferences
     lastLoginAt: string | null
     createdAt: string

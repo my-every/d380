@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.147Z",
+  "pdNumber": "4M411",
+  "projectName": "WP-NH",
+  "displayName": "WP-NH - Unit 1",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "02/10/26",
+    "BRAND_LIST": "2/16/2026",
+    "BRAND_WIRE": "2/23/2026",
+    "PROJ_KITTED": "2/17/2026",
+    "CONLAY": "2/18/2026",
+    "CONASY": "2/27/2026",
+    "PWRCHK": "3/6/2026",
+    "D380_FINAL_BIQ": "3/9/2026",
+    "DEPT_380_TARGET": "4/21/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

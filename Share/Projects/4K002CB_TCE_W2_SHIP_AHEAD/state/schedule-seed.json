@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.118Z",
+  "pdNumber": "4K002CB",
+  "projectName": "TCE-W2 SHIP AHEAD",
+  "displayName": "TCE-W2 SHIP AHEAD",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "03/10/26",
+    "BRAND_LIST": "2/5/2026",
+    "BRAND_WIRE": "2/12/2026",
+    "PROJ_KITTED": "3/16/2026",
+    "CONLAY": "3/19/2026",
+    "CONASY": "3/26/2026",
+    "PWRCHK": "4/3/2026",
+    "D380_FINAL_BIQ": "3/27/2026",
+    "DEPT_380_TARGET": "3/25/2026",
+    "LWC": "New",
+    "UNIT_TYPE": "CON"
+  }
+}

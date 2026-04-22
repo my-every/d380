@@ -1,20 +1,9 @@
 import { redirect } from 'next/navigation'
 
+import { getPostLaunchRouteForMode } from '@/lib/runtime/app-mode-routing'
 import { getAppModeSettings } from '@/lib/runtime/share-directory'
 
 export const dynamic = 'force-dynamic'
-
-function getPostLaunchRouteForMode(mode: 'DEPARTMENT' | 'WORKSPACE' | 'STANDALONE_TOOL'): string {
-  if (mode === 'DEPARTMENT') {
-    return '/projects'
-  }
-
-  if (mode === 'WORKSPACE') {
-    return '/projects/upload'
-  }
-
-  return '/projects'
-}
 
 function getDefaultRoute(settings: {
   appMode: 'DEPARTMENT' | 'WORKSPACE' | 'STANDALONE_TOOL'

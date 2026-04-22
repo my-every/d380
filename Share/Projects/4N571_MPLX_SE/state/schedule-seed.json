@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.736Z",
+  "pdNumber": "4N571",
+  "projectName": "MPLX-SE",
+  "displayName": "MPLX-SE",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "6/29/2026",
+    "BRAND_LIST": "7/7/2026",
+    "BRAND_WIRE": "7/14/2026",
+    "PROJ_KITTED": "7/15/2026",
+    "CONLAY": "7/16/2026",
+    "CONASY": "7/27/2026",
+    "PWRCHK": "8/4/2026",
+    "D380_FINAL_BIQ": "8/5/2026",
+    "DEPT_380_TARGET": "8/6/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

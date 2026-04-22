@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.298Z",
+  "pdNumber": "4M368CS",
+  "projectName": "LT2E-SC",
+  "displayName": "LT2E-SC",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "03/23/26",
+    "BRAND_LIST": "3/31/2026",
+    "BRAND_WIRE": "4/7/2026",
+    "PROJ_KITTED": "4/7/2026",
+    "CONLAY": "4/9/2026",
+    "CONASY": "4/20/2026",
+    "PWRCHK": "4/28/2026",
+    "D380_FINAL_BIQ": "4/29/2026",
+    "DEPT_380_TARGET": "4/29/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "CON"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.617Z",
+  "pdNumber": "4N991",
+  "projectName": "CUU-SU",
+  "displayName": "CUU-SU - Unit 2 - Slot 1",
+  "unitNumber": "2",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "6/12/2026",
+    "PROJ_KITTED": "6/13/2026",
+    "CONLAY": "6/16/2026",
+    "CONASY": "6/25/2026",
+    "PWRCHK": "7/6/2026",
+    "D380_FINAL_BIQ": "7/7/2026",
+    "DEPT_380_TARGET": "7/7/2026",
+    "LWC": "NTB",
+    "UNIT_TYPE": "CS"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.773Z",
+  "pdNumber": "4M512",
+  "projectName": "ENI-KBB",
+  "displayName": "ENI-KBB - Unit 1 - Slot 2",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "7/13/2026",
+    "BRAND_LIST": "7/20/2026",
+    "BRAND_WIRE": "7/27/2026",
+    "PROJ_KITTED": "7/28/2026",
+    "CONLAY": "7/29/2026",
+    "CONASY": "8/7/2026",
+    "PWRCHK": "8/17/2026",
+    "D380_FINAL_BIQ": "8/18/2026",
+    "DEPT_380_TARGET": "8/19/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "CS"
+  }
+}

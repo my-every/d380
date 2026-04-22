@@ -55,7 +55,10 @@ async function persistLayoutPagesToShare(
   });
 
   if (!response.ok) {
-    throw new Error("Failed to persist layout pages to Share state");
+    const detail = await response.text().catch(() => "");
+    throw new Error(
+      detail.trim() || `Failed to persist layout pages to Share state (${response.status})`,
+    );
   }
 }
 

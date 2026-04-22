@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.924Z",
+  "pdNumber": "4P621",
+  "projectName": "S60-95",
+  "displayName": "S60-95",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "9/1/2026",
+    "BRAND_LIST": "9/9/2026",
+    "BRAND_WIRE": "9/16/2026",
+    "PROJ_KITTED": "9/17/2026",
+    "CONLAY": "9/18/2026",
+    "CONASY": "9/29/2026",
+    "PWRCHK": "10/7/2026",
+    "D380_FINAL_BIQ": "10/8/2026",
+    "DEPT_380_TARGET": "8/4/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

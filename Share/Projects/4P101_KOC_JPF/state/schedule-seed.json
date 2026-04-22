@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.176Z",
+  "pdNumber": "4P101",
+  "projectName": "KOC-JPF",
+  "displayName": "KOC-JPF",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "02/19/26",
+    "BRAND_LIST": "2/25/2026",
+    "BRAND_WIRE": "3/4/2026",
+    "PROJ_KITTED": "2/26/2026",
+    "CONLAY": "3/2/2026",
+    "CONASY": "3/12/2026",
+    "PWRCHK": "3/24/2026",
+    "D380_FINAL_BIQ": "3/26/2026",
+    "DEPT_380_TARGET": "3/26/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

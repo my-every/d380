@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.900Z",
+  "pdNumber": "4N121",
+  "projectName": "WWM-W",
+  "displayName": "WWM-W - Unit 2",
+  "unitNumber": "2",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "8/31/2026",
+    "PROJ_KITTED": "9/1/2026",
+    "CONLAY": "9/2/2026",
+    "CONASY": "9/14/2026",
+    "PWRCHK": "9/22/2026",
+    "D380_FINAL_BIQ": "9/23/2026",
+    "DEPT_380_TARGET": "9/23/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

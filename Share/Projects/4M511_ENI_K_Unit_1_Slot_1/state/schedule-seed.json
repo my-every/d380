@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.143Z",
+  "pdNumber": "4M511",
+  "projectName": "ENI-K",
+  "displayName": "ENI-K - Unit 1 - Slot 1",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "03/23/26",
+    "BRAND_LIST": "2/12/2026",
+    "BRAND_WIRE": "2/19/2026",
+    "PROJ_KITTED": "3/24/2026",
+    "CONLAY": "3/26/2026",
+    "CONASY": "4/3/2026",
+    "PWRCHK": "4/3/2026",
+    "D380_FINAL_BIQ": "4/3/2026",
+    "DEPT_380_TARGET": "4/23/2026",
+    "LWC": "NTB",
+    "UNIT_TYPE": "CS"
+  }
+}

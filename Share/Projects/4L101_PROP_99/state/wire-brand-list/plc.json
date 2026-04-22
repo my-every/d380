@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-22T20:41:20.417Z",
+  "mode": "branding-export",
+  "sheetSlug": "plc",
+  "sheetName": "PLC",
+  "totalRows": 7,
+  "header": {
+    "locationTitle": "PLC",
+    "fromLabel": "From",
+    "toLabel": "To",
+    "columns": [
+      "Device ID",
+      "Wire No.",
+      "Wire ID",
+      "Gauge/Size",
+      "Length",
+      "Device ID",
+      "To Location",
+      "Bundle Name"
+    ]
+  },
+  "projectInfo": {
+    "projectNumber": "4L101",
+    "projectName": "PROP-99",
+    "revision": "C.4 M.5",
+    "controlsDE": "Li, Jonathan"
+  },
+  "prefixGroups": [
+    {
+      "prefix": "AT",
+      "bundles": [
+        {
+          "bundleName": "AT0680",
+          "toLocation": "PLC",
+          "rows": [
+            {
+              "rowId": "row-1",
+              "rowIndex": 12,
+              "fromDeviceId": "AT0680:NEG",
+              "wireNo": "0V",
+              "wireId": "WHT",
+              "gaugeSize": "16",
+              "length": 60,
+              "toDeviceId": "XT0680:2",
+              "toLocation": "PLC",
+              "bundleName": "AT0680",
+              "bundleDisplay": "AT0680",
+              "devicePrefix": "AT"
+            },
+            {
+              "rowId": "row-2",
+              "rowIndex": 13,
+              "fromDeviceId": "AT0680:POS",
+              "wireNo": "AT0680POS",
+              "wireId": "WHT",
+              "gaugeSize": "16",
+              "length": 60,
+              "toDeviceId": "XT0680:1",
+              "toLocation": "PLC",
+              "bundleName": "AT0680",
+              "bundleDisplay": "",
+              "devicePrefix": "AT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prefix": "FU",
+      "bundles": [
+        {
+          "bundleName": "FU - XT",
+          "toLocation": "PLC",
+          "rows": [
+            {
+              "rowId": "row-3",
+              "rowIndex": 14,
+              "fromDeviceId": "FU0680:LD",
+              "wireNo": "AT0680POS",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 60,
+              "toDeviceId": "XT0680:1",
+              "toLocation": "PLC",
+              "bundleName": "FU - XT",
+              "bundleDisplay": "FU - XT",
+              "devicePrefix": "FU"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prefix": "FU",
+      "bundles": [
+        {
+          "bundleName": "FU - XT",
+          "toLocation": "PANEL A",
+          "rows": [
+            {
+              "rowId": "row-9",
+              "rowIndex": 20,
+              "fromDeviceId": "FU0680:LI",
+              "wireNo": "FU0210",
+              "wireId": "WHT",
+              "gaugeSize": "16",
+              "length": 120,
+              "toDeviceId": "XT0231:1",
+              "toLocation": "PANEL A",
+              "bundleName": "FU - XT",
+              "bundleDisplay": "FU - XT - PANEL A",
+              "devicePrefix": "FU"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prefix": "UV",
+      "bundles": [
+        {
+          "bundleName": "UV0600",
+          "toLocation": "PANEL A",
+          "rows": [
+            {
+              "rowId": "row-11",
+              "rowIndex": 22,
+              "fromDeviceId": "UV0600:(+)",
+              "wireNo": "FU0010",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 120,
+              "toDeviceId": "FU0010:LD",
+              "toLocation": "PANEL A",
+              "bundleName": "UV0600",
+              "bundleDisplay": "UV0600 - PANEL A",
+              "devicePrefix": "UV"
+            },
+            {
+              "rowId": "row-10",
+              "rowIndex": 21,
+              "fromDeviceId": "UV0600:(-)",
+              "wireNo": "0V",
+              "wireId": "WHT",
+              "gaugeSize": "16",
+              "length": 120,
+              "toDeviceId": "XT0135:1",
+              "toLocation": "PANEL A",
+              "bundleName": "UV0600",
+              "bundleDisplay": "",
+              "devicePrefix": "UV"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prefix": "XT",
+      "bundles": [
+        {
+          "bundleName": "XT - XT",
+          "toLocation": "PANEL A",
+          "rows": [
+            {
+              "rowId": "row-12",
+              "rowIndex": 23,
+              "fromDeviceId": "XT0680:2",
+              "wireNo": "0V",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 120,
+              "toDeviceId": "XT0232:1",
+              "toLocation": "PANEL A",
+              "bundleName": "XT - XT",
+              "bundleDisplay": "XT - XT - PANEL A",
+              "devicePrefix": "XT"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

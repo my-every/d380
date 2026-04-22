@@ -621,6 +621,7 @@ export interface SchemaHydrationResult {
   projectInfo?: ProjectInfo;
   sheetTitle?: string;
   partNumberMap?: Map<string, PartNumberLookupResult>;
+  rowLengthsById?: Record<string, { display: string; roundedInches: number; confidence: string }>;
 }
 
 /**
@@ -644,6 +645,7 @@ export function hydrateSchemaForRender(schema: WireListPrintSchema): SchemaHydra
 
   // Build a part number map from schema rows that have part numbers
   const partNumberMap = new Map<string, PartNumberLookupResult>();
+  const rowLengthsById: NonNullable<SchemaHydrationResult["rowLengthsById"]> = {};
   if (wireListPage) {
     for (const group of wireListPage.locationGroups) {
       for (const sub of group.subsections) {
@@ -657,6 +659,14 @@ export function hydrateSchemaForRender(schema: WireListPrintSchema): SchemaHydra
                 location: row.fromLocation || "",
               });
             }
+          }
+
+          if (row.lengthDisplay && typeof row.lengthInches === "number") {
+            rowLengthsById[row.rowId] = {
+              display: row.lengthDisplay,
+              roundedInches: row.lengthInches,
+              confidence: "schema",
+            };
           }
         }
       }
@@ -678,5 +688,6 @@ export function hydrateSchemaForRender(schema: WireListPrintSchema): SchemaHydra
     projectInfo: coverPage?.projectInfo,
     sheetTitle: coverPage?.sheetTitle,
     partNumberMap: partNumberMap.size > 0 ? partNumberMap : undefined,
+    rowLengthsById: Object.keys(rowLengthsById).length > 0 ? rowLengthsById : undefined,
   };
 }

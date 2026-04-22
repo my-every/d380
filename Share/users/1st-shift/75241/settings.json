@@ -1,0 +1,31 @@
+{
+  "badge": "75241",
+  "shift": "1st",
+  "lastUpdated": "2026-04-22T06:21:33.246Z",
+  "roles": [],
+  "dashboardAccess": {
+    "projectSchedule": true,
+    "userAccess": true,
+    "catalogAccess": true
+  },
+  "permissions": {
+    "canViewSkills": true,
+    "canEditSkills": true,
+    "canManageSkillDefinitions": true,
+    "canViewPermissions": true,
+    "canGrantPermissions": true,
+    "canDelegatePermissions": true,
+    "canViewUsers": true,
+    "canEditUsers": true,
+    "canCreateUsers": true,
+    "canDeactivateUsers": true,
+    "canViewProjects": true,
+    "canEditProjects": true,
+    "canCreateProjects": true,
+    "canArchiveProjects": true,
+    "canAssignUsers": true,
+    "canReassignTasks": true
+  },
+  "permissionGroupId": "admin",
+  "permissionAudit": []
+}

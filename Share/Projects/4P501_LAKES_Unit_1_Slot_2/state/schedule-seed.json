@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.832Z",
+  "pdNumber": "4P501",
+  "projectName": "LAKES",
+  "displayName": "LAKES - Unit 1 - Slot 2",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "7/28/2026",
+    "BRAND_LIST": "8/4/2026",
+    "BRAND_WIRE": "8/11/2026",
+    "PROJ_KITTED": "8/12/2026",
+    "CONLAY": "8/13/2026",
+    "CONASY": "8/24/2026",
+    "PWRCHK": "9/1/2026",
+    "D380_FINAL_BIQ": "9/2/2026",
+    "DEPT_380_TARGET": "9/10/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "GS"
+  }
+}

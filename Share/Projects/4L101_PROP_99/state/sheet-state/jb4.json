@@ -1,0 +1,19 @@
+{
+  "projectId": "4l101-prop-99",
+  "sheetSlug": "jb4",
+  "updatedAt": "2026-04-23T01:51:10.400Z",
+  "rowPatches": [],
+  "workflow": {},
+  "columnVisibility": {},
+  "columnOrder": {},
+  "brandingEdits": {},
+  "revisionSelection": {
+    "wireListFilename": null,
+    "layoutFilename": null
+  },
+  "patchHistory": {
+    "past": [],
+    "future": [],
+    "maxSize": 50
+  }
+}

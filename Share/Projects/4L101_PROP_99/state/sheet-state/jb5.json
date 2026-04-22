@@ -1,0 +1,31 @@
+{
+  "projectId": "4l101-prop-99",
+  "sheetSlug": "jb5",
+  "updatedAt": "2026-04-23T13:47:49.984Z",
+  "rowPatches": [],
+  "workflow": {
+    "row-0": {
+      "fromChecked": true,
+      "toChecked": false,
+      "ipvChecked": false,
+      "comment": ""
+    }
+  },
+  "columnVisibility": {},
+  "columnOrder": {},
+  "brandingEdits": {
+    "row-5": {
+      "wireNo": "FU0113",
+      "length": 60
+    }
+  },
+  "revisionSelection": {
+    "wireListFilename": null,
+    "layoutFilename": null
+  },
+  "patchHistory": {
+    "past": [],
+    "future": [],
+    "maxSize": 50
+  }
+}

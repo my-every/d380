@@ -1,0 +1,26 @@
+{
+  "projectId": "4l101-prop-99",
+  "sheetSlug": "fire-pnl-jb70",
+  "updatedAt": "2026-04-23T01:49:26.972Z",
+  "rowPatches": [],
+  "workflow": {
+    "row-0": {
+      "fromChecked": false,
+      "toChecked": true,
+      "ipvChecked": false,
+      "comment": ""
+    }
+  },
+  "columnVisibility": {},
+  "columnOrder": {},
+  "brandingEdits": {},
+  "revisionSelection": {
+    "wireListFilename": null,
+    "layoutFilename": null
+  },
+  "patchHistory": {
+    "past": [],
+    "future": [],
+    "maxSize": 50
+  }
+}

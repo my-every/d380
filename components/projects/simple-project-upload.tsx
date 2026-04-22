@@ -20,6 +20,8 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 import { SecureActionModal } from "@/components/profile/secure-action-modal";
+import { PartsIngestPreviewDialog } from "@/components/projects/parts-ingest-preview-dialog";
+import { useAppRuntime } from "@/components/providers/app-runtime-provider";
 import { useUploadContext } from "@/contexts/upload-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -68,6 +70,13 @@ interface SimpleProjectUploadProps {
     onClose?: () => void;
 }
 
+interface PartsIngestPreviewSummary {
+    createdCount: number;
+    previewParts: string[];
+    uniqueCandidates: number;
+    existingCount: number;
+}
+
 const PROJECT_COLOR_PALETTE = [
     "#FBBF24",
     "#F59E0B",
@@ -90,10 +99,12 @@ export function SimpleProjectUpload({
     onClose,
 }: SimpleProjectUploadProps) {
     const router = useRouter();
+    const { appMode } = useAppRuntime();
     const { loadProject } = useProjectContext();
     const { verifyCredentials, changePin } = useSession();
     const { startUpload, completeUpload, failUpload } = useUploadContext();
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const partsPreviewResolverRef = useRef<((confirmed: boolean) => void) | null>(null);
 
     const [currentStep, setCurrentStep] = useState(1);
     const [projectName, setProjectName] = useState("");
@@ -120,6 +131,29 @@ export function SimpleProjectUpload({
     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
     const [feedbackType, setFeedbackType] = useState<"success" | "error">("success");
     const [feedbackMessage, setFeedbackMessage] = useState("");
+    const [partsPreview, setPartsPreview] = useState<PartsIngestPreviewSummary | null>(null);
+
+    const confirmPartsIngestPreview = useCallback((summary: PartsIngestPreviewSummary) => {
+        setPartsPreview(summary);
+
+        return new Promise<boolean>((resolve) => {
+            partsPreviewResolverRef.current = resolve;
+        });
+    }, []);
+
+    const handlePartsPreviewCancel = useCallback(() => {
+        setPartsPreview(null);
+        const resolver = partsPreviewResolverRef.current;
+        partsPreviewResolverRef.current = null;
+        resolver?.(false);
+    }, []);
+
+    const handlePartsPreviewConfirm = useCallback(() => {
+        setPartsPreview(null);
+        const resolver = partsPreviewResolverRef.current;
+        partsPreviewResolverRef.current = null;
+        resolver?.(true);
+    }, []);
 
     const addFiles = useCallback((newFiles: FileList | File[]) => {
         const fileArray = Array.from(newFiles);
@@ -315,17 +349,7 @@ export function SimpleProjectUpload({
             }),
         }).catch(() => null);
 
-        // Reload the manifest into context so the card grid picks it up
-        const { manifest } = (await response.json()) as { manifest: unknown };
-
-        const brandingWorkspaceResponse = await fetch(
-            `/api/project-context/${encodeURIComponent(projectModel.id)}/branding-workspace`,
-            { method: "POST" },
-        ).catch(() => null);
-
-        if (!brandingWorkspaceResponse?.ok) {
-            console.warn("Branding workspace assignment generation failed (non-blocking).");
-        }
+        await response.json().catch(() => null);
 
         // Process layout PDF if provided
         const layoutFile = files.find((entry) => entry.type === "layout");
@@ -342,6 +366,16 @@ export function SimpleProjectUpload({
                     pdNumber: projectModel.pdNumber,
                     projectName: projectModel.name,
                 });
+                const regenerateManifestResponse = await fetch(
+                    `/api/project-context/${encodeURIComponent(projectModel.id)}/manifest/regenerate`,
+                    {
+                        method: "POST",
+                    },
+                );
+
+                if (!regenerateManifestResponse.ok) {
+                    throw new Error("Failed to regenerate project manifest after saving layout pages");
+                }
                 setFiles((prev) =>
                     prev.map((entry) =>
                         entry.id === layoutFile.id
@@ -360,6 +394,19 @@ export function SimpleProjectUpload({
                 );
                 // Layout failure is non-blocking — continue with project creation
             }
+        }
+
+        const printSchemasResponse = await fetch(
+            `/api/project-context/${encodeURIComponent(projectModel.id)}/wire-list-print-schemas`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ mode: "all" }),
+            },
+        ).catch(() => null);
+
+        if (!printSchemasResponse?.ok) {
+            console.warn("Print and branding schema generation failed (non-blocking).");
         }
 
         loadProject(projectModel.id);
@@ -384,6 +431,10 @@ export function SimpleProjectUpload({
     ]);
 
     const runPartsIngestDryRunPreview = useCallback(async () => {
+        if (appMode !== "DEPARTMENT") {
+            return;
+        }
+
         const excelEntry = files.find((entry) => entry.type === "excel");
         if (!excelEntry) {
             return;
@@ -447,24 +498,17 @@ export function SimpleProjectUpload({
         }
 
         const previewList = (payload.result.createdParts ?? []).slice(0, 12);
-        const summary = [
-            `Dry-run found ${createdCount} new part${createdCount === 1 ? "" : "s"} that will be added on commit.",
-            `Unique candidates scanned: ${payload.result.uniqueCandidates ?? 0}",
-            `Already existing in library: ${payload.result.existingCount ?? 0}",
-            "",
-            previewList.length > 0 ? `Preview: ${previewList.join(", ")}` : "No preview items available.",
-            createdCount > previewList.length
-                ? `...and ${createdCount - previewList.length} more.`
-                : "",
-            "",
-            "Continue with upload commit?",
-        ].filter(Boolean).join("\n");
+        const shouldContinue = await confirmPartsIngestPreview({
+            createdCount,
+            previewParts: previewList,
+            uniqueCandidates: payload.result.uniqueCandidates ?? 0,
+            existingCount: payload.result.existingCount ?? 0,
+        });
 
-        const shouldContinue = window.confirm(summary);
         if (!shouldContinue) {
             throw new Error("Upload cancelled after parts ingest preview.");
         }
-    }, [dueDate, files, lwcType, pdNumber, planConassyDate, planConlayDate, projectColor, projectName, revision, unitNumber, validatePdNumber]);
+    }, [appMode, confirmPartsIngestPreview, dueDate, files, lwcType, pdNumber, planConassyDate, planConlayDate, projectColor, projectName, revision, unitNumber, validatePdNumber]);
 
     const executeUpload = useCallback(async () => {
         setIsCreating(true);
@@ -1017,6 +1061,16 @@ export function SimpleProjectUpload({
                 title="Authenticate to Upload"
                 description="Enter your badge number and PIN to upload this project"
                 showNumpad
+            />
+
+            <PartsIngestPreviewDialog
+                open={partsPreview !== null}
+                createdCount={partsPreview?.createdCount ?? 0}
+                previewParts={partsPreview?.previewParts ?? []}
+                uniqueCandidates={partsPreview?.uniqueCandidates ?? 0}
+                existingCount={partsPreview?.existingCount ?? 0}
+                onCancel={handlePartsPreviewCancel}
+                onConfirm={handlePartsPreviewConfirm}
             />
 
             <AnimatePresence>

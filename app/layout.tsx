@@ -11,6 +11,7 @@ import { FeedbackLoaderProvider } from '@/contexts/feedback-loader-context'
 import { IdleAutoLogoutGuard } from '@/components/providers/idle-auto-logout-guard'
 import { ShareDirectorySelector } from '@/components/providers/share-directory-selector'
 import { AppModeRouteGuard } from '@/components/providers/app-mode-route-guard'
+import { AppShellDecorations } from '@/components/providers/app-shell-decorations'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -70,6 +71,7 @@ export default function RootLayout({
                     <TourProvider>
                       <UploadProvider>
                         {children}
+                     
                       </UploadProvider>
                     </TourProvider>
                   </DeviceDetailsProvider>

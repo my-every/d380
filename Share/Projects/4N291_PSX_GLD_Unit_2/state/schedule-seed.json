@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.133Z",
+  "pdNumber": "4N291",
+  "projectName": "PSX-GLD",
+  "displayName": "PSX-GLD - Unit 2",
+  "unitNumber": "2",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "2/16/2026",
+    "PROJ_KITTED": "2/11/2026",
+    "CONLAY": "2/11/2026",
+    "CONASY": "2/21/2026",
+    "PWRCHK": "2/27/2026",
+    "D380_FINAL_BIQ": "3/1/2026",
+    "DEPT_380_TARGET": "3/17/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

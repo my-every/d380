@@ -211,8 +211,8 @@ export function SemanticWireListTable({
   );
 
   return (
-    <div className="relative h-full max-h-[70vh] overflow-hidden rounded-xl border border-foreground/30">
-      <div ref={tableContainerRef} className="relative h-full max-h-[70vh] overflow-auto">
+    <div className="relative h-full min-h-0 overflow-hidden rounded-xl border border-foreground/30">
+      <div ref={tableContainerRef} className="relative h-full min-h-0 overflow-auto">
         <table data-slot="table" className="relative min-w-300 w-full border-collapse text-sm">
           <TableHeader className="sticky top-0 z-30 bg-background">
             {!hideGroupedColumnHeaders && (fromCount > 0 || lengthCount > 0 || toCount > 0 || workflowCount > 0) && (

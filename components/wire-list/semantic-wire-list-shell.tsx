@@ -25,6 +25,10 @@ interface SemanticWireListShellProps {
   hideFooter?: boolean;
   /** Hide location tabs (for print mode) */
   hideLocationTabs?: boolean;
+  /** Hide the metadata summary card */
+  hideMetadataPanel?: boolean;
+  /** Use tighter vertical spacing for embedded layouts */
+  compactSpacing?: boolean;
 }
 
 export function SemanticWireListShell({
@@ -44,15 +48,17 @@ export function SemanticWireListShell({
   hideToolbar = false,
   hideFooter = false,
   hideLocationTabs = false,
+  hideMetadataPanel = false,
+  compactSpacing = false,
 }: SemanticWireListShellProps) {
   return (
-    <div className="flex flex-col gap-4">
-      {metadata && Object.keys(metadata).filter((key) => !key.startsWith("_")).length > 0 && (
+    <div className={compactSpacing ? "flex h-full min-h-0 flex-col gap-0" : "flex h-full min-h-0 flex-col gap-4"}>
+      {!hideMetadataPanel && metadata && Object.keys(metadata).filter((key) => !key.startsWith("_")).length > 0 && (
         <SheetMetadataPanel metadata={metadata} />
       )}
 
       {!hideLocationTabs && locations.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2">
+        <div className={compactSpacing ? "flex flex-wrap items-center gap-2 border-b px-4 py-3" : "flex flex-wrap items-center gap-2"}>
           <button
             onClick={() => onLocationChange(allLocationsLabel)}
             className={[
@@ -94,8 +100,10 @@ export function SemanticWireListShell({
 
       {!hideToolbar && toolbar}
       {relayPluginRuns}
-      {table}
-      {!hideFooter && footer}
+      <div className={compactSpacing ? "min-h-0 flex-1" : "min-h-0 flex-1"}>
+        {table}
+      </div>
+      {!hideFooter && <div className={compactSpacing ? "shrink-0 border-t px-4 py-3" : "shrink-0"}>{footer}</div>}
 
       {diagnostics && process.env.NODE_ENV === "development" && (
         <details className="text-xs text-muted-foreground border rounded p-2 mt-4">

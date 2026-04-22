@@ -3,12 +3,33 @@ import path from 'node:path'
 
 import type { SlimLayoutPage } from '@/lib/layout-matching'
 import { summarizeLayoutPagesForManifest } from '@/lib/project-state/layout-pages-manifest-summary'
+import {
+  computeManifestAggregates,
+  deriveProjectMechanicalSummaryFromAssignments,
+} from '@/lib/project-state/manifest-layout-utils'
 import { buildManifestAssignmentSummaries } from '@/lib/project-state/manifest-assignment-summaries'
 import { resolveProjectRootDirectory } from '@/lib/project-state/share-project-state-handlers'
 import type { ManifestAssignmentNode, ProjectManifest } from '@/types/project-manifest'
 
 function sanitizeManifest(manifest: ProjectManifest): ProjectManifest {
   const assignments: Record<string, ManifestAssignmentNode> = {}
+  const sheets = Array.isArray(manifest.sheets)
+    ? manifest.sheets
+      .map((sheet) => ({
+        slug: String(sheet.slug ?? '').trim(),
+        name: String(sheet.name ?? '').trim(),
+        kind: String(sheet.kind ?? 'unknown') as ProjectManifest['sheets'][number]['kind'],
+        sheetPath:
+          typeof sheet.sheetPath === 'string' && sheet.sheetPath.trim().length > 0
+            ? sheet.sheetPath.trim()
+            : `state/sheets/${String(sheet.slug ?? '').trim()}.json`,
+        rowCount: Number(sheet.rowCount ?? 0),
+        columnCount: typeof sheet.columnCount === 'number' ? sheet.columnCount : undefined,
+        sheetIndex: typeof sheet.sheetIndex === 'number' ? sheet.sheetIndex : undefined,
+        hasData: typeof sheet.hasData === 'boolean' ? sheet.hasData : true,
+      }))
+      .filter((sheet) => sheet.slug && sheet.name)
+    : []
 
   const rawAssignments = manifest.assignments as unknown as
     | Record<string, unknown>
@@ -52,7 +73,32 @@ function sanitizeManifest(manifest: ProjectManifest): ProjectManifest {
     }
   }
 
-  return { ...manifest, assignments }
+  const normalizedSheets = sheets.length > 0
+    ? sheets
+    : [
+      ...Object.values(assignments).map((assignment) => ({
+        slug: assignment.sheetSlug,
+        name: assignment.sheetName,
+        kind: assignment.kind,
+        sheetPath: assignment.sheetPath,
+        rowCount: assignment.rowCount,
+        columnCount: assignment.columnCount,
+        sheetIndex: assignment.sheetIndex,
+        hasData: assignment.hasData,
+      })),
+      ...Object.values(manifest.referenceSheets ?? {}).map((sheet) => ({
+        slug: sheet.sheetSlug,
+        name: sheet.sheetName,
+        kind: sheet.kind,
+        sheetPath: sheet.sheetPath,
+        rowCount: sheet.rowCount,
+        columnCount: sheet.columnCount,
+        sheetIndex: sheet.sheetIndex,
+        hasData: sheet.hasData,
+      })),
+    ]
+
+  return { ...manifest, assignments, sheets: normalizedSheets }
 }
 
 export async function enrichManifestFromProjectState(manifest: ProjectManifest): Promise<ProjectManifest> {
@@ -77,22 +123,34 @@ export async function enrichManifestFromProjectState(manifest: ProjectManifest):
 
     const summary = summarizeLayoutPagesForManifest(pages)
     const enrichedAssignments = await buildManifestAssignmentSummaries(projectRoot, normalizedManifest)
+    const derivedMechanicalSummary = deriveProjectMechanicalSummaryFromAssignments(enrichedAssignments)
 
-    return {
+    return computeManifestAggregates({
       ...normalizedManifest,
-      unitType: summary.unitType,
-      unitTypes: summary.unitTypes,
-      panducts: summary.panducts,
-      rails: summary.rails,
+      unitType: derivedMechanicalSummary.unitType || summary.unitType || normalizedManifest.unitType,
+      unitTypes:
+        derivedMechanicalSummary.unitTypes.length > 0
+          ? derivedMechanicalSummary.unitTypes
+          : summary.unitTypes,
+      panducts: derivedMechanicalSummary.panducts || summary.panducts,
+      rails: derivedMechanicalSummary.rails || summary.rails,
       assignments: enrichedAssignments,
-    }
+    })
   } catch {
     try {
       const enrichedAssignments = await buildManifestAssignmentSummaries(projectRoot, normalizedManifest)
-      return {
+      const derivedMechanicalSummary = deriveProjectMechanicalSummaryFromAssignments(enrichedAssignments)
+      return computeManifestAggregates({
         ...normalizedManifest,
+        unitType: derivedMechanicalSummary.unitType || normalizedManifest.unitType,
+        unitTypes:
+          derivedMechanicalSummary.unitTypes.length > 0
+            ? derivedMechanicalSummary.unitTypes
+            : normalizedManifest.unitTypes,
+        panducts: derivedMechanicalSummary.panducts || normalizedManifest.panducts,
+        rails: derivedMechanicalSummary.rails || normalizedManifest.rails,
         assignments: enrichedAssignments,
-      }
+      })
     } catch {
       return normalizedManifest
     }

@@ -1,9 +1,9 @@
 "use client";
 
 import {
-    BarChart3,
-    Boxes,
+    BriefcaseBusiness,
     FolderKanban,
+    GraduationCap,
     Home,
     Library,
 } from "lucide-react";
@@ -11,7 +11,9 @@ import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
+import { AppFloatingActions, type FloatingActionSection } from "@/components/layout/app-floating-actions";
 import { type CommandSearchGroup } from "@/components/layout/layout-composite";
+import type { TourConfig } from "@/components/tour/tour/index";
 import { type UserAvatarMenuProps } from "@/components/layout/user-avatar-menu";
 import LayoutScaffold, {
     type LayoutScaffoldClassNames,
@@ -26,6 +28,7 @@ type PageLayoutProps = {
     subtitle?: string;
     headerActions?: React.ReactNode;
     floatingActions?: React.ReactNode;
+    showFloatingActions?: boolean;
     variant?: LayoutVariant;
     contentVariant?: "default" | "grid" | "focus";
     showAside?: boolean;
@@ -33,6 +36,8 @@ type PageLayoutProps = {
     activeRootId?: string;
     commandSearchGroups?: CommandSearchGroup[];
     commandSearchPlaceholder?: string;
+    floatingActionSections?: FloatingActionSection[];
+    floatingActionTourConfig?: TourConfig;
     classNames?: LayoutScaffoldClassNames;
     // Optional custom content components - use defaults if not provided
     sidePanelContent?: React.ReactNode;
@@ -59,28 +64,18 @@ const SPRING = {
 } as const;
 
 const ROOT_NAV: RootNavItem[] = [
-    { id: "home", href: "/", label: "Home", icon: Home },
+
     { id: "projects", href: "/projects", label: "Projects", icon: FolderKanban },
-    { id: "parts", href: "/parts", label: "Parts", icon: Library },
-    { id: "startup", href: "/startup", label: "Startup", icon: BarChart3 },
+
 ];
 
 function resolveRoot(pathname: string): string {
-    if (pathname === "/") {
-        return "home";
-    }
-
+ 
     if (pathname.startsWith("/projects")) {
         return "projects";
     }
 
-    if (pathname.startsWith("/startup")) {
-        return "startup";
-    }
-
-    if (pathname.startsWith("/parts")) {
-        return "parts";
-    }
+ 
 
     return "home";
 }
@@ -91,12 +86,15 @@ export default function PageLayout({
     subtitle,
     headerActions,
     floatingActions,
+    showFloatingActions = false,
     variant = "default",
     showAside = true,
     navItems = ROOT_NAV,
     activeRootId: activeRootIdProp,
     commandSearchGroups = [],
     commandSearchPlaceholder,
+    floatingActionSections,
+    floatingActionTourConfig,
     classNames,
     sidePanelContent,
     asideContent,
@@ -111,7 +109,7 @@ export default function PageLayout({
     showSubHeader = true,
     showStartUpButton = false,
     userAvatarMenu,
-    showUserAvatarMenu = true,
+    showUserAvatarMenu = false,
 }: PageLayoutProps) {
     const pathname = usePathname();
 
@@ -130,7 +128,12 @@ export default function PageLayout({
             showAside={showAside}
             variant={variant}
             classNames={classNames}
-            floatingActions={floatingActions}
+            floatingActions={showFloatingActions ? (floatingActions ?? (
+                <AppFloatingActions
+                    sections={floatingActionSections}
+                    tourConfig={floatingActionTourConfig}
+                />
+            )) : undefined}
             commandSearchGroups={commandSearchGroups}
             commandSearchPlaceholder={commandSearchPlaceholder ?? `Search in ${title ?? activeNav.label}...`}
             sideRailFooter={sideRailFooter}

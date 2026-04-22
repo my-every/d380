@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.109Z",
+  "pdNumber": "4N621",
+  "projectName": "PER-PGM",
+  "displayName": "PER-PGM - Unit 2",
+  "unitNumber": "2",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "2/6/2026",
+    "PROJ_KITTED": "2/6/2026",
+    "CONLAY": "2/9/2026",
+    "CONASY": "2/18/2026",
+    "PWRCHK": "2/26/2026",
+    "D380_FINAL_BIQ": "2/28/2026",
+    "DEPT_380_TARGET": "4/9/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.866Z",
+  "pdNumber": "4P811",
+  "projectName": "EPD-OR",
+  "displayName": "EPD-OR - Unit 2",
+  "unitNumber": "2",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "8/14/2026",
+    "PROJ_KITTED": "8/15/2026",
+    "CONLAY": "8/18/2026",
+    "CONASY": "8/27/2026",
+    "PWRCHK": "9/4/2026",
+    "D380_FINAL_BIQ": "9/8/2026",
+    "DEPT_380_TARGET": "9/11/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

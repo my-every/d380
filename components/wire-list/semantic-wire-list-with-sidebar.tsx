@@ -13,11 +13,16 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { ListChecks } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SemanticWireList, type WireListFeatureConfig, type ColumnOrderConfig } from "./semantic-wire-list";
+import {
+  SemanticWireList,
+  type WireListFeatureConfig,
+  type ColumnOrderConfig,
+} from "./semantic-wire-list";
 import { OriginalWireListSidebar } from "@/components/original-wire-list-sidebar/original-wire-list-sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { SemanticWireListRow, SheetMetadataInfo, WireListParserDiagnostics } from "@/lib/workbook/types";
 import type { BlueLabelSequenceMap } from "@/lib/wiring-identification/types";
+import type { SemanticWireListToolbarOptions } from "./semantic-wire-list-toolbar";
 
 interface SemanticWireListWithSidebarProps {
   /** Semantic wire list rows */
@@ -53,6 +58,16 @@ interface SemanticWireListWithSidebarProps {
   };
   /** Show floating toolbar at bottom */
   showFloatingToolbar?: boolean;
+  /** Automatically sync the sidebar open state to the current screen size */
+  autoSyncSidebarWithDeviceSize?: boolean;
+  /** Render the semantic toolbar at the top or bottom of the workspace */
+  toolbarPlacement?: "top" | "bottom";
+  /** Toggle individual toolbar controls */
+  toolbarOptions?: SemanticWireListToolbarOptions;
+  /** Hide the metadata panel above the wire list */
+  hideMetadataPanel?: boolean;
+  /** Remove outer gaps for embedded layouts */
+  compactSpacing?: boolean;
 }
 
 export function SemanticWireListWithSidebar({
@@ -70,6 +85,11 @@ export function SemanticWireListWithSidebar({
   showSidebar: initialShowSidebar = false,
   swsType,
   showFloatingToolbar = false,
+  autoSyncSidebarWithDeviceSize = false,
+  toolbarPlacement = "top",
+  toolbarOptions,
+  hideMetadataPanel = false,
+  compactSpacing = false,
 }: SemanticWireListWithSidebarProps) {
   const isMobile = useIsMobile();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(!initialShowSidebar);
@@ -81,6 +101,14 @@ export function SemanticWireListWithSidebar({
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!autoSyncSidebarWithDeviceSize) {
+      return;
+    }
+
+    setSidebarCollapsed(isMobile);
+  }, [autoSyncSidebarWithDeviceSize, isMobile]);
   
   // Track visible row IDs (all rows are considered visible for matching purposes)
   const visibleEnhancedRowIds = useMemo(() => {
@@ -118,7 +146,7 @@ export function SemanticWireListWithSidebar({
   }
   
   return (
-    <div className="flex h-full relative gap-4">
+    <div className={compactSpacing ? "flex h-full min-h-0 relative gap-0" : "flex h-full min-h-0 relative gap-4"}>
       {/* Original Wire List Sidebar - renders as drawer on mobile */}
       {!sidebarCollapsed && (
         <OriginalWireListSidebar
@@ -134,10 +162,10 @@ export function SemanticWireListWithSidebar({
       )}
       
       {/* Main content */}
-      <div className="flex-1 min-w-0 flex flex-col" onClick={handleContentClick}>
+      <div className="flex-1 min-w-0 min-h-0 flex flex-col" onClick={handleContentClick}>
         {/* Sidebar toggle button (when collapsed on desktop, or always on mobile) */}
         {(sidebarCollapsed || isMobile) && (
-          <div className="mb-4 flex-shrink-0">
+          <div className={compactSpacing ? "border-b px-4 py-3" : "mb-4 flex-shrink-0"}>
             <Button
               variant="outline"
               size="sm"
@@ -164,6 +192,10 @@ export function SemanticWireListWithSidebar({
           activeRowId={activeRowId}
           swsType={swsType}
           showFloatingToolbar={showFloatingToolbar}
+          toolbarPlacement={toolbarPlacement}
+          toolbarOptions={toolbarOptions}
+          hideMetadataPanel={hideMetadataPanel}
+          compactSpacing={compactSpacing}
         />
       </div>
     </div>

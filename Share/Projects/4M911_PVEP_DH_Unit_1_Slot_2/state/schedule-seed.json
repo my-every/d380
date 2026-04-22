@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.466Z",
+  "pdNumber": "4M911",
+  "projectName": "PVEP-DH",
+  "displayName": "PVEP-DH - Unit 1 - Slot 2",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "05/04/26",
+    "BRAND_LIST": "5/4/2026",
+    "BRAND_WIRE": "5/11/2026",
+    "PROJ_KITTED": "5/12/2026",
+    "CONLAY": "5/13/2026",
+    "CONASY": "5/22/2026",
+    "PWRCHK": "6/2/2026",
+    "D380_FINAL_BIQ": "6/3/2026",
+    "DEPT_380_TARGET": "7/1/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "CS"
+  }
+}

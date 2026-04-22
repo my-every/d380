@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.908Z",
+  "pdNumber": "4L761",
+  "projectName": "WTE-MLP",
+  "displayName": "WTE-MLP - Unit 1 - Slot 2",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "8/20/2026",
+    "BRAND_LIST": "8/27/2026",
+    "BRAND_WIRE": "9/3/2026",
+    "PROJ_KITTED": "9/4/2026",
+    "CONLAY": "9/8/2026",
+    "CONASY": "9/17/2026",
+    "PWRCHK": "9/25/2026",
+    "D380_FINAL_BIQ": "9/28/2026",
+    "DEPT_380_TARGET": "9/28/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "CS"
+  }
+}

@@ -21,6 +21,8 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 import { SecureActionModal } from "@/components/profile/secure-action-modal";
+import { PartsIngestPreviewDialog } from "@/components/projects/parts-ingest-preview-dialog";
+import { useAppRuntime } from "@/components/providers/app-runtime-provider";
 import { useUploadContext } from "@/contexts/upload-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -61,7 +63,6 @@ import { buildUploadPropsManifest } from "@/lib/workbook/upload-props";
 import type { FileRevision } from "@/lib/revision/types";
 import { canPerformAction } from "@/types/d380-user-session";
 import { getPermissionDeniedMessage } from "@/lib/session/session-feedback";
-import { buildAllSheetSchemas, buildProjectManifest } from "@/lib/project-state/schema-generators";
 
 interface FileEntry {
   id: string;
@@ -78,6 +79,17 @@ export interface RevisionUploadCompleteResult {
   layoutPages: LayoutPagePreview[];
   matchedRows: SemanticWireListRow[];
   matchedLayoutPage: LayoutPagePreview | null;
+}
+
+interface PartsIngestPreviewError extends Error {
+  details?: string;
+}
+
+interface PartsIngestPreviewSummary {
+  createdCount: number;
+  previewParts: string[];
+  uniqueCandidates: number;
+  existingCount: number;
 }
 
 interface ProjectUploadFlowProps {
@@ -128,10 +140,12 @@ export function ProjectUploadFlow({
 }: ProjectUploadFlowProps) {
   const isRevisionMode = mode === "revision";
   const router = useRouter();
+  const { appMode } = useAppRuntime();
   const { saveProject } = useProjectContext();
   const { verifyCredentials, changePin } = useSession();
   const { startUpload, completeUpload, failUpload } = useUploadContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const partsPreviewResolverRef = useRef<((confirmed: boolean) => void) | null>(null);
 
   const [currentStep, setCurrentStep] = useState(1);
   const [projectName, setProjectName] = useState(initialProjectName);
@@ -153,6 +167,7 @@ export function ProjectUploadFlow({
     isRevisionMode ? "Preparing revision upload..." : "Preparing project workspace...",
   );
   const [error, setError] = useState<string | null>(null);
+  const [errorDetails, setErrorDetails] = useState<string | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isBadgeAuthRequired, setIsBadgeAuthRequired] = useState(true);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -161,6 +176,29 @@ export function ProjectUploadFlow({
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [feedbackType, setFeedbackType] = useState<"success" | "error">("success");
   const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [partsPreview, setPartsPreview] = useState<PartsIngestPreviewSummary | null>(null);
+
+  const confirmPartsIngestPreview = useCallback((summary: PartsIngestPreviewSummary) => {
+    setPartsPreview(summary);
+
+    return new Promise<boolean>((resolve) => {
+      partsPreviewResolverRef.current = resolve;
+    });
+  }, []);
+
+  const handlePartsPreviewCancel = useCallback(() => {
+    setPartsPreview(null);
+    const resolver = partsPreviewResolverRef.current;
+    partsPreviewResolverRef.current = null;
+    resolver?.(false);
+  }, []);
+
+  const handlePartsPreviewConfirm = useCallback(() => {
+    setPartsPreview(null);
+    const resolver = partsPreviewResolverRef.current;
+    partsPreviewResolverRef.current = null;
+    resolver?.(true);
+  }, []);
 
   const addFiles = useCallback((newFiles: FileList | File[]) => {
     const fileArray = Array.from(newFiles);
@@ -467,6 +505,40 @@ export function ProjectUploadFlow({
 
     setFiles((prev) => prev.map((entry) => entry.id === excelFile.id ? { ...entry, status: "success", message: `Parsed ${projectModel.sheets.length} sheets` } : entry));
 
+    setProcessingStatusMessage("Saving project state to Share...");
+    const projectResponse = await fetch(`/api/project-context/${encodeURIComponent(projectModel.id)}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ projectModel }),
+    });
+
+    if (!projectResponse.ok) {
+      throw new Error("Failed to persist project state");
+    }
+    await fetch(`/api/project-context/${encodeURIComponent(projectModel.id)}/state/upload-props`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        pdNumber: projectModel.pdNumber,
+        projectName: projectModel.name,
+        props: uploadPropsManifest,
+      }),
+    }).catch(() => null);
+
+    saveProject(projectModel);
+    const printSchemasResponse = await fetch(
+      `/api/project-context/${encodeURIComponent(projectModel.id)}/wire-list-print-schemas`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mode: "all" }),
+      },
+    ).catch(() => null);
+
+    if (!printSchemasResponse?.ok) {
+      console.warn("Print schema generation failed (non-blocking). Schemas can be regenerated from the print modal.");
+    }
+
     const pdfFile = files.find((entry) => entry.type === "pdf");
     if (pdfFile) {
       setProcessingStatusMessage("Rendering layout previews...");
@@ -484,10 +556,23 @@ export function ProjectUploadFlow({
           },
         });
 
+        setProcessingStatusMessage("Saving layout pages...");
         await saveLayoutPages(layoutPages, projectModel.id, {
           pdNumber: projectModel.pdNumber,
           projectName: projectModel.name,
         });
+
+        setProcessingStatusMessage("Finalizing manifest...");
+        const regenerateManifestResponse = await fetch(
+          `/api/project-context/${encodeURIComponent(projectModel.id)}/manifest/regenerate`,
+          {
+            method: "POST",
+          },
+        );
+
+        if (!regenerateManifestResponse.ok) {
+          throw new Error("Failed to regenerate project manifest after saving layout pages");
+        }
 
         setFiles((prev) => prev.map((entry) => entry.id === pdfFile.id ? {
           ...entry,
@@ -498,112 +583,15 @@ export function ProjectUploadFlow({
         console.error("PDF render error:", renderErr);
         setFiles((prev) => prev.map((entry) => entry.id === pdfFile.id ? {
           ...entry,
-          status: "success",
-          message: "Page rendering failed",
+          status: "error",
+          message: renderErr instanceof Error ? renderErr.message : "Page rendering failed",
         } : entry));
       }
     }
-
-    setProcessingStatusMessage("Saving project state to Share...");
-    const manifest = buildProjectManifest(projectModel, []);
-    const sheetSchemas = buildAllSheetSchemas(projectModel, []);
-
-    const projectResponse = await fetch(`/api/project-context/${encodeURIComponent(projectModel.id)}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(manifest),
-    });
-
-    if (!projectResponse.ok) {
-      throw new Error("Failed to persist project state");
-    }
-
-    await Promise.all(
-      sheetSchemas.map(async (schema) => {
-        const sheetResponse = await fetch(
-          `/api/project-context/${encodeURIComponent(projectModel.id)}/sheets/${encodeURIComponent(schema.slug)}`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(schema),
-          },
-        );
-
-        if (!sheetResponse.ok) {
-          throw new Error(`Failed to persist sheet schema: ${schema.slug}`);
-        }
-      }),
-    );
-    await fetch(`/api/project-context/${encodeURIComponent(projectModel.id)}/state/upload-props`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        pdNumber: projectModel.pdNumber,
-        projectName: projectModel.name,
-        props: uploadPropsManifest,
-      }),
-    }).catch(() => null);
-
-    saveProject(projectModel);
-    const [brandingExportsResponse, wireListExportsResponse, printSchemasResponse] = await Promise.all([
-      fetch(`/api/project-context/${encodeURIComponent(projectModel.id)}/exports?kind=branding`, { method: "POST" }),
-      fetch(`/api/project-context/${encodeURIComponent(projectModel.id)}/exports?kind=wire-lists`, { method: "POST" })
-        .catch(() => null),
-      fetch(`/api/project-context/${encodeURIComponent(projectModel.id)}/wire-list-print-schemas`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mode: "all" }),
-      })
-        .catch(() => null),
-    ]);
-
-    if (!brandingExportsResponse.ok) {
-      throw new Error("Failed to generate branding CSV exports");
-    }
-
-    const brandingWorkspaceResponse = await fetch(
-      `/api/project-context/${encodeURIComponent(projectModel.id)}/branding-workspace`,
-      { method: "POST" },
-    ).catch(() => null);
-
-    if (!brandingWorkspaceResponse?.ok) {
-      console.warn(
-        "Branding workspace assignment generation failed (non-blocking). It can be regenerated from the branding workspace endpoint.",
-      );
-    }
-
-    if (!wireListExportsResponse?.ok) {
-      console.warn("Wire list PDF export generation failed (non-blocking). PDFs can be regenerated from the Project Exports panel.");
-    }
-    if (!printSchemasResponse?.ok) {
-      console.warn("Print schema generation failed (non-blocking). Schemas can be regenerated from the print modal.");
-    }
-
-    // Seed initial files into Legal Drawings so they appear in the revision history sidebar
-    try {
-      const seedFormData = new FormData();
-      const excelFile = files.find((entry) => entry.type === "excel");
-      const pdfFile = files.find((entry) => entry.type === "pdf");
-      if (excelFile) seedFormData.append("workbook", excelFile.file);
-      if (pdfFile) seedFormData.append("layout", pdfFile.file);
-      seedFormData.append("baseRevision", revision || projectModel.revision || "");
-      seedFormData.append("pdNumber", pdNumber || projectModel.pdNumber || "");
-      await fetch(`/api/project-context/revisions/${encodeURIComponent(projectModel.id)}/files`, {
-        method: "POST",
-        body: seedFormData,
-      });
-    } catch {
-      // Non-blocking: seeding Legal Drawings is best-effort
-      console.warn("Failed to seed initial files into Legal Drawings (non-blocking)");
-    }
-
-    setTimeout(() => {
-      router.push("/projects");
-    }, 800);
-  }, [dueDate, files, isRevisionMode, lwcType, pdNumber, planConassyDate, planConlayDate, processRevisionUpload, projectColor, projectName, revision, router, saveProject, unitNumber, validatePdNumber]);
+  }, [dueDate, files, isRevisionMode, lwcType, pdNumber, planConassyDate, planConlayDate, processRevisionUpload, projectColor, projectName, revision, saveProject, unitNumber, validatePdNumber]);
 
   const runPartsIngestDryRunPreview = useCallback(async () => {
-    if (isRevisionMode) {
+    if (isRevisionMode || appMode !== "DEPARTMENT") {
       return;
     }
 
@@ -664,7 +652,26 @@ export function ProjectUploadFlow({
     });
 
     if (!dryRunResponse.ok) {
-      throw new Error("Failed to run dry-run parts ingest preview");
+      const responseText = await dryRunResponse.text().catch(() => "");
+      let detail = responseText.trim();
+
+      try {
+        const parsed = JSON.parse(responseText) as { error?: string; details?: unknown };
+        detail = [
+          parsed.error,
+          typeof parsed.details === "string"
+            ? parsed.details
+            : parsed.details
+              ? JSON.stringify(parsed.details, null, 2)
+              : "",
+        ].filter(Boolean).join("\n\n");
+      } catch {
+        // Keep raw response text when the API did not return JSON.
+      }
+
+      const previewError = new Error("Failed to run dry-run parts ingest preview") as PartsIngestPreviewError;
+      previewError.details = detail || `HTTP ${dryRunResponse.status} ${dryRunResponse.statusText}`;
+      throw previewError;
     }
 
     const payload = await dryRunResponse.json() as {
@@ -688,28 +695,22 @@ export function ProjectUploadFlow({
     }
 
     const previewList = (payload.result.createdParts ?? []).slice(0, 12);
-    const summary = [
-      `Dry-run found ${createdCount} new part${createdCount === 1 ? "" : "s"} that will be added on commit.`,
-      `Unique candidates scanned: ${payload.result.uniqueCandidates ?? 0}`,
-      `Already existing in library: ${payload.result.existingCount ?? 0}`,
-      "",
-      previewList.length > 0 ? `Preview: ${previewList.join(", ")}` : "No preview items available.",
-      createdCount > previewList.length
-        ? `...and ${createdCount - previewList.length} more.`
-        : "",
-      "",
-      "Continue with upload commit?",
-    ].filter(Boolean).join("\n");
+    const shouldContinue = await confirmPartsIngestPreview({
+      createdCount,
+      previewParts: previewList,
+      uniqueCandidates: payload.result.uniqueCandidates ?? 0,
+      existingCount: payload.result.existingCount ?? 0,
+    });
 
-    const shouldContinue = window.confirm(summary);
     if (!shouldContinue) {
       throw new Error("Upload cancelled after parts ingest preview.");
     }
-  }, [dueDate, files, isRevisionMode, lwcType, pdNumber, planConassyDate, planConlayDate, projectColor, projectName, revision, unitNumber, validatePdNumber]);
+  }, [appMode, confirmPartsIngestPreview, dueDate, files, isRevisionMode, lwcType, pdNumber, planConassyDate, planConlayDate, projectColor, projectName, revision, unitNumber, validatePdNumber]);
 
   const executeUpload = useCallback(async () => {
     setIsCreating(true);
     setError(null);
+    setErrorDetails(null);
 
     try {
       await runPartsIngestDryRunPreview();
@@ -717,6 +718,9 @@ export function ProjectUploadFlow({
       setIsCreating(false);
       const message = err instanceof Error ? err.message : "Unable to run parts ingest preview";
       setError(message);
+      setErrorDetails(err && typeof err === "object" && "details" in err && typeof (err as PartsIngestPreviewError).details === "string"
+        ? (err as PartsIngestPreviewError).details ?? null
+        : null);
       failUpload(message);
       return;
     }
@@ -730,6 +734,8 @@ export function ProjectUploadFlow({
       await handleCreateProject();
       if (isRevisionMode) {
         onCancel?.();
+      } else {
+        router.push("/projects");
       }
       completeUpload(`${displayName} uploaded successfully!`);
     } catch (err) {
@@ -1085,33 +1091,24 @@ export function ProjectUploadFlow({
 
                 {!isRevisionMode && (
                   <>
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      <LwcTypeField
+              
+                    <div className="flex flex-wrap gap-4">
+                    <LwcTypeField
                         mode="create"
                         label="LWC Type"
                         value={lwcType}
                         onChange={setLwcType}
-                        description="Classification for sorting"
+                        description="Classification"
                       />
-                      <DateField
-                        mode="create"
-                        label="Due Date"
-                        value={dueDate}
-                        onChange={setDueDate}
-                        placeholder="Select date"
-                        description="Target completion"
-                        minDate={new Date()}
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+   
                       <DateField
                         mode="create"
                         label="PLAN CONLAY"
                         value={planConlayDate}
                         onChange={setPlanConlayDate}
                         placeholder="Select date"
-                        description="Planned consolidation layout"
+                        description="Planned Assembly Start Date"
+                        className="flex-1"
                       />
                       <DateField
                         mode="create"
@@ -1119,7 +1116,19 @@ export function ProjectUploadFlow({
                         value={planConassyDate}
                         onChange={setPlanConassyDate}
                         placeholder="Select date"
-                        description="Planned consolidation assembly"
+                        description="Planned Assembly Completion Date"
+                        className="flex-1"
+                      />
+
+                    <DateField
+                        mode="create"
+                        label="Due Date"
+                        value={dueDate}
+                        onChange={setDueDate}
+                        placeholder="Select date"
+                        description="Planned Target Date"
+                        minDate={new Date()}
+                        className="flex-1"
                       />
                     </div>
 
@@ -1151,9 +1160,16 @@ export function ProjectUploadFlow({
 
             {error && (
               <Card className="border-destructive/50 bg-destructive/5">
-                <CardContent className="flex items-center gap-3 py-4">
-                  <AlertCircle className="h-5 w-5 shrink-0 text-destructive" />
-                  <p className="text-sm text-destructive">{error}</p>
+                <CardContent className="py-4">
+                  <div className="flex items-center gap-3">
+                    <AlertCircle className="h-5 w-5 shrink-0 text-destructive" />
+                    <p className="text-sm text-destructive">{error}</p>
+                  </div>
+                  {errorDetails ? (
+                    <pre className="mt-3 overflow-x-auto rounded-xl border border-destructive/20 bg-background/80 p-3 text-xs leading-5 text-foreground">
+              {errorDetails}
+                    </pre>
+                  ) : null}
                 </CardContent>
               </Card>
             )}
@@ -1199,6 +1215,16 @@ export function ProjectUploadFlow({
         title={isRevisionMode ? "Authenticate to Upload Revision" : "Authenticate to Upload"}
         description={isRevisionMode ? "Enter your badge number and PIN to upload revision files" : "Enter your badge number and PIN to upload this project"}
         showNumpad
+      />
+
+      <PartsIngestPreviewDialog
+        open={partsPreview !== null}
+        createdCount={partsPreview?.createdCount ?? 0}
+        previewParts={partsPreview?.previewParts ?? []}
+        uniqueCandidates={partsPreview?.uniqueCandidates ?? 0}
+        existingCount={partsPreview?.existingCount ?? 0}
+        onCancel={handlePartsPreviewCancel}
+        onConfirm={handlePartsPreviewConfirm}
       />
 
       <AnimatePresence>

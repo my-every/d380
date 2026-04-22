@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.097Z",
+  "pdNumber": "4K911",
+  "projectName": "ERGON-V",
+  "displayName": "ERGON-V",
+  "unitNumber": "2",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "1/28/2026",
+    "PROJ_KITTED": "1/29/2026",
+    "CONLAY": "1/30/2026",
+    "CONASY": "2/12/2026",
+    "PWRCHK": "2/20/2026",
+    "D380_FINAL_BIQ": "2/24/2026",
+    "DEPT_380_TARGET": "4/17/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

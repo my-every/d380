@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-22T20:41:20.760Z",
+  "mode": "branding-export",
+  "sheetSlug": "prox-hpc-jb352",
+  "sheetName": "PROX,HPC^JB352",
+  "totalRows": 0,
+  "header": {
+    "locationTitle": "PROX,HPC^JB352",
+    "fromLabel": "From",
+    "toLabel": "To",
+    "columns": [
+      "Device ID",
+      "Wire No.",
+      "Wire ID",
+      "Gauge/Size",
+      "Length",
+      "Device ID",
+      "To Location",
+      "Bundle Name"
+    ]
+  },
+  "projectInfo": {
+    "projectNumber": "4L101",
+    "projectName": "PROP-99",
+    "revision": "C.4 M.5",
+    "controlsDE": "Li, Jonathan"
+  },
+  "prefixGroups": []
+}

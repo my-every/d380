@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.100Z",
+  "pdNumber": "4M451",
+  "projectName": "ET-WAH",
+  "displayName": "ET-WAH - Unit 1",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "01/22/26",
+    "BRAND_LIST": "1/22/2026",
+    "BRAND_WIRE": "1/29/2026",
+    "PROJ_KITTED": "1/30/2026",
+    "CONLAY": "2/2/2026",
+    "CONASY": "2/16/2026",
+    "PWRCHK": "2/19/2026",
+    "D380_FINAL_BIQ": "2/23/2026",
+    "DEPT_380_TARGET": "2/26/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

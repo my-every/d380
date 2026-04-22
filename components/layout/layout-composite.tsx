@@ -284,7 +284,7 @@ export function CompositeFloatingActions({ children, className }: CompositeRegio
                     exit={{ opacity: 0, y: 12 }}
                     transition={SPRING}
                 >
-                    <div className="pointer-events-auto max-w-max rounded-2xl border border-border bg-background/95 p-2 shadow-lg backdrop-blur">
+                    <div className="pointer-events-auto max-w-max">
                         {children}
                     </div>
                 </motion.div>

@@ -14,19 +14,14 @@
  * when the active revision changes in the sidebar.
  */
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState, type ReactNode } from "react";
 import Image from "next/image";
 import {
-  ArrowLeft,
-  ChevronRight,
   FileImage,
   ZoomIn,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { getProjectsRoutePath } from "@/hooks/use-sheet-route";
 import type {
   ProjectModel,
   ProjectSheetSummary,
@@ -35,7 +30,7 @@ import type {
 import type { ProjectManifest, ManifestSheetEntry } from "@/types/project-manifest";
 import type { LayoutPagePreview, SheetLayoutMatch } from "@/lib/layout-matching";
 import { LayoutPreviewModal } from "@/components/projects/layout-preview-modal";
-import { getSheetKindLabel, getSheetKindVariant } from "@/lib/workbook/classify-sheet";
+import { resolveLayoutPreviewPage } from "@/lib/layout-matching/resolve-layout-preview";
 
 // ============================================================================
 // Props
@@ -58,6 +53,8 @@ interface ProjectSheetSubheaderProps {
   activeRevisionLabel?: string;
   /** Override row count when viewing a different revision */
   activeRowCount?: number;
+  /** Optional action area rendered in the header */
+  headerActions?: ReactNode;
 }
 
 // ============================================================================
@@ -87,17 +84,25 @@ export function ProjectSheetSubheader({
   swsType,
   activeRevisionLabel,
   activeRowCount,
+  headerActions,
 }: ProjectSheetSubheaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  const kindLabel = getSheetKindLabel(sheet.kind);
-  const kindVariant = getSheetKindVariant(sheet.kind);
+  const resolvedLayoutPage = layoutPage ?? resolveLayoutPreviewPage({
+    pages: allPages ?? [],
+    matchedPageNumber: layoutMatch?.pageNumber,
+    matchedPageTitle: layoutMatch?.pageTitle,
+    sheetName: sheet.name,
+    sheetSlug: "slug" in sheet ? sheet.slug : undefined,
+  });
 
-  const hasImage = Boolean(layoutPage?.imageUrl) && !imageError;
-  const isMatched =
-    layoutMatch && layoutMatch.confidence !== "unmatched";
-  const modalPages = layoutPage ? [layoutPage] : [];
+  const hasImage = Boolean(resolvedLayoutPage?.imageUrl) && !imageError;
+  const modalPages = (allPages && allPages.length > 0)
+    ? allPages
+    : resolvedLayoutPage
+      ? [resolvedLayoutPage]
+      : [];
 
   // Merge project-level + sheet-level metadata
   const metaEntries = metadata
@@ -117,33 +122,12 @@ export function ProjectSheetSubheader({
   return (
     <>
       <div className="flex flex-col gap-3">
-        {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-sm text-muted-foreground overflow-x-auto">
-          <Link
-            href={getProjectsRoutePath()}
-            className="flex items-center gap-1 whitespace-nowrap hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Projects
-          </Link>
-          <ChevronRight className="h-3.5 w-3.5 flex-shrink-0" />
-          <Link
-            href={getProjectsRoutePath()}
-            className="truncate hover:text-foreground transition-colors"
-          >
-            {project.name}
-          </Link>
-          <ChevronRight className="h-3.5 w-3.5 flex-shrink-0" />
-          <span className="font-medium text-foreground truncate">
-            {sheet.name}
-          </span>
-        </nav>
-
+    
         {/* Combined card: cover image + info */}
-        <Card className="overflow-hidden p-0">
+        <Card className="overflow-hidden my-2 p-0">
           <div className="flex flex-col md:flex-row">
             {/* Layout cover image — flex-start so top of drawing is visible */}
-            {hasImage && isMatched ? (
+            {hasImage ? (
               <div
                 className="relative w-full md:w-80 lg:w-96 flex-shrink-0 cursor-pointer group"
                 onClick={() => setIsModalOpen(true)}
@@ -158,7 +142,7 @@ export function ProjectSheetSubheader({
               >
                 <div className="relative h-44 md:h-full min-h-[11rem] bg-muted">
                   <Image
-                    src={layoutPage!.imageUrl}
+                    src={resolvedLayoutPage!.imageUrl}
                     alt={`Layout for ${sheet.name}`}
                     fill
                     className="object-cover object-top transition-transform duration-200 group-hover:scale-[1.02]"
@@ -180,7 +164,7 @@ export function ProjectSheetSubheader({
                       variant="secondary"
                       className="bg-white/90 text-foreground text-[10px] backdrop-blur-sm"
                     >
-                      Page {layoutPage!.pageNumber}
+                      Page {resolvedLayoutPage!.pageNumber}
                     </Badge>
 
                   </div>
@@ -200,27 +184,34 @@ export function ProjectSheetSubheader({
             <div className="flex flex-1 flex-col justify-between gap-4 p-4 md:p-5 min-w-0">
               {/* Top: sheet identity */}
               <div className="flex flex-col gap-1.5">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h1 className="text-xl font-semibold tracking-tight text-foreground leading-tight">
-                    {sheet.name}
-                  </h1>
-                  {swsType && (
-                    <Badge
-                      variant="outline"
-                      className="text-[10px]"
-                      style={{
-                        borderColor: swsType.color,
-                        color: swsType.color,
-                      }}
-                    >
-                      {swsType.shortLabel}
-                    </Badge>
-                  )}
-                  {activeRevisionLabel && (
-                    <Badge variant="secondary" className="text-[10px] font-mono">
-                      Rev {activeRevisionLabel}
-                    </Badge>
-                  )}
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="flex min-w-0 flex-wrap items-center gap-2">
+                    <h1 className="text-xl font-semibold tracking-tight text-foreground leading-tight">
+                      {sheet.name}
+                    </h1>
+                    {swsType && (
+                      <Badge
+                        variant="outline"
+                        className="text-[10px]"
+                        style={{
+                          borderColor: swsType.color,
+                          color: swsType.color,
+                        }}
+                      >
+                        {swsType.shortLabel}
+                      </Badge>
+                    )}
+                    {activeRevisionLabel && (
+                      <Badge variant="secondary" className="text-[10px] font-mono">
+                        Rev {activeRevisionLabel}
+                      </Badge>
+                    )}
+                  </div>
+                  {headerActions ? (
+                    <div className="flex shrink-0 items-center gap-2">
+                      {headerActions}
+                    </div>
+                  ) : null}
                 </div>
                 <p className="text-sm text-muted-foreground">
                   {(activeRowCount ?? sheet.rowCount).toLocaleString()} wire rows
@@ -253,7 +244,7 @@ export function ProjectSheetSubheader({
       {modalPages.length > 0 && (
         <LayoutPreviewModal
           pages={modalPages}
-          initialPageNumber={layoutPage?.pageNumber ?? 1}
+          initialPageNumber={resolvedLayoutPage?.pageNumber ?? layoutPage?.pageNumber ?? 1}
           matchedSheetName={sheet.name}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

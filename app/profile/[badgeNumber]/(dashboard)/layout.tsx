@@ -290,7 +290,7 @@ function DashboardLayoutInner({
             });
         }
         await signOut();
-        router.replace("/auth");
+        router.replace("/380");
     }, [router, signOut, user]);
 
     const handleSwitchRole = useCallback(

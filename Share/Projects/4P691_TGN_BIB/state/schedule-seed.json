@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.887Z",
+  "pdNumber": "4P691",
+  "projectName": "TGN-BIB",
+  "displayName": "TGN-BIB",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "8/7/2026",
+    "BRAND_LIST": "8/14/2026",
+    "BRAND_WIRE": "8/21/2026",
+    "PROJ_KITTED": "8/22/2026",
+    "CONLAY": "8/25/2026",
+    "CONASY": "9/3/2026",
+    "PWRCHK": "9/14/2026",
+    "D380_FINAL_BIQ": "9/15/2026",
+    "DEPT_380_TARGET": "9/16/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
 import { createSessionFeedback } from '@/lib/session/session-feedback'
-import { verifyPinInShare } from '@/lib/session/share-user-store'
+import { verifyPinForRuntime } from '@/lib/session/runtime-user-store'
 
 export async function POST(request: Request) {
     try {
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
             )
         }
 
-        const { valid, user } = await verifyPinInShare(badge, pin)
+        const { valid, user } = await verifyPinForRuntime(badge, pin)
 
         if (!valid || !user) {
             return NextResponse.json({ valid: false, user: null })

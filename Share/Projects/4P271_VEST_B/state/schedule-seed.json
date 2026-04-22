@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.385Z",
+  "pdNumber": "4P271",
+  "projectName": "VEST-B",
+  "displayName": "VEST-B",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "3/18/2026",
+    "BRAND_LIST": "4/7/2026",
+    "BRAND_WIRE": "4/14/2026",
+    "PROJ_KITTED": "4/15/2026",
+    "CONLAY": "4/16/2026",
+    "CONASY": "4/27/2026",
+    "PWRCHK": "5/5/2026",
+    "D380_FINAL_BIQ": "5/6/2026",
+    "DEPT_380_TARGET": "5/20/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

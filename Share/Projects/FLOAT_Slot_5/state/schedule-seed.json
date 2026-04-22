@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.227Z",
+  "pdNumber": "FLOAT",
+  "projectName": "FLOAT",
+  "displayName": "FLOAT - Slot 5",
+  "unitNumber": "",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "3/26/2026",
+    "PROJ_KITTED": "3/27/2026",
+    "CONLAY": "3/30/2026",
+    "CONASY": "4/8/2026",
+    "PWRCHK": "4/16/2026",
+    "D380_FINAL_BIQ": "4/17/2026",
+    "DEPT_380_TARGET": "",
+    "LWC": "Offskid",
+    "UNIT_TYPE": ""
+  }
+}

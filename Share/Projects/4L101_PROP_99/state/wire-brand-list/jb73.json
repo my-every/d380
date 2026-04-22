@@ -1,0 +1,595 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-22T20:41:19.401Z",
+  "mode": "branding-export",
+  "sheetSlug": "jb73",
+  "sheetName": "JB73",
+  "totalRows": 33,
+  "header": {
+    "locationTitle": "JB73",
+    "fromLabel": "From",
+    "toLabel": "To",
+    "columns": [
+      "Device ID",
+      "Wire No.",
+      "Wire ID",
+      "Gauge/Size",
+      "Length",
+      "Device ID",
+      "To Location",
+      "Bundle Name"
+    ]
+  },
+  "projectInfo": {
+    "projectNumber": "4L101",
+    "projectName": "PROP-99",
+    "revision": "C.4 M.5",
+    "controlsDE": "Li, Jonathan"
+  },
+  "prefixGroups": [
+    {
+      "prefix": "SB",
+      "bundles": [
+        {
+          "bundleName": "SB0472A",
+          "toLocation": "JB73",
+          "rows": [
+            {
+              "rowId": "row-83",
+              "rowIndex": 94,
+              "fromDeviceId": "SB0472A:B1-12",
+              "wireNo": "ESTOPA",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "XT0121:8",
+              "toLocation": "JB73",
+              "bundleName": "SB0472A",
+              "bundleDisplay": "SB0472A",
+              "devicePrefix": "SB"
+            },
+            {
+              "rowId": "row-82",
+              "rowIndex": 93,
+              "fromDeviceId": "SB0472A:B1-11",
+              "wireNo": "SB0472AB111",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "XT0121:7",
+              "toLocation": "JB73",
+              "bundleName": "SB0472A",
+              "bundleDisplay": "",
+              "devicePrefix": "SB"
+            },
+            {
+              "rowId": "row-84",
+              "rowIndex": 95,
+              "fromDeviceId": "SB0472A:B2-11",
+              "wireNo": "SB0472AB211",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "XT0121:9",
+              "toLocation": "JB73",
+              "bundleName": "SB0472A",
+              "bundleDisplay": "",
+              "devicePrefix": "SB"
+            },
+            {
+              "rowId": "row-85",
+              "rowIndex": 96,
+              "fromDeviceId": "SB0472A:B2-12",
+              "wireNo": "SB0472AB212",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "XT0121:10",
+              "toLocation": "JB73",
+              "bundleName": "SB0472A",
+              "bundleDisplay": "",
+              "devicePrefix": "SB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prefix": "AF",
+      "bundles": [
+        {
+          "bundleName": "AF0510",
+          "toLocation": "JB73",
+          "rows": [
+            {
+              "rowId": "row-9",
+              "rowIndex": 20,
+              "fromDeviceId": "AF0510:56",
+              "wireNo": "052055",
+              "wireId": "WHT",
+              "gaugeSize": "16",
+              "length": 60,
+              "toDeviceId": "AF0520:55",
+              "toLocation": "JB73",
+              "bundleName": "AF0510",
+              "bundleDisplay": "AF0510",
+              "devicePrefix": "AF"
+            },
+            {
+              "rowId": "row-7",
+              "rowIndex": 18,
+              "fromDeviceId": "AF0510:54",
+              "wireNo": "052053",
+              "wireId": "WHT",
+              "gaugeSize": "16",
+              "length": 60,
+              "toDeviceId": "AF0520:53",
+              "toLocation": "JB73",
+              "bundleName": "AF0510",
+              "bundleDisplay": "",
+              "devicePrefix": "AF"
+            },
+            {
+              "rowId": "row-8",
+              "rowIndex": 19,
+              "fromDeviceId": "AF0510:55",
+              "wireNo": "FU0133",
+              "wireId": "WHT",
+              "gaugeSize": "16",
+              "length": 60,
+              "toDeviceId": "FU0133:LD",
+              "toLocation": "JB73",
+              "bundleName": "AF0510",
+              "bundleDisplay": "",
+              "devicePrefix": "AF"
+            },
+            {
+              "rowId": "row-6",
+              "rowIndex": 17,
+              "fromDeviceId": "AF0510:53",
+              "wireNo": "0V",
+              "wireId": "WHT",
+              "gaugeSize": "16",
+              "length": 60,
+              "toDeviceId": "XT0130:2",
+              "toLocation": "JB73",
+              "bundleName": "AF0510",
+              "bundleDisplay": "",
+              "devicePrefix": "AF"
+            }
+          ]
+        },
+        {
+          "bundleName": "AF1202",
+          "toLocation": "JB73",
+          "rows": [
+            {
+              "rowId": "row-22",
+              "rowIndex": 33,
+              "fromDeviceId": "AF1202:V+",
+              "wireNo": "AU1200P",
+              "wireId": "WHT",
+              "gaugeSize": "16",
+              "length": 60,
+              "toDeviceId": "AU1200:V+",
+              "toLocation": "JB73",
+              "bundleName": "AF1202",
+              "bundleDisplay": "AF1202",
+              "devicePrefix": "AF"
+            },
+            {
+              "rowId": "row-19",
+              "rowIndex": 30,
+              "fromDeviceId": "AF1202:COM",
+              "wireNo": "AU1200N",
+              "wireId": "WHT",
+              "gaugeSize": "16",
+              "length": 60,
+              "toDeviceId": "AU1200:COM",
+              "toLocation": "JB73",
+              "bundleName": "AF1202",
+              "bundleDisplay": "",
+              "devicePrefix": "AF"
+            }
+          ]
+        },
+        {
+          "bundleName": "AF1201",
+          "toLocation": "JB73",
+          "rows": [
+            {
+              "rowId": "row-17",
+              "rowIndex": 28,
+              "fromDeviceId": "AF1201:V+",
+              "wireNo": "FU0121",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 60,
+              "toDeviceId": "FU0121:LD",
+              "toLocation": "JB73",
+              "bundleName": "AF1201",
+              "bundleDisplay": "AF1201",
+              "devicePrefix": "AF"
+            },
+            {
+              "rowId": "row-14",
+              "rowIndex": 25,
+              "fromDeviceId": "AF1201:32",
+              "wireNo": "120132",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "KA4401:22",
+              "toLocation": "JB73",
+              "bundleName": "AF1201",
+              "bundleDisplay": "",
+              "devicePrefix": "AF"
+            },
+            {
+              "rowId": "row-11",
+              "rowIndex": 22,
+              "fromDeviceId": "AF1201:00",
+              "wireNo": "120100",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "KA0120:14",
+              "toLocation": "JB73",
+              "bundleName": "AF1201",
+              "bundleDisplay": "",
+              "devicePrefix": "AF"
+            },
+            {
+              "rowId": "row-15",
+              "rowIndex": 26,
+              "fromDeviceId": "AF1201:COM",
+              "wireNo": "0V",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 60,
+              "toDeviceId": "XT0130:3",
+              "toLocation": "JB73",
+              "bundleName": "AF1201",
+              "bundleDisplay": "",
+              "devicePrefix": "AF"
+            },
+            {
+              "rowId": "row-13",
+              "rowIndex": 24,
+              "fromDeviceId": "AF1201:18",
+              "wireNo": "SV51102",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "XT0121:12",
+              "toLocation": "JB73",
+              "bundleName": "AF1201",
+              "bundleDisplay": "",
+              "devicePrefix": "AF"
+            },
+            {
+              "rowId": "row-12",
+              "rowIndex": 23,
+              "fromDeviceId": "AF1201:02",
+              "wireNo": "SV51101",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "XT0121:11",
+              "toLocation": "JB73",
+              "bundleName": "AF1201",
+              "bundleDisplay": "",
+              "devicePrefix": "AF"
+            }
+          ]
+        },
+        {
+          "bundleName": "AF1207",
+          "toLocation": "JB73",
+          "rows": [
+            {
+              "rowId": "row-42",
+              "rowIndex": 53,
+              "fromDeviceId": "AF1207:32",
+              "wireNo": "PS44012",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "KA4401:11",
+              "toLocation": "JB73",
+              "bundleName": "AF1207",
+              "bundleDisplay": "AF1207",
+              "devicePrefix": "AF"
+            },
+            {
+              "rowId": "row-41",
+              "rowIndex": 52,
+              "fromDeviceId": "AF1207:16",
+              "wireNo": "120716",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "KA4401:A2",
+              "toLocation": "JB73",
+              "bundleName": "AF1207",
+              "bundleDisplay": "",
+              "devicePrefix": "AF"
+            },
+            {
+              "rowId": "row-40",
+              "rowIndex": 51,
+              "fromDeviceId": "AF1207:00",
+              "wireNo": "120700",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "KA4401:14",
+              "toLocation": "JB73",
+              "bundleName": "AF1207",
+              "bundleDisplay": "",
+              "devicePrefix": "AF"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prefix": "AU",
+      "bundles": [
+        {
+          "bundleName": "AU1200",
+          "toLocation": "JB73",
+          "rows": [
+            {
+              "rowId": "row-67",
+              "rowIndex": 78,
+              "fromDeviceId": "AU1200:V+",
+              "wireNo": "FU0120",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 60,
+              "toDeviceId": "FU0120:LD",
+              "toLocation": "JB73",
+              "bundleName": "AU1200",
+              "bundleDisplay": "AU1200",
+              "devicePrefix": "AU"
+            },
+            {
+              "rowId": "row-66",
+              "rowIndex": 77,
+              "fromDeviceId": "AU1200:COM",
+              "wireNo": "0V",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 60,
+              "toDeviceId": "XT0130:4",
+              "toLocation": "JB73",
+              "bundleName": "AU1200",
+              "bundleDisplay": "",
+              "devicePrefix": "AU"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prefix": "FU",
+      "bundles": [
+        {
+          "bundleName": "FU - FU",
+          "toLocation": "JB73",
+          "rows": [
+            {
+              "rowId": "row-69",
+              "rowIndex": 80,
+              "fromDeviceId": "FU0120:LI",
+              "wireNo": "FU0130",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 60,
+              "toDeviceId": "FU0130:LD",
+              "toLocation": "JB73",
+              "bundleName": "FU - FU",
+              "bundleDisplay": "FU - FU",
+              "devicePrefix": "FU"
+            }
+          ]
+        },
+        {
+          "bundleName": "FU0130",
+          "toLocation": "JB73",
+          "rows": [
+            {
+              "rowId": "row-71",
+              "rowIndex": 82,
+              "fromDeviceId": "FU0130:LD",
+              "wireNo": "FU0130",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 60,
+              "toDeviceId": "XT0121:3",
+              "toLocation": "JB73",
+              "bundleName": "FU0130",
+              "bundleDisplay": "FU0130",
+              "devicePrefix": "FU"
+            },
+            {
+              "rowId": "row-72",
+              "rowIndex": 83,
+              "fromDeviceId": "FU0130:LI",
+              "wireNo": "FU0136",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 60,
+              "toDeviceId": "XT0130:1",
+              "toLocation": "JB73",
+              "bundleName": "FU0130",
+              "bundleDisplay": "",
+              "devicePrefix": "FU"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prefix": "KA",
+      "bundles": [
+        {
+          "bundleName": "KA0120",
+          "toLocation": "JB73",
+          "rows": [
+            {
+              "rowId": "row-77",
+              "rowIndex": 88,
+              "fromDeviceId": "KA0120:12",
+              "wireNo": "KA012012",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "KA4401:21",
+              "toLocation": "JB73",
+              "bundleName": "KA0120",
+              "bundleDisplay": "KA0120",
+              "devicePrefix": "KA"
+            },
+            {
+              "rowId": "row-78",
+              "rowIndex": 89,
+              "fromDeviceId": "KA0120:A1",
+              "wireNo": "KA0231A1",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 60,
+              "toDeviceId": "XT0130:5",
+              "toLocation": "JB73",
+              "bundleName": "KA0120",
+              "bundleDisplay": "",
+              "devicePrefix": "KA"
+            },
+            {
+              "rowId": "row-79",
+              "rowIndex": 90,
+              "fromDeviceId": "KA0120:A2",
+              "wireNo": "0V",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "XT0130:3",
+              "toLocation": "JB73",
+              "bundleName": "KA0120",
+              "bundleDisplay": "",
+              "devicePrefix": "KA"
+            }
+          ]
+        },
+        {
+          "bundleName": "KA4401",
+          "toLocation": "JB73",
+          "rows": [
+            {
+              "rowId": "row-80",
+              "rowIndex": 91,
+              "fromDeviceId": "KA4401:11",
+              "wireNo": "PS44012",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "XT0121:1",
+              "toLocation": "JB73",
+              "bundleName": "KA4401",
+              "bundleDisplay": "KA4401",
+              "devicePrefix": "KA"
+            },
+            {
+              "rowId": "row-81",
+              "rowIndex": 92,
+              "fromDeviceId": "KA4401:A1",
+              "wireNo": "PS44013",
+              "wireId": "WHT",
+              "gaugeSize": "20",
+              "length": 60,
+              "toDeviceId": "XT0121:2",
+              "toLocation": "JB73",
+              "bundleName": "KA4401",
+              "bundleDisplay": "",
+              "devicePrefix": "KA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prefix": "XT",
+      "bundles": [
+        {
+          "bundleName": "XT - XT",
+          "toLocation": "JB73",
+          "rows": [
+            {
+              "rowId": "row-86",
+              "rowIndex": 97,
+              "fromDeviceId": "XT0121:5",
+              "wireNo": "0V",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 60,
+              "toDeviceId": "XT0130:3",
+              "toLocation": "JB73",
+              "bundleName": "XT - XT",
+              "bundleDisplay": "XT - XT",
+              "devicePrefix": "XT"
+            },
+            {
+              "rowId": "row-89",
+              "rowIndex": 100,
+              "fromDeviceId": "XT0520:3",
+              "wireNo": "KA0231A1",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 60,
+              "toDeviceId": "XT0130:5",
+              "toLocation": "JB73",
+              "bundleName": "XT - XT",
+              "bundleDisplay": "",
+              "devicePrefix": "XT"
+            }
+          ]
+        },
+        {
+          "bundleName": "XT0130",
+          "toLocation": "JB73",
+          "rows": [
+            {
+              "rowId": "row-88",
+              "rowIndex": 99,
+              "fromDeviceId": "XT0130:4",
+              "wireNo": "0V",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 60,
+              "toDeviceId": "XT0520:2",
+              "toLocation": "JB73",
+              "bundleName": "XT0130",
+              "bundleDisplay": "XT0130",
+              "devicePrefix": "XT"
+            },
+            {
+              "rowId": "row-87",
+              "rowIndex": 98,
+              "fromDeviceId": "XT0130:1",
+              "wireNo": "FU0136",
+              "wireId": "WHT",
+              "gaugeSize": "14",
+              "length": 60,
+              "toDeviceId": "XT0520:1",
+              "toLocation": "JB73",
+              "bundleName": "XT0130",
+              "bundleDisplay": "",
+              "devicePrefix": "XT"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

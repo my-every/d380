@@ -23,27 +23,19 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import {
+  buildProjectScheduleExtraColumns,
+  parseProjectScheduleLegalsValue,
+  toProjectScheduleSlotsTableRow,
+  type ParsedProjectScheduleLegalsValue,
+} from "@/lib/project-schedule/adapters";
+import { fetchProjectScheduleComparison } from "@/lib/project-schedule/client";
+import type { ProjectScheduleComparisonRow } from "@/lib/project-schedule/types";
 import { cn } from "@/lib/utils";
 
 type BranderDashboardProps = {
   badgeNumber: string;
 };
-
-type RawSlotsRow = Record<string, unknown>;
-
-type LegalsState =
-  | "published"
-  | "pending_reference"
-  | "not_applicable"
-  | "missing"
-  | "invalid";
-
-interface ParsedLegalsValue {
-  raw: string;
-  normalizedDate: string | null;
-  statusCode: "A" | "C" | null;
-  state: LegalsState;
-}
 
 interface BranderChecklistState {
   checkedSlotChart: boolean;
@@ -57,60 +49,17 @@ interface BranderChecklistState {
 
 interface BranderScheduleRow {
   id: string;
+  source: ProjectScheduleComparisonRow;
   pdNumber: string;
   projectName: string;
   unit: string;
-  lwc: string;
-  controlsSlot: string;
-  ntbSlot: string;
-  slotLabel: string;
   dept380TargetRaw: string;
-  dept380TargetIso: string | null;
   dueMonth: string | null;
   daysLate: number | null;
-  legals: ParsedLegalsValue;
-  resolvedLegalsIso: string | null;
-  legalFilesLikelyReady: boolean;
+  legals: ParsedProjectScheduleLegalsValue;
   extraColumns: Record<string, string>;
   checklist: BranderChecklistState;
 }
-
-const EXTRA_SCHEDULE_COLUMN_KEYS = [
-  "LWC",
-  "BRAND LIST",
-  "BRAND WIRE",
-  "PROJ KITTED",
-  "CONLAY",
-  "CONASY",
-  "PWRCHK",
-  "D380 FINAL-BIQ",
-  "SHIPC",
-  "NEW COMMMIT",
-  "BIQ COMP",
-  "Applic",
-  "Prod ID",
-  "Unit Type",
-  "MO #",
-  "ME Name",
-  "Cntls DE Name",
-  "Cons Type",
-  "Need Event",
-  "Need Dt",
-  "Base Dt",
-  "PWRCHK Status",
-  "Cons Ship - 2",
-  "Cons Ship",
-  "PM Name",
-  "CMP Name",
-  "CONDEF Plan",
-  "CONDEF A/C",
-  "SOFTT Plan",
-  "SOFTT A/C",
-  "Project Type",
-  "Controls Slot",
-  "NTB Slot",
-  "New Pwrchk",
-] as const;
 
 const CHECKLIST_STORAGE_PREFIX = "brander-dashboard-checklist-v1";
 
@@ -123,16 +72,6 @@ const EMPTY_CHECKLIST: BranderChecklistState = {
   updatedAt: null,
   updatedBy: null,
 };
-
-function toString(value: unknown): string {
-  if (typeof value === "string") {
-    return value.trim();
-  }
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return String(value);
-  }
-  return "";
-}
 
 function parseDateToIso(value: string): string | null {
   const normalized = value.trim();
@@ -161,59 +100,6 @@ function parseDateToIso(value: string): string | null {
   }
 
   return iso;
-}
-
-function parseLegals(rawValue: string): ParsedLegalsValue {
-  const raw = rawValue.trim();
-  const lower = raw.toLowerCase();
-
-  if (!raw) {
-    return {
-      raw,
-      normalizedDate: null,
-      statusCode: null,
-      state: "missing",
-    };
-  }
-
-  if (lower === "see #1") {
-    return {
-      raw,
-      normalizedDate: null,
-      statusCode: null,
-      state: "pending_reference",
-    };
-  }
-
-  if (lower === "#n/a") {
-    return {
-      raw,
-      normalizedDate: null,
-      statusCode: null,
-      state: "not_applicable",
-    };
-  }
-
-  const suffixMatch = raw.match(/[A-Za-z]$/);
-  const suffix = suffixMatch ? suffixMatch[0].toUpperCase() : null;
-  const dateOnly = suffix ? raw.slice(0, -1).trim() : raw;
-  const normalizedDate = parseDateToIso(dateOnly);
-
-  if (!normalizedDate) {
-    return {
-      raw,
-      normalizedDate: null,
-      statusCode: suffix === "A" || suffix === "C" ? suffix : null,
-      state: "invalid",
-    };
-  }
-
-  return {
-    raw,
-    normalizedDate,
-    statusCode: suffix === "A" || suffix === "C" ? suffix : null,
-    state: "published",
-  };
 }
 
 function parseDaysLate(rawValue: string): number | null {
@@ -268,7 +154,7 @@ function getRowStatus(row: BranderScheduleRow): ProjectScheduleStatus {
   return "Upcoming";
 }
 
-function getLegalsStateLabel(state: LegalsState): string {
+function getLegalsStateLabel(state: ParsedProjectScheduleLegalsValue["state"]): string {
   switch (state) {
     case "published":
       return "Published";
@@ -284,7 +170,7 @@ function getLegalsStateLabel(state: LegalsState): string {
 }
 
 function getLegalsStateVariant(
-  state: LegalsState,
+  state: ParsedProjectScheduleLegalsValue["state"],
 ): "default" | "secondary" | "outline" | "destructive" {
   switch (state) {
     case "published":
@@ -412,30 +298,24 @@ function mergeChecklist(
 }
 
 function toScheduleRow(
-  row: RawSlotsRow,
-  index: number,
+  row: ProjectScheduleComparisonRow,
   checklistMap: Record<string, BranderChecklistState>,
   unit1LegalsByPd: Record<string, string | null>,
 ): BranderScheduleRow {
-  const pdNumber = toString(row["PD#"]).toUpperCase();
-  const projectName = toString(row.PROJECT);
-  const unit = toString(row.UNIT);
-  const lwc = toString(row.LWC);
-  const controlsSlot = toString(row["Controls Slot"]);
-  const ntbSlot = toString(row["NTB Slot"]);
-  const slotLabel = controlsSlot || ntbSlot || "Unslotted";
-
-  const dept380TargetRaw = toString(row["DEPT 380 TARGET"]);
+  const pdNumber = row.pdNumber.toUpperCase();
+  const projectName = row.projectName || "Unnamed Project";
+  const unit = row.unit || "-";
+  const dept380TargetRaw = row.plannedDept380Target ?? "";
   const dept380TargetIso = parseDateToIso(dept380TargetRaw);
   const dueMonth = dept380TargetIso ? dept380TargetIso.slice(0, 7) : null;
 
-  const rawLegals = toString(row.LEGALS);
-  const parsedLegals = parseLegals(rawLegals);
+  const rawLegals = row.plannedLegals ?? "";
+  const parsedLegals = parseProjectScheduleLegalsValue(rawLegals);
   const inheritedUnit1Legals =
     parsedLegals.state === "pending_reference"
       ? (unit1LegalsByPd[pdNumber] ?? null)
       : null;
-  const effectiveLegals: ParsedLegalsValue = inheritedUnit1Legals
+  const effectiveLegals: ParsedProjectScheduleLegalsValue = inheritedUnit1Legals
     ? {
         raw: `${rawLegals} (Unit 1)`,
         normalizedDate: inheritedUnit1Legals,
@@ -443,36 +323,20 @@ function toScheduleRow(
         state: "published",
       }
     : parsedLegals;
-  const resolvedLegalsIso = effectiveLegals.normalizedDate;
-
-  const legalFilesLikelyReady = Boolean(resolvedLegalsIso);
-
-  const legacyRowId = `${pdNumber || "UNKNOWN"}-${unit || "NA"}-${slotLabel || index}`;
-  const rowId = `${legacyRowId}-${index + 1}`;
-  const checklist = mergeChecklist(
-    checklistMap[rowId] ?? checklistMap[legacyRowId],
-  );
-  const extraColumns: Record<string, string> = {};
-  for (const columnKey of EXTRA_SCHEDULE_COLUMN_KEYS) {
-    extraColumns[columnKey] = toString(row[columnKey]);
-  }
+  const rowId = row.key || `${pdNumber || "UNKNOWN"}-${unit || "NA"}`;
+  const checklist = mergeChecklist(checklistMap[rowId]);
+  const extraColumns = buildProjectScheduleExtraColumns(row);
 
   return {
     id: rowId,
+    source: row,
     pdNumber: pdNumber || "UNKNOWN",
-    projectName: projectName || "Unnamed Project",
-    unit: unit || "-",
-    lwc: lwc || "-",
-    controlsSlot,
-    ntbSlot,
-    slotLabel,
+    projectName,
+    unit,
     dept380TargetRaw,
-    dept380TargetIso,
     dueMonth,
-    daysLate: parseDaysLate(toString(row["DAYS LATE"])),
+    daysLate: row.plannedDaysLate ?? parseDaysLate(extraColumns["DAYS LATE"] ?? ""),
     legals: effectiveLegals,
-    resolvedLegalsIso,
-    legalFilesLikelyReady,
     extraColumns,
     checklist,
   };
@@ -493,31 +357,24 @@ export function BranderDashboard({ badgeNumber }: BranderDashboardProps) {
       setError(null);
 
       try {
-        const response = await fetch("/api/schedule/slots", {
-          cache: "no-store",
-        });
-        if (!response.ok) {
-          throw new Error("Failed to load slot schedule data");
-        }
-
-        const payload = (await response.json()) as { rows?: RawSlotsRow[] };
-        const sourceRows = Array.isArray(payload.rows) ? payload.rows : [];
+        const payload = await fetchProjectScheduleComparison();
+        const sourceRows = payload.rows ?? [];
 
         const checklistMap = loadChecklistMap(badgeNumber);
 
         const unit1LegalsByPd: Record<string, string | null> = {};
         for (const rawRow of sourceRows) {
-          const pd = toString(rawRow["PD#"]).toUpperCase();
+          const pd = rawRow.pdNumber.trim().toUpperCase();
           if (!pd) {
             continue;
           }
 
-          const unitNumber = parseUnitNumber(toString(rawRow.UNIT));
+          const unitNumber = parseUnitNumber(rawRow.unit);
           if (unitNumber !== 1) {
             continue;
           }
 
-          const parsed = parseLegals(toString(rawRow.LEGALS));
+          const parsed = parseProjectScheduleLegalsValue(rawRow.plannedLegals ?? "");
           if (parsed.state === "published" && parsed.normalizedDate) {
             if (
               !unit1LegalsByPd[pd] ||
@@ -528,13 +385,13 @@ export function BranderDashboard({ badgeNumber }: BranderDashboardProps) {
           }
         }
 
-        const normalizedRows = sourceRows.map((rawRow, index) =>
-          toScheduleRow(rawRow, index, checklistMap, unit1LegalsByPd),
+        const normalizedRows = sourceRows.map((rawRow) =>
+          toScheduleRow(rawRow, checklistMap, unit1LegalsByPd),
         );
 
         normalizedRows.sort((left, right) => {
-          const leftDue = left.dept380TargetIso || "9999-12-31";
-          const rightDue = right.dept380TargetIso || "9999-12-31";
+          const leftDue = left.dueMonth ? `${left.dueMonth}-31` : "9999-12-31";
+          const rightDue = right.dueMonth ? `${right.dueMonth}-31` : "9999-12-31";
           if (leftDue !== rightDue) {
             return leftDue.localeCompare(rightDue);
           }
@@ -572,19 +429,13 @@ export function BranderDashboard({ badgeNumber }: BranderDashboardProps) {
 
   const tableRows = useMemo<ProjectScheduleSlotsTableRow[]>(
     () =>
-      rows.map((row) => ({
-        id: row.id,
-        pdNumber: row.pdNumber,
-        projectName: row.projectName,
-        unit: row.unit,
-        dueLabel: row.dept380TargetRaw,
-        dueMonth: row.dueMonth,
-        daysLate: row.daysLate,
-        legalsState: row.legals.state,
-        legalsLabel: row.legals.raw,
-        status: getRowStatus(row),
-        extraColumns: row.extraColumns,
-      })),
+      rows.map((row) =>
+        toProjectScheduleSlotsTableRow(
+          row.source,
+          getRowStatus(row),
+          row.legals.state,
+        ),
+      ),
     [rows],
   );
 

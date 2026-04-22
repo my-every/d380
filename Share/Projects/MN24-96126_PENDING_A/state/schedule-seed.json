@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.806Z",
+  "pdNumber": "MN24-96126",
+  "projectName": "PENDING-A",
+  "displayName": "PENDING-A",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "7/16/2026",
+    "BRAND_LIST": "7/23/2026",
+    "BRAND_WIRE": "7/30/2026",
+    "PROJ_KITTED": "7/31/2026",
+    "CONLAY": "8/3/2026",
+    "CONASY": "8/12/2026",
+    "PWRCHK": "8/20/2026",
+    "D380_FINAL_BIQ": "8/21/2026",
+    "DEPT_380_TARGET": "",
+    "LWC": "New",
+    "UNIT_TYPE": ""
+  }
+}

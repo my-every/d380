@@ -1303,6 +1303,18 @@ interface PrintModalProps {
   };
 }
 
+export interface SingleSheetPrintWorkspaceProps extends PrintModalProps {
+  workspaceActive?: boolean;
+  onRequestClose?: () => void;
+  headerTitle?: string;
+  hideCloseButton?: boolean;
+  extraHeaderActions?: ReactNode;
+  initialLoadedSchema?: WireListPrintSchema | null;
+  initialMode?: PrintFormatMode;
+  reviewModeCompact?: boolean;
+  reviewModeShowSettings?: boolean;
+}
+
 export interface WireListPrintDocumentData {
   settings: PrintSettings;
   projectInfo: ProjectInfo;
@@ -3298,7 +3310,7 @@ function ProjectInfoHeader({
 // Main Component
 // ============================================================================
 
-export function PrintModal({
+export function SingleSheetPrintWorkspace({
   rows,
   blueLabels,
   currentSheetName = "",
@@ -3308,8 +3320,16 @@ export function PrintModal({
   metadata,
   getRowLength,
   swsType,
-}: PrintModalProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  workspaceActive = true,
+  onRequestClose,
+  headerTitle = "Print Wire List",
+  hideCloseButton = false,
+  extraHeaderActions,
+  initialLoadedSchema = null,
+  initialMode = "standardize",
+  reviewModeCompact = false,
+  reviewModeShowSettings = false,
+}: SingleSheetPrintWorkspaceProps) {
   const { toast } = useToast();
   const [brandingSelection, setBrandingSelection] = useState<BrandingSelectionState>(createEmptyBrandingSelection);
   const [brandingMeasurements, setBrandingMeasurements] = useState<Record<string, number | null>>({});
@@ -3365,7 +3385,10 @@ export function PrintModal({
     partNumberMap,
   });
 
-  const [settings, setSettings] = useState<PrintSettings>(() => createDefaultPrintSettings() as PrintSettings);
+  const [settings, setSettings] = useState<PrintSettings>(() => ({
+    ...(createDefaultPrintSettings() as PrintSettings),
+    mode: initialMode,
+  }));
   const [projectInfo, setProjectInfo] = useState<ProjectInfo>(() => createDefaultProjectInfo({
     projectNumber: metadata?.projectNumber || currentProject?.pdNumber,
     projectName: metadata?.projectName || currentProject?.name,
@@ -3511,7 +3534,7 @@ export function PrintModal({
 
   // Lock body scroll when modal is open
   useEffect(() => {
-    if (isOpen) {
+    if (workspaceActive) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -3519,7 +3542,7 @@ export function PrintModal({
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isOpen]);
+  }, [workspaceActive]);
 
   // Handle comment change
   const handleCommentChange = useCallback((rowId: string, value: string) => {
@@ -4000,6 +4023,28 @@ export function PrintModal({
     [processedRows]
   );
 
+  // ── Schema-driven render mode (state + hydration) ────────────────────
+  const [loadedSchema, setLoadedSchema] = useState<WireListPrintSchema | null>(initialLoadedSchema);
+  const [isLoadingSchema, setIsLoadingSchema] = useState(false);
+
+  const schemaHydration = useMemo(() => {
+    if (!loadedSchema) return null;
+    return hydrateSchemaForRender(loadedSchema);
+  }, [loadedSchema]);
+
+  useEffect(() => {
+    setLoadedSchema(initialLoadedSchema);
+  }, [initialLoadedSchema]);
+
+  useEffect(() => {
+    setSettings((prev) => (prev.mode === initialMode ? prev : { ...prev, mode: initialMode }));
+  }, [initialMode]);
+
+  const effectiveGetRowLength = useCallback(
+    (rowId: string) => schemaHydration?.rowLengthsById?.[rowId] ?? getRowLength?.(rowId) ?? null,
+    [getRowLength, schemaHydration?.rowLengthsById],
+  );
+
   const brandingPreviewRows = useMemo((): BrandingPreviewRow[] => {
     const sorted = sortRowsByGaugeSize([...rows], "smallest-first");
     const sameLocationRows = sorted.filter(
@@ -4012,7 +4057,7 @@ export function PrintModal({
     return filterEmptyDeviceChangeSections([...sameLocationRows, ...otherLocationRows])
       .filter((row) => !detectDeviceChange(row).isDeviceChange)
       .map((row) => {
-        const baseLength = getRowLength?.(row.__rowId)?.roundedInches;
+        const baseLength = effectiveGetRowLength(row.__rowId)?.roundedInches;
         const localMeasurement = brandingMeasurements[row.__rowId];
         const persistedEdit = persistedBrandingEdits[row.__rowId];
         const persistedLength = typeof persistedEdit?.length === "number"
@@ -4037,7 +4082,7 @@ export function PrintModal({
           isExternal: Boolean(normalizedSheetName) && !location.toUpperCase().includes(normalizedSheetName),
         };
       });
-  }, [brandingMeasurements, currentSheetName, getRowLength, persistedBrandingEdits, rows]);
+  }, [brandingMeasurements, currentSheetName, effectiveGetRowLength, persistedBrandingEdits, rows]);
 
   const brandingPreviewRowMap = useMemo(
     () => new Map(brandingPreviewRows.map((entry) => [entry.row.__rowId, entry])),
@@ -4279,14 +4324,7 @@ export function PrintModal({
     });
   }, [brandingSelection.selectedIds, canPersistBrandingMeasurements, toast]);
 
-  // ── Schema-driven render mode (state + hydration) ────────────────────
-  const [loadedSchema, setLoadedSchema] = useState<WireListPrintSchema | null>(null);
-  const [isLoadingSchema, setIsLoadingSchema] = useState(false);
-
-  const schemaHydration = useMemo(() => {
-    if (!loadedSchema) return null;
-    return hydrateSchemaForRender(loadedSchema);
-  }, [loadedSchema]);
+  const effectivePartNumberMap = schemaHydration?.partNumberMap ?? partNumberMap;
 
   // Print preview should follow the same section membership as the live identity filter.
   // When a saved schema is loaded, use its hydrated groups instead.
@@ -4299,17 +4337,17 @@ export function PrintModal({
       sectionOrder: settings.sectionOrder,
       currentSheetName,
       blueLabels: effectiveBlueLabels,
-      partNumberMap,
+      partNumberMap: effectivePartNumberMap,
       sortMode: settings.mode === "branding" ? settings.brandingSortMode : settings.wireListSortMode,
     }) as PrintLocationGroup[];
-  }, [schemaHydration, rows, settings.mode, settings.enabledSections, settings.sectionOrder, settings.brandingSortMode, settings.wireListSortMode, currentSheetName, effectiveBlueLabels, partNumberMap]);
+  }, [schemaHydration, rows, settings.mode, settings.enabledSections, settings.sectionOrder, settings.brandingSortMode, settings.wireListSortMode, currentSheetName, effectiveBlueLabels, effectivePartNumberMap]);
 
   const externalSectionContext = useMemo(() => ({
     assignmentMappings: assignmentMappings.length > 0 ? assignmentMappings : undefined,
     currentSheetName,
     internalRows: rows,
-    partNumberMap,
-  }), [assignmentMappings, currentSheetName, rows, partNumberMap]);
+    partNumberMap: effectivePartNumberMap,
+  }), [assignmentMappings, currentSheetName, rows, effectivePartNumberMap]);
 
   const defaultBrandingHiddenSections = useMemo(() => {
     return buildDefaultBrandingHiddenSections(processedLocationGroups as never, externalSectionContext);
@@ -4480,7 +4518,7 @@ export function PrintModal({
   );
 
   useEffect(() => {
-    if (!isOpen) {
+    if (!workspaceActive) {
       brandingToastShownRef.current = false;
       return;
     }
@@ -4495,7 +4533,7 @@ export function PrintModal({
       description: "Click any measurement to edit it, use +/- for quick changes, or use bulk controls for selected rows.",
       duration: 3500,
     });
-  }, [isOpen, settings.mode, toast]);
+  }, [workspaceActive, settings.mode, toast]);
 
   const previewPageCount = useMemo(() => {
     return buildPrintPreviewPageCount({
@@ -4528,10 +4566,10 @@ export function PrintModal({
       activeHiddenSections,
       brandingPreviewRowMap: brandingPreviewRowMap as never,
       currentSheetName,
-      partNumberMap,
+      partNumberMap: effectivePartNumberMap,
       hiddenRows: settings.hiddenRows,
     }) as BrandingVisibleSection[];
-  }, [activeHiddenSections, brandingPreviewRowMap, currentSheetName, processedLocationGroups, settings.hiddenRows]);
+  }, [activeHiddenSections, brandingPreviewRowMap, currentSheetName, processedLocationGroups, effectivePartNumberMap, settings.hiddenRows]);
 
   const brandingVisibleRowCount = useMemo(
     () => brandingVisibleSections.reduce((sum, section) => sum + section.rows.length, 0),
@@ -4625,7 +4663,7 @@ export function PrintModal({
         brandingVisibleSections,
         currentSheetName,
         sectionColumnVisibility: settings.sectionColumnVisibility,
-        partNumberMap,
+        partNumberMap: effectivePartNumberMap,
         brandingSortMode: settings.brandingSortMode,
         projectInfo: {
           pdNumber: projectInfo.pdNumber,
@@ -4683,7 +4721,7 @@ export function PrintModal({
       const location = group.location || "";
 
       for (const row of visibleRows) {
-        const lengthDisplay = getRowLength?.(row.__rowId)?.display || "";
+        const lengthDisplay = effectiveGetRowLength(row.__rowId)?.display || "";
         const csvRow = [
           row.fromDeviceId || "",
           row.wireNo || "",
@@ -4730,9 +4768,9 @@ export function PrintModal({
   }, [
     brandingVisibleSections,
     currentSheetName,
-    getRowLength,
+    effectiveGetRowLength,
     metadata?.controlsDE,
-    partNumberMap,
+    effectivePartNumberMap,
     projectInfo.pdNumber,
     projectInfo.projectName,
     projectInfo.revision,
@@ -4753,7 +4791,7 @@ export function PrintModal({
       brandingVisibleSections,
       currentSheetName,
       sectionColumnVisibility: settings.sectionColumnVisibility,
-      partNumberMap,
+      partNumberMap: effectivePartNumberMap,
       brandingSortMode: settings.brandingSortMode,
       projectInfo: {
         pdNumber: projectInfo.pdNumber,
@@ -4846,7 +4884,7 @@ export function PrintModal({
     brandingVisibleSections,
     currentSheetName,
     metadata?.controlsDE,
-    partNumberMap,
+    effectivePartNumberMap,
     projectInfo.pdNumber,
     projectInfo.projectName,
     projectInfo.revision,
@@ -5112,42 +5150,16 @@ export function PrintModal({
   const handleZoomReset = () => setZoom(100);
 
   return (
-    <>
-      <Button variant="outline" size="sm" className="gap-2" onClick={() => setIsOpen(true)}>
-        <Printer className="h-4 w-4" />
-        <span className="hidden sm:inline">Print</span>
-      </Button>
-
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
-              onClick={() => setIsOpen(false)}
-            />
-
-            {/* Modal */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="fixed inset-0 z-50 pointer-events-none"
-            >
-              <div
-                className="bg-background h-screen w-screen flex flex-col overflow-hidden pointer-events-auto"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {/* Header */}
-                <div className="px-3 sm:px-5 py-3 border-b flex items-center justify-between flex-shrink-0 bg-muted/30 gap-2">
+    <div
+      className="bg-background h-full w-full flex flex-col overflow-hidden"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Header */}
+      {!reviewModeCompact ? (
+      <div className="px-3 sm:px-5 py-3 border-b flex items-center justify-between flex-shrink-0 bg-muted/30 gap-2">
                   <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                     <Printer className="h-5 w-5 text-foreground/70 flex-shrink-0 hidden sm:block" />
-                    <h2 className="text-base sm:text-lg font-semibold truncate">Print Wire List</h2>
+                    <h2 className="text-base sm:text-lg font-semibold truncate">{headerTitle}</h2>
                     <Badge variant="secondary" className="text-xs flex-shrink-0">
                       {settings.mode === "branding" ? brandingPreviewRows.length : totalRowCount} rows
                     </Badge>
@@ -5242,6 +5254,7 @@ export function PrintModal({
                         <span className="hidden sm:inline">Exit Wiring</span>
                       </Button>
                     )}
+                    {extraHeaderActions}
                     <Button onClick={handlePrint} size="sm" className="gap-1.5 sm:gap-2 h-8 px-2 sm:px-3">
                       <Printer className="h-4 w-4" />
                       <span className="hidden sm:inline">Print</span>
@@ -5256,31 +5269,35 @@ export function PrintModal({
                       <Download className="h-4 w-4" />
                       <span className="hidden sm:inline">Download PDF</span>
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsOpen(false)}>
+                    {!hideCloseButton && onRequestClose && (
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onRequestClose}>
                       <X className="h-4 w-4" />
-                    </Button>
+                      </Button>
+                    )}
                   </div>
-                </div>
+      </div>
+      ) : null}
 
-                {/* Body */}
-                {wiringExecutionActive ? (
-                  <div className="flex-1 overflow-hidden">
-                    <WiringExecutionMode
-                      projectId={projectId || ""}
-                      sheetSlug={sheetSlug || currentSheetName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}
-                      sheetName={currentSheetName}
-                      swsType={swsType?.id || "UNDECIDED"}
-                      badge={user?.badge || "unknown"}
-                      shift={user?.currentShift || "1st-shift"}
-                      locationGroups={processedLocationGroups}
-                      settings={settings}
-                      rowMap={rowMap}
-                      onClose={() => setWiringExecutionActive(false)}
-                    />
-                  </div>
-                ) : (
-                  <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
+      {/* Body */}
+      {wiringExecutionActive ? (
+        <div className="flex-1 overflow-hidden">
+          <WiringExecutionMode
+            projectId={projectId || ""}
+            sheetSlug={sheetSlug || currentSheetName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}
+            sheetName={currentSheetName}
+            swsType={swsType?.id || "UNDECIDED"}
+            badge={user?.badge || "unknown"}
+            shift={user?.currentShift || "1st-shift"}
+            locationGroups={processedLocationGroups}
+            settings={settings}
+            rowMap={rowMap}
+            onClose={() => setWiringExecutionActive(false)}
+          />
+        </div>
+      ) : (
+        <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
                     {/* Left: Settings Panel */}
+                    {(!reviewModeCompact || reviewModeShowSettings) ? (
                     <div className="w-full md:w-[380px] lg:w-[420px] flex-shrink-0 border-b md:border-b-0 md:border-r bg-muted/20 overflow-y-auto max-h-[40vh] md:max-h-none">
                       <div className="p-4 space-y-5">
                         {/* Project Information */}
@@ -6274,10 +6291,12 @@ export function PrintModal({
                         )}
                       </div>
                     </div>
+                    ) : null}
 
                     {/* Right: Preview Panel */}
                     <div className="flex-1 flex flex-col overflow-hidden bg-muted/10">
                       {/* Preview Header with Zoom Controls */}
+                      {!reviewModeCompact ? (
                       <div className="px-4 py-2 border-b bg-background flex items-center justify-between flex-shrink-0">
                         <div className="flex items-center gap-2">
                           {hasCrossWireSections ? (
@@ -6352,6 +6371,7 @@ export function PrintModal({
                           </Button>
                         </div>
                       </div>
+                      ) : null}
 
                       {/* Scrollable & Zoomable Preview */}
                       <div
@@ -6416,7 +6436,7 @@ export function PrintModal({
                                         sectionLabel={subsection.label}
                                         sectionKind={subsection.sectionKind}
                                         sectionColumnVisibility={settings.sectionColumnVisibility}
-                                        partNumberMap={partNumberMap}
+                                        partNumberMap={effectivePartNumberMap}
                                         matchMetadata={subsection.matchMetadata}
                                         brandingSortMode={settings.brandingSortMode}
                                         selection={brandingSelection}
@@ -6535,9 +6555,9 @@ export function PrintModal({
                                                         sectionKind={subsection.sectionKind}
                                                         sectionLabel={subsection.label}
                                                         matchMetadata={subsection.matchMetadata}
-                                                        partNumberMap={partNumberMap}
+                                                        partNumberMap={effectivePartNumberMap}
                                                         cablePartNumberMap={cablePartNumberMap}
-                                                        getRowLength={getRowLength}
+                                                        getRowLength={effectiveGetRowLength}
                                                         hiddenRows={settings.hiddenRows}
                                                         onToggleRowHidden={toggleRowHidden}
                                                       />
@@ -6687,9 +6707,9 @@ export function PrintModal({
                                                     sectionKind={section.subsection.sectionKind}
                                                     sectionLabel={section.subsection.label}
                                                     matchMetadata={section.subsection.matchMetadata}
-                                                    partNumberMap={partNumberMap}
+                                                    partNumberMap={effectivePartNumberMap}
                                                     cablePartNumberMap={cablePartNumberMap}
-                                                    getRowLength={getRowLength}
+                                                    getRowLength={effectiveGetRowLength}
                                                   />
                                                 </div>
                                               )}
@@ -6706,8 +6726,47 @@ export function PrintModal({
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function PrintModal(props: PrintModalProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="outline" size="sm" className="gap-2" onClick={() => setIsOpen(true)}>
+        <Printer className="h-4 w-4" />
+        <span className="hidden sm:inline">Print</span>
+      </Button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+              onClick={() => setIsOpen(false)}
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="fixed inset-0 z-50 pointer-events-none"
+            >
+              <div className="h-screen w-screen pointer-events-auto">
+                <SingleSheetPrintWorkspace
+                  {...props}
+                  workspaceActive={isOpen}
+                  onRequestClose={() => setIsOpen(false)}
+                />
               </div>
             </motion.div>
           </>

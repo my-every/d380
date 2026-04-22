@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.170Z",
+  "pdNumber": "4M037CS",
+  "projectName": "WP-ADSC STA",
+  "displayName": "WP-ADSC STA",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "02/16/26",
+    "BRAND_LIST": "2/23/2026",
+    "BRAND_WIRE": "3/2/2026",
+    "PROJ_KITTED": "2/27/2026",
+    "CONLAY": "3/4/2026",
+    "CONASY": "3/10/2026",
+    "PWRCHK": "3/19/2026",
+    "D380_FINAL_BIQ": "3/20/2026",
+    "DEPT_380_TARGET": "3/18/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "CON"
+  }
+}

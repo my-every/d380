@@ -1,0 +1,74 @@
+{
+  "id": "4l761-wte-mlp-unit-1-slot-2",
+  "name": "WTE-MLP - Unit 1 - Slot 2",
+  "filename": "slots-seeded:4L761:1",
+  "pdNumber": "4L761",
+  "unitNumber": "1",
+  "revision": "O & G",
+  "lwcType": "OFFSKID",
+  "color": "#F4B400",
+  "unitType": "CS",
+  "unitTypes": [
+    "CS"
+  ],
+  "createdAt": "2026-04-23T06:54:31.908Z",
+  "dueDate": "2026-09-28T07:00:00.000Z",
+  "planConlayDate": "2026-09-08T07:00:00.000Z",
+  "planConassyDate": "2026-09-17T07:00:00.000Z",
+  "sheets": [],
+  "assignments": {},
+  "lifecycleGates": [
+    {
+      "gateId": "LEGALS_READY",
+      "status": "READY",
+      "targetDate": "2026-08-20T07:00:00.000Z",
+      "notes": "Seeded from SLOTS.json legals milestone."
+    },
+    {
+      "gateId": "BRANDLIST_COMPLETE",
+      "status": "READY",
+      "targetDate": "2026-08-27T07:00:00.000Z",
+      "notes": "Seeded from SLOTS.json brand-list milestone."
+    },
+    {
+      "gateId": "BRANDING_READY",
+      "status": "READY",
+      "targetDate": "2026-09-03T07:00:00.000Z",
+      "notes": "Seeded from SLOTS.json branding milestone."
+    },
+    {
+      "gateId": "KITTING_READY",
+      "status": "READY",
+      "targetDate": "2026-09-04T07:00:00.000Z",
+      "notes": "Seeded from SLOTS.json kitting milestone."
+    }
+  ],
+  "aggregates": {
+    "totalAssignments": 0,
+    "completedAssignments": 0,
+    "inProgressAssignments": 0,
+    "blockedAssignments": 0,
+    "totalEstimatedMinutes": 0,
+    "totalRemainingMinutes": 0,
+    "totalActualMinutes": 0,
+    "overallProgress": 0,
+    "highestPriority": "low",
+    "priorityCounts": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "stageCounts": {}
+  },
+  "panducts": 0,
+  "rails": 0,
+  "status": "legals_pending",
+  "estimatedTotalHours": null,
+  "estimatedPanelCount": null,
+  "daysLate": 0,
+  "deptTargetDate": "2026-09-28T07:00:00.000Z",
+  "shipDate": "",
+  "activeWorkbookRevisionId": null,
+  "activeLayoutRevisionId": null
+}

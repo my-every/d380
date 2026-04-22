@@ -9,11 +9,12 @@
  */
 
 import { useEffect, useMemo, useState } from "react";
-import { useProjectContext, fetchSheetSchema } from "@/contexts/project-context";
-import type { ProjectManifest, ManifestAssignmentNode, ManifestReferenceSheet } from "@/types/project-manifest";
+import { useProjectContext, fetchSheetSchema, fetchWireListPrintSchema } from "@/contexts/project-context";
+import type { ProjectManifest } from "@/types/project-manifest";
 import type { SheetSchema } from "@/types/sheet-schema";
 import type { PartNumberLookupResult } from "@/lib/part-number-list";
 import { useProjectPartNumbers, useProjectBlueLabels, type BlueLabelLookupResult } from "@/hooks/use-project-lookups";
+import type { WireListPrintSchema } from "@/lib/wire-list-print/schema";
 
 interface UseSheetRouteParams {
   /** The project ID from the route */
@@ -25,10 +26,12 @@ interface UseSheetRouteParams {
 interface UseSheetRouteReturn {
   /** The project manifest */
   project: ProjectManifest | null;
-  /** The resolved manifest sheet entry (assignment or reference) */
-  sheetEntry: ManifestAssignmentNode | ManifestReferenceSheet | null;
+  /** The resolved manifest sheet entry */
+  sheetEntry: { slug: string; name: string; kind: string } | null;
   /** The fully loaded sheet schema (fetched on demand) */
   sheetSchema: SheetSchema | null;
+  /** Pre-generated wire list schema used as a render fallback */
+  wireListSchema: WireListPrintSchema | null;
   /** Pre-built part number map */
   partNumberMap: Map<string, PartNumberLookupResult>;
   /** Part number lookup helper */
@@ -56,6 +59,7 @@ export function useSheetRoute(params: UseSheetRouteParams): UseSheetRouteReturn 
   const { blueLabelsMap, hasBlueLabel, getBlueLabels } = useProjectBlueLabels();
 
   const [sheetSchema, setSheetSchema] = useState<SheetSchema | null>(null);
+  const [wireListSchema, setWireListSchema] = useState<WireListPrintSchema | null>(null);
   const [schemaLoading, setSchemaLoading] = useState(false);
 
   // Resolve manifest sheet entry
@@ -70,14 +74,24 @@ export function useSheetRoute(params: UseSheetRouteParams): UseSheetRouteReturn 
     }
 
     const decodedSheetName = decodeURIComponent(params.sheetName);
-    const allSheets = [
-      ...Object.values(project.assignments ?? {}),
-      ...Object.values(project.referenceSheets ?? {}),
+    const manifestSheets = project.sheets ?? [];
+    const assignmentAndReferenceSheets = [
+      ...Object.values(project.assignments ?? {}).map((entry) => ({
+        slug: entry.sheetSlug,
+        name: entry.sheetName,
+        kind: entry.kind,
+      })),
+      ...Object.values(project.referenceSheets ?? {}).map((entry) => ({
+        slug: entry.sheetSlug,
+        name: entry.sheetName,
+        kind: entry.kind,
+      })),
     ];
+    const allSheets = [...manifestSheets, ...assignmentAndReferenceSheets];
     const entry =
-      allSheets.find(s => s.sheetSlug === decodedSheetName) ??
-      allSheets.find(s => s.sheetSlug === params.sheetName) ??
-      allSheets.find(s => s.sheetName === decodedSheetName);
+      allSheets.find(s => s.slug === decodedSheetName) ??
+      allSheets.find(s => s.slug === params.sheetName) ??
+      allSheets.find(s => s.name === decodedSheetName);
 
     if (!entry) {
       return { sheetEntry: null, found: false, error: `Sheet "${params.sheetName}" not found in project` };
@@ -96,15 +110,19 @@ export function useSheetRoute(params: UseSheetRouteParams): UseSheetRouteReturn 
     let cancelled = false;
     setSchemaLoading(true);
 
-    fetchSheetSchema(project.id, resolved.sheetEntry.sheetSlug).then(schema => {
+    void Promise.all([
+      fetchSheetSchema(project.id, resolved.sheetEntry.slug),
+      fetchWireListPrintSchema(project.id, resolved.sheetEntry.slug),
+    ]).then(([schema, printSchema]) => {
       if (!cancelled) {
         setSheetSchema(schema);
+        setWireListSchema(printSchema);
         setSchemaLoading(false);
       }
     });
 
     return () => { cancelled = true; };
-  }, [project?.id, resolved.sheetEntry?.sheetSlug, project]);
+  }, [project?.id, resolved.sheetEntry?.slug, project]);
 
   const isLoading = contextLoading || schemaLoading;
 
@@ -112,6 +130,7 @@ export function useSheetRoute(params: UseSheetRouteParams): UseSheetRouteReturn 
     project,
     sheetEntry: resolved.sheetEntry,
     sheetSchema,
+    wireListSchema,
     partNumberMap,
     getPartNumber,
     blueLabelsMap,

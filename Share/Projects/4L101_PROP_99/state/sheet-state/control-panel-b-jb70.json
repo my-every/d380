@@ -1,0 +1,19 @@
+{
+  "projectId": "4l101-prop-99",
+  "sheetSlug": "control-panel-b-jb70",
+  "updatedAt": "2026-04-23T11:26:19.143Z",
+  "rowPatches": [],
+  "workflow": {},
+  "columnVisibility": {},
+  "columnOrder": {},
+  "brandingEdits": {},
+  "revisionSelection": {
+    "wireListFilename": null,
+    "layoutFilename": null
+  },
+  "patchHistory": {
+    "past": [],
+    "future": [],
+    "maxSize": 50
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.855Z",
+  "pdNumber": "4N381",
+  "projectName": "WWM-FR",
+  "displayName": "WWM-FR - Unit 1",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "7/30/2026",
+    "BRAND_LIST": "8/6/2026",
+    "BRAND_WIRE": "8/13/2026",
+    "PROJ_KITTED": "8/14/2026",
+    "CONLAY": "8/17/2026",
+    "CONASY": "8/26/2026",
+    "PWRCHK": "9/3/2026",
+    "D380_FINAL_BIQ": "9/4/2026",
+    "DEPT_380_TARGET": "10/2/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

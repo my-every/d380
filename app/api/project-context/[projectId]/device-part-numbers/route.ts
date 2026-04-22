@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { promises as fs } from 'node:fs'
-import path from 'node:path'
 
 import {
     readProjectManifest,
+    readStoredProjectFromState,
     resolveProjectRootDirectory,
 } from '@/lib/project-state/share-project-state-handlers'
 import {
@@ -11,7 +10,6 @@ import {
     readDevicePartNumbersMap,
     saveDevicePartNumbersMap,
 } from '@/lib/project-state/device-part-numbers-generator'
-import type { StoredProject } from '@/types/d380-shared'
 
 export const dynamic = 'force-dynamic'
 
@@ -38,30 +36,6 @@ export async function GET(
     return NextResponse.json({ devices: map?.devices ?? {}, generatedAt: map?.generatedAt })
 }
 
-async function readStoredProject(projectId: string): Promise<{ root: string; project: StoredProject } | null> {
-    const manifest = await readProjectManifest(projectId)
-    if (!manifest) {
-        return null
-    }
-
-    const projectRoot = await resolveProjectRootDirectory(projectId, {
-        pdNumber: manifest.pdNumber,
-        projectName: manifest.name,
-    })
-
-    if (!projectRoot) {
-        return null
-    }
-
-    const contextPath = path.join(projectRoot, 'state', 'project-context.json')
-    try {
-        const raw = await fs.readFile(contextPath, 'utf-8')
-        return { root: projectRoot, project: JSON.parse(raw) as StoredProject }
-    } catch {
-        return null
-    }
-}
-
 export async function POST(
     _request: NextRequest,
     { params }: { params: Promise<{ projectId: string }> },
@@ -69,7 +43,7 @@ export async function POST(
     const { projectId } = await params
 
     try {
-        const stored = await readStoredProject(projectId)
+        const stored = await readStoredProjectFromState(projectId)
         if (!stored) {
             return NextResponse.json(
                 {

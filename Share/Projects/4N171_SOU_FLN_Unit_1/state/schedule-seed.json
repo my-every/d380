@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.186Z",
+  "pdNumber": "4N171",
+  "projectName": "SOU-FLN",
+  "displayName": "SOU-FLN - Unit 1",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "03/05/26",
+    "BRAND_LIST": "3/5/2026",
+    "BRAND_WIRE": "3/12/2026",
+    "PROJ_KITTED": "3/16/2026",
+    "CONLAY": "3/16/2026",
+    "CONASY": "3/27/2026",
+    "PWRCHK": "4/1/2026",
+    "D380_FINAL_BIQ": "4/3/2026",
+    "DEPT_380_TARGET": "4/22/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-22T20:41:19.916Z",
+  "mode": "branding-export",
+  "sheetSlug": "jb75-left-rail",
+  "sheetName": "JB75,LEFT RAIL",
+  "totalRows": 3,
+  "header": {
+    "locationTitle": "JB75,LEFT RAIL",
+    "fromLabel": "From",
+    "toLabel": "To",
+    "columns": [
+      "Device ID",
+      "Wire No.",
+      "Wire ID",
+      "Gauge/Size",
+      "Length",
+      "Device ID",
+      "To Location",
+      "Bundle Name"
+    ]
+  },
+  "projectInfo": {
+    "projectNumber": "4L101",
+    "projectName": "PROP-99",
+    "revision": "C.4 M.5",
+    "controlsDE": "Li, Jonathan"
+  },
+  "prefixGroups": [
+    {
+      "prefix": "BA",
+      "bundles": [
+        {
+          "bundleName": "BA - FU",
+          "toLocation": "JB75,LEFT RAIL",
+          "rows": [
+            {
+              "rowId": "row-0",
+              "rowIndex": 11,
+              "fromDeviceId": "BA1213:POS",
+              "wireNo": "FU1213LD",
+              "wireId": "WHT",
+              "gaugeSize": "16",
+              "length": 60,
+              "toDeviceId": "FU1213:LD",
+              "toLocation": "JB75,LEFT RAIL",
+              "bundleName": "BA - FU",
+              "bundleDisplay": "BA - FU",
+              "devicePrefix": "BA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prefix": "BA",
+      "bundles": [
+        {
+          "bundleName": "BA - XT",
+          "toLocation": "RAIL,RIGHT,JB70",
+          "rows": [
+            {
+              "rowId": "row-3",
+              "rowIndex": 14,
+              "fromDeviceId": "BA1213:NEG",
+              "wireNo": "BA1100N",
+              "wireId": "WHT",
+              "gaugeSize": "16",
+              "length": 120,
+              "toDeviceId": "XT0391:2",
+              "toLocation": "RAIL,RIGHT,JB70",
+              "bundleName": "BA - XT",
+              "bundleDisplay": "BA - XT - RAIL,RIGHT,JB70",
+              "devicePrefix": "BA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prefix": "FU",
+      "bundles": [
+        {
+          "bundleName": "FU - XT",
+          "toLocation": "RAIL,RIGHT,JB70",
+          "rows": [
+            {
+              "rowId": "row-4",
+              "rowIndex": 15,
+              "fromDeviceId": "FU1213:LI",
+              "wireNo": "BA1100P",
+              "wireId": "WHT",
+              "gaugeSize": "16",
+              "length": 120,
+              "toDeviceId": "XT0391:1",
+              "toLocation": "RAIL,RIGHT,JB70",
+              "bundleName": "FU - XT",
+              "bundleDisplay": "FU - XT - RAIL,RIGHT,JB70",
+              "devicePrefix": "FU"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

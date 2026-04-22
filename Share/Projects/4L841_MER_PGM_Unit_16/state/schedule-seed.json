@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.161Z",
+  "pdNumber": "4L841",
+  "projectName": "MER-PGM",
+  "displayName": "MER-PGM - Unit 16",
+  "unitNumber": "16",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "2/27/2026",
+    "PROJ_KITTED": "2/23/2026",
+    "CONLAY": "2/23/2026",
+    "CONASY": "3/9/2026",
+    "PWRCHK": "3/12/2026",
+    "D380_FINAL_BIQ": "3/16/2026",
+    "DEPT_380_TARGET": "5/28/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "GS"
+  }
+}

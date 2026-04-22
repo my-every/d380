@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.096Z",
+  "pdNumber": "4N171CB",
+  "projectName": "SOU-FLN SHIP AHEAD",
+  "displayName": "SOU-FLN SHIP AHEAD",
+  "unitNumber": "3",
+  "scheduleSnapshot": {
+    "LEGALS": "See #1",
+    "BRAND_LIST": "See #1",
+    "BRAND_WIRE": "1/28/2026",
+    "PROJ_KITTED": "1/28/2026",
+    "CONLAY": "1/30/2026",
+    "CONASY": "2/9/2026",
+    "PWRCHK": "2/19/2026",
+    "D380_FINAL_BIQ": "2/19/2026",
+    "DEPT_380_TARGET": "2/13/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CON"
+  }
+}

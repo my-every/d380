@@ -13,7 +13,6 @@ coverage
 .idea
 .vscode
 *.iml
-Share/Projects/
 Share/Legals/
 release
 # Mock workspace data (optional - remove this line if you want to commit mock data for team sharing)

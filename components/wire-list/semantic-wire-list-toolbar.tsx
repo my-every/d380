@@ -18,11 +18,26 @@ import { PrefixFilterDropdown } from "./prefix-filter-dropdown";
 import { GaugeFilterDropdown } from "./gauge-filter-dropdown";
 import { WireNoSearch } from "./wire-no-search";
 import { PrintModal } from "./print-modal";
+import { MultiSheetPrintModal } from "./multi-sheet-print-modal";
 import type { SemanticWireListRow, SheetMetadataInfo } from "@/lib/workbook/types";
 import { wireListRowsToCSV, downloadWireListCSV } from "@/lib/workbook/types";
 import { useSession } from "@/hooks/use-session";
 import type { BlueLabelSequenceMap, IdentificationFilterKind, IdentificationFilterOption } from "@/lib/wiring-identification/types";
 import type { GaugeSortOrder } from "@/lib/wiring-identification/gauge-filter";
+
+export interface SemanticWireListToolbarOptions {
+  showSearchInput?: boolean;
+  showIdentifyFilter?: boolean;
+  showDeviceFilter?: boolean;
+  showGaugeFilter?: boolean;
+  showWireNoSearch?: boolean;
+  showSearchAll?: boolean;
+  showPrint?: boolean;
+  showMultiSheet?: boolean;
+  showExport?: boolean;
+  showCustomize?: boolean;
+  showRowCount?: boolean;
+}
 
 interface SemanticWireListToolbarProps {
   searchValue: string;
@@ -77,6 +92,7 @@ interface SemanticWireListToolbarProps {
     shortLabel: string;
     color?: string;
   };
+  options?: SemanticWireListToolbarOptions;
 }
 
 export function SemanticWireListToolbar({
@@ -126,9 +142,23 @@ export function SemanticWireListToolbar({
   onShowDeviceSubheadersChange,
   getRowLength,
   swsType,
+  options,
 }: SemanticWireListToolbarProps) {
   const { hasRole } = useSession();
   const canExport = hasRole('BRANDER');
+  const {
+    showSearchInput = true,
+    showIdentifyFilter = true,
+    showDeviceFilter = true,
+    showGaugeFilter = true,
+    showWireNoSearch = true,
+    showSearchAll = true,
+    showPrint = true,
+    showMultiSheet = true,
+    showExport = true,
+    showCustomize = true,
+    showRowCount = true,
+  } = options ?? {};
   
   // Handle CSV export
   const handleExportCSV = () => {
@@ -154,89 +184,115 @@ export function SemanticWireListToolbar({
   
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-      <div className="relative w-full sm:flex-1 sm:max-w-sm">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          placeholder="Search all columns..."
-          value={searchValue}
-          onChange={(event) => onSearchValueChange(event.target.value)}
-          className="pl-9"
-        />
-      </div>
+      {showSearchInput ? (
+        <div className="relative w-full sm:flex-1 sm:max-w-sm">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Search all columns..."
+            value={searchValue}
+            onChange={(event) => onSearchValueChange(event.target.value)}
+            className="pl-9"
+          />
+        </div>
+      ) : (
+        <div className="hidden sm:block sm:flex-1" />
+      )}
 
       <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 -mx-2 px-2 sm:mx-0 sm:px-0">
-        <IdentificationFilterDropdown
-          selectedFilter={selectedFilter}
-          filterOptions={filterOptions}
-          onFilterChange={onSelectedFilterChange}
-          hasBlueLabels={hasBlueLabels}
-        />
+        {showIdentifyFilter ? (
+          <IdentificationFilterDropdown
+            selectedFilter={selectedFilter}
+            filterOptions={filterOptions}
+            onFilterChange={onSelectedFilterChange}
+            hasBlueLabels={hasBlueLabels}
+          />
+        ) : null}
 
-        <PrefixFilterDropdown
-          rows={filterRows}
-          fromPrefix={fromPrefix}
-          toPrefix={toPrefix}
-          onFromPrefixChange={onFromPrefixChange}
-          onToPrefixChange={onToPrefixChange}
-        />
+        {showDeviceFilter ? (
+          <PrefixFilterDropdown
+            rows={filterRows}
+            fromPrefix={fromPrefix}
+            toPrefix={toPrefix}
+            onFromPrefixChange={onFromPrefixChange}
+            onToPrefixChange={onToPrefixChange}
+          />
+        ) : null}
 
-        <GaugeFilterDropdown
-          rows={prefixRows}
-          selectedGauge={selectedGauge}
-          sortOrder={gaugeSortOrder}
-          onGaugeChange={onSelectedGaugeChange}
-          onSortOrderChange={onGaugeSortOrderChange}
-        />
+        {showGaugeFilter ? (
+          <GaugeFilterDropdown
+            rows={prefixRows}
+            selectedGauge={selectedGauge}
+            sortOrder={gaugeSortOrder}
+            onGaugeChange={onSelectedGaugeChange}
+            onSortOrderChange={onGaugeSortOrderChange}
+          />
+        ) : null}
 
-        <WireNoSearch
-          value={wireNoSearchValue}
-          onChange={onWireNoSearchValueChange}
-          onClear={onClearWireNoSearch}
-          matchCount={wireNoMatchCount}
-          totalRows={locationDisplayRows}
-          isActive={isWireNoSearchActive}
-          searchModeEnabled={searchModeEnabled}
-          onToggleSearchMode={onToggleSearchMode}
-          onFocusChange={onWireNoInputFocusChange}
-        />
+        {showWireNoSearch ? (
+          <WireNoSearch
+            value={wireNoSearchValue}
+            onChange={onWireNoSearchValueChange}
+            onClear={onClearWireNoSearch}
+            matchCount={wireNoMatchCount}
+            totalRows={locationDisplayRows}
+            isActive={isWireNoSearchActive}
+            searchModeEnabled={searchModeEnabled}
+            onToggleSearchMode={onToggleSearchMode}
+            onFocusChange={onWireNoInputFocusChange}
+          />
+        ) : null}
 
-        <Button variant="outline" size="sm" className="gap-2" onClick={onOpenFullScreenSearch}>
-          <Search className="h-4 w-4" />
-          <span className="hidden sm:inline">Search All</span>
-        </Button>
+        {showSearchAll ? (
+          <Button variant="outline" size="sm" className="gap-2" onClick={onOpenFullScreenSearch}>
+            <Search className="h-4 w-4" />
+            <span className="hidden sm:inline">Search All</span>
+          </Button>
+        ) : null}
 
-        <PrintModal
-          rows={rows}
-          blueLabels={blueLabels}
-          currentSheetName={currentSheetName}
-          projectId={projectId}
-          sheetSlug={sheetSlug}
-          sheetTitle={title}
-          metadata={metadata}
-          getRowLength={getRowLength}
-          swsType={swsType}
-        />
+        {showPrint ? (
+          <PrintModal
+            rows={rows}
+            blueLabels={blueLabels}
+            currentSheetName={currentSheetName}
+            projectId={projectId}
+            sheetSlug={sheetSlug}
+            sheetTitle={title}
+            metadata={metadata}
+            getRowLength={getRowLength}
+            swsType={swsType}
+          />
+        ) : null}
 
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="gap-2"
-          onClick={handleExportCSV}
-          disabled={rows.length === 0 || !canExport}
-          title={canExport ? 'Export to CSV' : 'Brander role required to export'}
-        >
-          <Download className="h-4 w-4" />
-          <span className="hidden sm:inline">Export</span>
-        </Button>
+        {showMultiSheet ? (
+          <MultiSheetPrintModal
+            projectId={projectId}
+            currentSheetSlug={sheetSlug}
+          />
+        ) : null}
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-2">
-              <Columns3 className="h-4 w-4" />
-              Customize
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56 max-h-100 overflow-auto">
+        {showExport ? (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="gap-2"
+            onClick={handleExportCSV}
+            disabled={rows.length === 0 || !canExport}
+            title={canExport ? 'Export to CSV' : 'Brander role required to export'}
+          >
+            <Download className="h-4 w-4" />
+            <span className="hidden sm:inline">Export</span>
+          </Button>
+        ) : null}
+
+        {showCustomize ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-2">
+                <Columns3 className="h-4 w-4" />
+                Customize
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56 max-h-100 overflow-auto">
             <DropdownMenuLabel>From Section</DropdownMenuLabel>
             {showFrom && (
               <DropdownMenuCheckboxItem
@@ -348,10 +404,13 @@ export function SemanticWireListToolbar({
                 Reset to defaults
               </Button>
             </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : null}
 
-        <span className="text-sm text-muted-foreground">{filteredDisplayRows} rows</span>
+        {showRowCount ? (
+          <span className="text-sm text-muted-foreground">{filteredDisplayRows} rows</span>
+        ) : null}
       </div>
     </div>
   );

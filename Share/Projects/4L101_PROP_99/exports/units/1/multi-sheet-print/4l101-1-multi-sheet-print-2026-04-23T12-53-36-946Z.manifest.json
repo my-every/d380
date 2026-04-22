@@ -1,0 +1,111 @@
+{
+  "projectId": "4l101-prop-99",
+  "generatedAt": "2026-04-23T12:53:37.769Z",
+  "approvedSheets": [
+    {
+      "sheetSlug": "bop-jb74",
+      "sheetName": "BOP,JB74",
+      "brandingRows": 64,
+      "wireRows": 95
+    },
+    {
+      "sheetSlug": "bop-jb75",
+      "sheetName": "BOP,JB75",
+      "brandingRows": 80,
+      "wireRows": 109
+    },
+    {
+      "sheetSlug": "control-panel-b-jb70",
+      "sheetName": "CONTROL PANEL B, JB70",
+      "brandingRows": 232,
+      "wireRows": 294
+    },
+    {
+      "sheetSlug": "door-jb70",
+      "sheetName": "DOOR,JB70",
+      "brandingRows": 54,
+      "wireRows": 58
+    },
+    {
+      "sheetSlug": "fire-pnl-jb70",
+      "sheetName": "FIRE PNL,JB70",
+      "brandingRows": 65,
+      "wireRows": 98
+    },
+    {
+      "sheetSlug": "jb4",
+      "sheetName": "JB4",
+      "brandingRows": 0,
+      "wireRows": 1
+    },
+    {
+      "sheetSlug": "jb5",
+      "sheetName": "JB5",
+      "brandingRows": 10,
+      "wireRows": 66
+    },
+    {
+      "sheetSlug": "jb73",
+      "sheetName": "JB73",
+      "brandingRows": 33,
+      "wireRows": 88
+    },
+    {
+      "sheetSlug": "jb74-left-rail",
+      "sheetName": "JB74,LEFT RAIL",
+      "brandingRows": 5,
+      "wireRows": 7
+    },
+    {
+      "sheetSlug": "jb75-left-rail",
+      "sheetName": "JB75,LEFT RAIL",
+      "brandingRows": 3,
+      "wireRows": 5
+    },
+    {
+      "sheetSlug": "panel-a",
+      "sheetName": "PANEL A",
+      "brandingRows": 206,
+      "wireRows": 313
+    },
+    {
+      "sheetSlug": "plc",
+      "sheetName": "PLC",
+      "brandingRows": 7,
+      "wireRows": 17
+    },
+    {
+      "sheetSlug": "power-supply-box",
+      "sheetName": "POWER SUPPLY BOX",
+      "brandingRows": 7,
+      "wireRows": 20
+    },
+    {
+      "sheetSlug": "prox-hpc-jb352",
+      "sheetName": "PROX,HPC^JB352",
+      "brandingRows": 0,
+      "wireRows": 1
+    },
+    {
+      "sheetSlug": "rail-left-jb70",
+      "sheetName": "RAIL,LEFT,JB70",
+      "brandingRows": 50,
+      "wireRows": 79
+    },
+    {
+      "sheetSlug": "rail-right-jb70",
+      "sheetName": "RAIL,RIGHT,JB70",
+      "brandingRows": 44,
+      "wireRows": 55
+    }
+  ],
+  "skippedSheets": [],
+  "brandingWorkbook": {
+    "fileName": "4l101-1-multi-sheet-print-2026-04-23T12-53-36-946Z.xlsx",
+    "relativePath": "exports/units/1/multi-sheet-print/4l101-1-multi-sheet-print-2026-04-23T12-53-36-946Z.xlsx"
+  },
+  "wireListSchema": {
+    "fileName": "4l101-1-multi-sheet-print-2026-04-23T12-53-36-946Z.wire-list.json",
+    "relativePath": "exports/units/1/multi-sheet-print/4l101-1-multi-sheet-print-2026-04-23T12-53-36-946Z.wire-list.json"
+  }
+}

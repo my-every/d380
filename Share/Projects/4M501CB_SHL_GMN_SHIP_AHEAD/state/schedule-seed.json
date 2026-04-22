@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.101Z",
+  "pdNumber": "4M501CB",
+  "projectName": "SHL-GMN SHIP AHEAD",
+  "displayName": "SHL-GMN SHIP AHEAD",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "02/04/26",
+    "BRAND_LIST": "1/23/2026",
+    "BRAND_WIRE": "1/30/2026",
+    "PROJ_KITTED": "3/11/2026",
+    "CONLAY": "3/11/2026",
+    "CONASY": "3/19/2026",
+    "PWRCHK": "3/23/2026",
+    "D380_FINAL_BIQ": "3/23/2026",
+    "DEPT_380_TARGET": "3/6/2026",
+    "LWC": "New",
+    "UNIT_TYPE": "CON"
+  }
+}

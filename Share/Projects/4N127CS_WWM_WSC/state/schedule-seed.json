@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.441Z",
+  "pdNumber": "4N127CS",
+  "projectName": "WWM-WSC",
+  "displayName": "WWM-WSC",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "04/16/26",
+    "BRAND_LIST": "4/16/2026",
+    "BRAND_WIRE": "4/23/2026",
+    "PROJ_KITTED": "4/24/2026",
+    "CONLAY": "4/27/2026",
+    "CONASY": "5/6/2026",
+    "PWRCHK": "5/14/2026",
+    "D380_FINAL_BIQ": "5/15/2026",
+    "DEPT_380_TARGET": "5/25/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "CON"
+  }
+}

@@ -21,6 +21,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import { resolveProjectMeasurementSource, reuseProjectMeasurements } from "@/lib/project-measurements/client";
 import { cn } from "@/lib/utils";
 import type { MappedAssignment } from "@/lib/assignment/mapped-assignment";
 import type { ActivityEntry } from "@/types/activity";
@@ -70,6 +72,13 @@ interface ScheduleStepperMilestone {
   actualRaw: string;
   actualDate: Date | null;
   isReached: boolean;
+}
+
+interface PendingMeasurementReuseConfirmation {
+  sourceSheetSlug: string;
+  confidence: "high" | "medium" | "low" | "none";
+  reason: string;
+  targetSheetSlugs: string[];
 }
 
 const STAGE_SUBGROUPS: Array<{ label: string; stages: string[] }> = [
@@ -208,6 +217,7 @@ export function ProjectScheduleDetailsModalAlt({
   row,
   currentBadge,
 }: ProjectScheduleDetailsModalAltProps) {
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [project, setProject] = useState<ProjectManifest | null>(null);
@@ -219,6 +229,8 @@ export function ProjectScheduleDetailsModalAlt({
   const [activitiesError, setActivitiesError] = useState<string | null>(null);
   const [manifestRefreshing, setManifestRefreshing] = useState(false);
   const [manifestRefreshMessage, setManifestRefreshMessage] = useState<string | null>(null);
+  const [reusingUnitType, setReusingUnitType] = useState<string | null>(null);
+  const [pendingReuseByUnitType, setPendingReuseByUnitType] = useState<Record<string, PendingMeasurementReuseConfirmation>>({});
 
   const fallbackUnitType = row?.extraColumns?.["Unit Type"];
 
@@ -409,6 +421,122 @@ export function ProjectScheduleDetailsModalAlt({
       setManifestRefreshing(false);
     }
   }, [project?.id]);
+
+  const runReuseMeasurements = useCallback(async (
+    unitType: string,
+    sheetSlugs: string[],
+    sourceSheetSlug?: string,
+  ) => {
+    if (!project?.id) {
+      toast({
+        title: "Project unavailable",
+        description: "Open a saved project before reusing measurements.",
+      });
+      return;
+    }
+
+    const targets = sheetSlugs.filter(Boolean);
+    if (targets.length === 0) {
+      toast({
+        title: "No target sheets",
+        description: `No assignment sheets were found for ${unitType}.`,
+      });
+      return;
+    }
+
+    setReusingUnitType(unitType);
+    try {
+      const result = await reuseProjectMeasurements(project.id, {
+        sourceSheetSlug,
+        targetSheetSlugs: targets,
+        mode: "both",
+      });
+
+      const brandingTotal = result.results.reduce(
+        (sum, entry) => sum + (entry.brandingRowsCopied ?? 0),
+        0,
+      );
+      const wireTotal = result.results.reduce(
+        (sum, entry) => sum + (entry.wireListRowsCopied ?? 0),
+        0,
+      );
+
+      toast({
+        title: `Measurements reused for ${unitType}`,
+        description: `${brandingTotal} branding rows and ${wireTotal} wire-list rows copied from ${result.sourceSheetSlug}${result.sourceInferenceUsed ? " (auto-resolved)" : ""}.`,
+      });
+      setPendingReuseByUnitType((prev) => {
+        const next = { ...prev };
+        delete next[unitType];
+        return next;
+      });
+    } catch (error) {
+      toast({
+        title: "Reuse failed",
+        description: error instanceof Error ? error.message : "Failed to reuse measurements.",
+        variant: "destructive",
+      });
+    } finally {
+      setReusingUnitType(null);
+    }
+  }, [project?.id, toast]);
+
+  const handleReuseMeasurements = useCallback(async (unitType: string, sheetSlugs: string[]) => {
+    if (!project?.id) {
+      toast({
+        title: "Project unavailable",
+        description: "Open a saved project before reusing measurements.",
+      });
+      return;
+    }
+
+    const targets = sheetSlugs.filter(Boolean);
+    if (targets.length === 0) {
+      toast({
+        title: "No target sheets",
+        description: `No assignment sheets were found for ${unitType}.`,
+      });
+      return;
+    }
+
+    const pending = pendingReuseByUnitType[unitType];
+    if (pending) {
+      await runReuseMeasurements(unitType, pending.targetSheetSlugs, pending.sourceSheetSlug);
+      return;
+    }
+
+    try {
+      const resolution = await resolveProjectMeasurementSource(project.id, {
+        targetSheetSlugs: targets,
+      });
+
+      if (resolution.confidence === "high") {
+        await runReuseMeasurements(unitType, targets, resolution.sourceSheetSlug);
+        return;
+      }
+
+      setPendingReuseByUnitType((prev) => ({
+        ...prev,
+        [unitType]: {
+          sourceSheetSlug: resolution.sourceSheetSlug,
+          confidence: resolution.confidence,
+          reason: resolution.reason,
+          targetSheetSlugs: targets,
+        },
+      }));
+
+      toast({
+        title: `Confirm source for ${unitType}`,
+        description: `${resolution.reason} Using ${resolution.sourceSheetSlug}. Click the action again to confirm.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Source resolution failed",
+        description: error instanceof Error ? error.message : "Failed to resolve source sheet.",
+        variant: "destructive",
+      });
+    }
+  }, [pendingReuseByUnitType, project?.id, runReuseMeasurements, toast]);
 
   useEffect(() => {
     if (!open || !row) {
@@ -659,6 +787,32 @@ export function ProjectScheduleDetailsModalAlt({
                                 <div className="flex items-center gap-2">
                                   <Badge variant="outline" className="border-slate-700 text-foreground">{group.unitType}</Badge>
                                   <span className="text-xs text-foreground">{group.assignments.length} assignments</span>
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    className="h-7 rounded-full px-3 text-[11px]"
+                                    disabled={reusingUnitType === group.unitType}
+                                    onClick={(event) => {
+                                      event.preventDefault();
+                                      event.stopPropagation();
+                                      void handleReuseMeasurements(
+                                        group.unitType,
+                                        group.assignments.map((assignment) => assignment.sheetSlug),
+                                      );
+                                    }}
+                                  >
+                                    {reusingUnitType === group.unitType ? (
+                                      <>
+                                        <Loader2 className="mr-1.5 h-3 w-3 animate-spin" />
+                                        Reusing
+                                      </>
+                                    ) : pendingReuseByUnitType[group.unitType] ? (
+                                      "Confirm Reuse"
+                                    ) : (
+                                      "Reuse V1 Measurements"
+                                    )}
+                                  </Button>
                                 </div>
                                 <div className="w-36">
                                   <div className="mb-1 flex items-center justify-between text-[11px] text-foreground">
@@ -673,6 +827,16 @@ export function ProjectScheduleDetailsModalAlt({
                             </AccordionTrigger>
                             <AccordionContent>
                               <div className="space-y-2 pb-2">
+                                {pendingReuseByUnitType[group.unitType] ? (
+                                  <div className="rounded-lg border border-amber-400/50 bg-amber-500/10 px-3 py-2 text-xs text-foreground">
+                                    <div className="font-medium text-amber-200">
+                                      Suggested source: {pendingReuseByUnitType[group.unitType].sourceSheetSlug}
+                                    </div>
+                                    <div className="mt-1 text-foreground/80">
+                                      {pendingReuseByUnitType[group.unitType].reason}
+                                    </div>
+                                  </div>
+                                ) : null}
                                 {group.assignments.map((assignment) => (
                                   <div key={assignment.sheetSlug} className="rounded-lg border border-border  p-3">
                                     <div className="flex items-center justify-between gap-3">

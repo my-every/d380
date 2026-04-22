@@ -76,7 +76,7 @@ export async function PATCH(
   // Update the manifest assignment index entry for this sheet
   const manifest = await readProjectManifest(projectId)
   if (manifest?.assignments) {
-    const entry = manifest.assignments.find((a) => a.sheetSlug === body.slug)
+    const entry = manifest.assignments[body.slug]
     if (entry) {
       if (body.selectedStage !== undefined) entry.stage = body.selectedStage as AssignmentStageId
       if (body.selectedStatus !== undefined) entry.status = body.selectedStatus as SheetSchema['assignment']['status']

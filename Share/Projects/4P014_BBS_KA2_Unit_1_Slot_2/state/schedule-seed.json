@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.627Z",
+  "pdNumber": "4P014",
+  "projectName": "BBS-KA2",
+  "displayName": "BBS-KA2 - Unit 1 - Slot 2",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "6/3/2026",
+    "BRAND_LIST": "6/10/2026",
+    "BRAND_WIRE": "6/17/2026",
+    "PROJ_KITTED": "6/18/2026",
+    "CONLAY": "6/19/2026",
+    "CONASY": "6/30/2026",
+    "PWRCHK": "7/9/2026",
+    "D380_FINAL_BIQ": "7/10/2026",
+    "DEPT_380_TARGET": "8/12/2026",
+    "LWC": "Offskid",
+    "UNIT_TYPE": "CS"
+  }
+}

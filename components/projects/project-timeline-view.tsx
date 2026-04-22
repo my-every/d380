@@ -1578,7 +1578,7 @@ export function ProjectTimelineView({
                     <div>
                         {FLOOR_AREAS.map((area) => {
                             const meta = FLOOR_AREA_META[area]
-                            const stations = FLOOR_STATIONS[area]
+                            const stations = FLOOR_STATIONS[area] ?? []
 
                             return (
                                 <div key={area}>
@@ -1668,7 +1668,7 @@ export function ProjectTimelineView({
                             {/* Station swimlane rows — grouped by floor area */}
                             {FLOOR_AREAS.map((area) => {
                                 const meta = FLOOR_AREA_META[area]
-                                const stations = FLOOR_STATIONS[area]
+                                const stations = FLOOR_STATIONS[area] ?? []
 
                                 return (
                                     <div key={area}>

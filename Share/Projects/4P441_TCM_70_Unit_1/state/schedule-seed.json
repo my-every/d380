@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.427Z",
+  "pdNumber": "4P441",
+  "projectName": "TCM-70",
+  "displayName": "TCM-70 - Unit 1",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "04/09/26",
+    "BRAND_LIST": "4/9/2026",
+    "BRAND_WIRE": "4/16/2026",
+    "PROJ_KITTED": "4/17/2026",
+    "CONLAY": "4/20/2026",
+    "CONASY": "4/29/2026",
+    "PWRCHK": "5/7/2026",
+    "D380_FINAL_BIQ": "5/8/2026",
+    "DEPT_380_TARGET": "5/8/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

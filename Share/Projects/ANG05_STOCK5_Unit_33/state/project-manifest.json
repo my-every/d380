@@ -1,0 +1,72 @@
+{
+  "id": "ang05-stock5-unit-33",
+  "name": "STOCK5 - Unit 33",
+  "filename": "slots-seeded:ANG05:33",
+  "pdNumber": "ANG05",
+  "unitNumber": "33",
+  "revision": "IPG",
+  "lwcType": "ONSKID",
+  "color": "#F4B400",
+  "unitType": "GS",
+  "unitTypes": [
+    "GS"
+  ],
+  "createdAt": "2026-04-23T06:54:31.904Z",
+  "dueDate": "2026-10-07T07:00:00.000Z",
+  "planConlayDate": "2026-09-04T07:00:00.000Z",
+  "planConassyDate": "2026-09-16T07:00:00.000Z",
+  "sheets": [],
+  "assignments": {},
+  "lifecycleGates": [
+    {
+      "gateId": "LEGALS_READY",
+      "status": "READY",
+      "notes": "Seeded from SLOTS.json legals milestone."
+    },
+    {
+      "gateId": "BRANDLIST_COMPLETE",
+      "status": "READY",
+      "notes": "Seeded from SLOTS.json brand-list milestone."
+    },
+    {
+      "gateId": "BRANDING_READY",
+      "status": "READY",
+      "targetDate": "2026-09-02T07:00:00.000Z",
+      "notes": "Seeded from SLOTS.json branding milestone."
+    },
+    {
+      "gateId": "KITTING_READY",
+      "status": "READY",
+      "targetDate": "2026-09-03T07:00:00.000Z",
+      "notes": "Seeded from SLOTS.json kitting milestone."
+    }
+  ],
+  "aggregates": {
+    "totalAssignments": 0,
+    "completedAssignments": 0,
+    "inProgressAssignments": 0,
+    "blockedAssignments": 0,
+    "totalEstimatedMinutes": 0,
+    "totalRemainingMinutes": 0,
+    "totalActualMinutes": 0,
+    "overallProgress": 0,
+    "highestPriority": "low",
+    "priorityCounts": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "stageCounts": {}
+  },
+  "panducts": 0,
+  "rails": 0,
+  "status": "legals_pending",
+  "estimatedTotalHours": null,
+  "estimatedPanelCount": null,
+  "daysLate": -12,
+  "deptTargetDate": "2026-10-07T07:00:00.000Z",
+  "shipDate": "",
+  "activeWorkbookRevisionId": null,
+  "activeLayoutRevisionId": null
+}

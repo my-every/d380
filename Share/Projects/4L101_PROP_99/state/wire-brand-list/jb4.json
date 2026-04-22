@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-22T20:41:18.983Z",
+  "mode": "branding-export",
+  "sheetSlug": "jb4",
+  "sheetName": "JB4",
+  "totalRows": 0,
+  "header": {
+    "locationTitle": "JB4",
+    "fromLabel": "From",
+    "toLabel": "To",
+    "columns": [
+      "Device ID",
+      "Wire No.",
+      "Wire ID",
+      "Gauge/Size",
+      "Length",
+      "Device ID",
+      "To Location",
+      "Bundle Name"
+    ]
+  },
+  "projectInfo": {
+    "projectNumber": "4L101",
+    "projectName": "PROP-99",
+    "revision": "C.4 M.5",
+    "controlsDE": "Li, Jonathan"
+  },
+  "prefixGroups": []
+}
