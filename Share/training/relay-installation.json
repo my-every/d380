@@ -1,0 +1,160 @@
+{
+  "id": "relay-installation",
+  "name": "Standard Relay Installation",
+  "description": "Basic installation guide for relays and relay modules",
+  "partNumbers": [
+    "700-HA32A1",
+    "700-HA32Z24",
+    "700-HN103"
+  ],
+  "partTypes": ["relay", "relay-module"],
+  "category": "devices",
+  "stages": [
+    {
+      "stage": "preparation",
+      "enabled": true,
+      "steps": [
+        {
+          "id": "prep-1",
+          "order": 1,
+          "title": "Gather Required Materials",
+          "content": "Collect all necessary parts, tools, and documentation before beginning installation.",
+          "estimatedTime": 5,
+          "tools": ["Parts list", "Screwdriver", "Wire strippers"]
+        },
+        {
+          "id": "prep-2",
+          "order": 2,
+          "title": "Review Wiring Diagram",
+          "content": "Study the wiring diagram to understand terminal connections and wire routing.",
+          "estimatedTime": 3,
+          "tip": "Mark the diagram with highlighter for complex circuits."
+        },
+        {
+          "id": "prep-3",
+          "order": 3,
+          "title": "Verify Part Numbers",
+          "content": "Check that all part numbers match the BOM and wiring list specifications.",
+          "estimatedTime": 2,
+          "warning": "Do not proceed if part numbers do not match specifications."
+        }
+      ],
+      "notes": "Proper preparation prevents problems during installation."
+    },
+    {
+      "stage": "buildup",
+      "enabled": true,
+      "steps": [
+        {
+          "id": "build-1",
+          "order": 1,
+          "title": "Mount Relay Socket",
+          "content": "Secure the relay socket to the DIN rail using the locking tab. Ensure proper seating.",
+          "estimatedTime": 2,
+          "tools": ["Flat screwdriver"]
+        },
+        {
+          "id": "build-2",
+          "order": 2,
+          "title": "Insert Relay",
+          "content": "Align the relay pins with the socket and press firmly until seated. Verify all pins are engaged.",
+          "estimatedTime": 1,
+          "warning": "Do not force the relay - pins should align naturally.",
+          "tip": "Listen for a click when the relay is fully seated."
+        },
+        {
+          "id": "build-3",
+          "order": 3,
+          "title": "Install Marking Tags",
+          "content": "Apply component identification tags per the panel layout drawing.",
+          "estimatedTime": 2
+        }
+      ]
+    },
+    {
+      "stage": "wiring",
+      "enabled": true,
+      "steps": [
+        {
+          "id": "wire-1",
+          "order": 1,
+          "title": "Connect Coil Wiring",
+          "content": "Connect the coil terminals (A1, A2) per the wiring diagram. Observe polarity for DC coils.",
+          "estimatedTime": 5,
+          "warning": "Verify coil voltage matches power supply before connecting.",
+          "tools": ["Wire strippers", "Ferrule crimper", "Screwdriver"]
+        },
+        {
+          "id": "wire-2",
+          "order": 2,
+          "title": "Connect Contact Wiring",
+          "content": "Wire the normally open (NO) and normally closed (NC) contacts as specified.",
+          "estimatedTime": 8,
+          "tip": "Use color-coded wire per company standards for easy identification."
+        },
+        {
+          "id": "wire-3",
+          "order": 3,
+          "title": "Dress and Secure Wires",
+          "content": "Route wires neatly along wire ways. Use cable ties at appropriate intervals.",
+          "estimatedTime": 5
+        }
+      ]
+    },
+    {
+      "stage": "cross-wiring",
+      "enabled": true,
+      "steps": [
+        {
+          "id": "xwire-1",
+          "order": 1,
+          "title": "Complete Cross Connections",
+          "content": "Make any cross-connections between relays and other components as shown on the wiring diagram.",
+          "estimatedTime": 10
+        },
+        {
+          "id": "xwire-2",
+          "order": 2,
+          "title": "Verify Wire Tags",
+          "content": "Ensure all wire tags are legible and match the wire list.",
+          "estimatedTime": 5
+        }
+      ]
+    },
+    {
+      "stage": "testing",
+      "enabled": true,
+      "steps": [
+        {
+          "id": "test-1",
+          "order": 1,
+          "title": "Continuity Check",
+          "content": "Perform continuity test on all wired connections using multimeter.",
+          "estimatedTime": 5,
+          "tools": ["Multimeter"],
+          "warning": "Ensure power is disconnected before testing."
+        },
+        {
+          "id": "test-2",
+          "order": 2,
+          "title": "Functional Test",
+          "content": "Apply power and verify relay operation. Check that contacts switch properly.",
+          "estimatedTime": 5,
+          "tip": "Listen for audible click when relay energizes."
+        }
+      ]
+    },
+    {
+      "stage": "final-inspection",
+      "enabled": false,
+      "steps": []
+    }
+  ],
+  "version": 1,
+  "createdAt": "2026-04-17T00:00:00.000Z",
+  "updatedAt": "2026-04-17T00:00:00.000Z",
+  "status": "published",
+  "tags": ["relay", "installation", "standard"],
+  "difficulty": "beginner",
+  "totalEstimatedTime": 65
+}
