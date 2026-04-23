@@ -4326,6 +4326,13 @@ export function SingleSheetPrintWorkspace({
 
   const effectivePartNumberMap = schemaHydration?.partNumberMap ?? partNumberMap;
 
+  const effectivePartNumberMap = schemaHydration?.partNumberMap ?? partNumberMap;
+
+  const effectiveGetRowLength = useCallback(
+    (rowId: string) => schemaHydration?.rowLengthsById?.[rowId] ?? getRowLength?.(rowId) ?? null,
+    [getRowLength, schemaHydration?.rowLengthsById],
+  );
+
   // Print preview should follow the same section membership as the live identity filter.
   // When a saved schema is loaded, use its hydrated groups instead.
   const processedLocationGroups = useMemo((): PrintLocationGroup[] => {
