@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.183Z",
+  "pdNumber": "4N091",
+  "projectName": "TRP-FA1",
+  "displayName": "TRP-FA1",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "03/05/26",
+    "BRAND_LIST": "3/5/2026",
+    "BRAND_WIRE": "3/12/2026",
+    "PROJ_KITTED": "3/13/2026",
+    "CONLAY": "3/16/2026",
+    "CONASY": "3/23/2026",
+    "PWRCHK": "3/25/2026",
+    "D380_FINAL_BIQ": "3/27/2026",
+    "DEPT_380_TARGET": "4/29/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}

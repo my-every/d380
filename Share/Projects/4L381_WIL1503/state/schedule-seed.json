@@ -1,0 +1,21 @@
+{
+  "source": "SLOTS.json",
+  "seededAt": "2026-04-23T06:54:31.743Z",
+  "pdNumber": "4L381",
+  "projectName": "WIL1503",
+  "displayName": "WIL1503",
+  "unitNumber": "1",
+  "scheduleSnapshot": {
+    "LEGALS": "7/2/2026",
+    "BRAND_LIST": "7/10/2026",
+    "BRAND_WIRE": "7/17/2026",
+    "PROJ_KITTED": "7/18/2026",
+    "CONLAY": "7/21/2026",
+    "CONASY": "7/30/2026",
+    "PWRCHK": "8/7/2026",
+    "D380_FINAL_BIQ": "8/10/2026",
+    "DEPT_380_TARGET": "8/25/2026",
+    "LWC": "Onskid",
+    "UNIT_TYPE": "CS"
+  }
+}
