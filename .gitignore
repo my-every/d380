@@ -14,6 +14,9 @@ coverage
 .vscode
 *.iml
 Share/Legals/
+Share/Projects/
+Share/users/1st-shift/
+Share/users/2nd-shift/
 release
 # Mock workspace data (optional - remove this line if you want to commit mock data for team sharing)
 # Share/_mock/

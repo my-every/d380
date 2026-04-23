@@ -9,6 +9,7 @@ import {
   Download,
   Eye,
   ImageIcon,
+  Info,
   Layers3,
   Loader2,
   LogIn,
@@ -26,6 +27,14 @@ import { FileCard } from "@/components/projects/file-card";
 import { LoginPopup } from "@/components/dialog/login-popup";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
@@ -97,6 +106,12 @@ interface MultiSheetPrintSheetReview {
   reviewedAt: string;
   reviewedByBadge: string | null;
   reviewedByName: string | null;
+}
+
+interface MultiSheetPrintExportFilesState {
+  brandingWorkbookExists: boolean;
+  wireListSchemaExists: boolean;
+  manifestFileExists: boolean;
 }
 
 type FileCardFormat = ComponentProps<typeof FileCard>["formatFile"];
@@ -194,6 +209,9 @@ export function MultiSheetPrintModal({
   const [layoutPreviewMinimized, setLayoutPreviewMinimized] = useState(false);
   const [layoutPreviewPosition, setLayoutPreviewPosition] = useState({ x: 72, y: 96 });
   const [selectedBrandRows, setSelectedBrandRows] = useState<Set<string>>(() => new Set());
+  const [savedBrandSchemaSlugs, setSavedBrandSchemaSlugs] = useState<string[]>([]);
+  const [exportFileState, setExportFileState] = useState<MultiSheetPrintExportFilesState | null>(null);
+  const [stateReviewOpen, setStateReviewOpen] = useState(false);
 
   const isAuthenticated = Boolean(user);
   const isControlled = typeof controlledOpen === "boolean";
@@ -343,6 +361,7 @@ export function MultiSheetPrintModal({
             sheetReviews?: Record<string, MultiSheetPrintSheetReview>;
             lastCombinedExportResult: MultiSheetPrintExportResult | null;
           } | null;
+          exportFiles?: MultiSheetPrintExportFilesState;
         }>;
       })
       .then((payload) => {
@@ -355,17 +374,24 @@ export function MultiSheetPrintModal({
           setActiveSlug(session.activeSheetSlug ?? null);
           setApprovedSlugs(Array.isArray(session.approvedSheetSlugs) ? session.approvedSheetSlugs : []);
           setSheetReviews(session.sheetReviews ?? {});
-          setExportResult(session.lastCombinedExportResult ?? null);
+          setExportFileState(payload.exportFiles ?? null);
+          setExportResult(
+            session.lastCombinedExportResult && (payload.exportFiles?.brandingWorkbookExists ?? true)
+              ? session.lastCombinedExportResult
+              : null,
+          );
         } else {
           setApprovedSlugs([]);
           setSheetReviews({});
           setExportResult(null);
+          setExportFileState(null);
         }
       })
       .catch(() => {
         if (!cancelled) {
           setSheetReviews({});
           setExportResult(null);
+          setExportFileState(null);
         }
       })
       .finally(() => {
@@ -407,6 +433,38 @@ export function MultiSheetPrintModal({
       .finally(() => {
         if (!cancelled) {
           setIsLoadingPages(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen, projectId]);
+
+  useEffect(() => {
+    if (!isOpen || !projectId) {
+      return;
+    }
+
+    let cancelled = false;
+    void fetch(`/api/project-context/${encodeURIComponent(projectId)}/wire-brand-list-schemas`, {
+      cache: "no-store",
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        return response.json() as Promise<{ sheets?: string[] }>;
+      })
+      .then((payload) => {
+        if (!cancelled) {
+          setSavedBrandSchemaSlugs(Array.isArray(payload.sheets) ? payload.sheets : []);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setSavedBrandSchemaSlugs([]);
         }
       });
 
@@ -494,6 +552,24 @@ export function MultiSheetPrintModal({
       group.bundles.flatMap((bundle) => bundle.rows.map((row) => row.rowId)),
     );
   }, [activeBrandSchema]);
+  const reviewState = useMemo(() => {
+    const savedSet = new Set(savedBrandSchemaSlugs);
+    const mappedSheets = tabs.filter((tab) => Boolean(tab.pageNumber)).length;
+    const savedSchemas = tabs.filter((tab) => savedSet.has(tab.slug) || Boolean(resourceMap[tab.slug]?.brandSchema)).length;
+    const allApproved = tabs.length > 0 && tabs.every((tab) => approvedSlugs.includes(tab.slug));
+    const brandingWorkbookReady = Boolean(exportResult?.brandingWorkbook && (exportFileState?.brandingWorkbookExists ?? true));
+
+    return {
+      totalSheets: tabs.length,
+      mappedSheets,
+      savedSchemas,
+      approvedSheets: approvedSlugs.length,
+      allApproved,
+      brandingWorkbookReady,
+      wireListSchemaReady: Boolean(exportResult?.wireListSchema && (exportFileState?.wireListSchemaExists ?? true)),
+      mappingNeedsReview: tabs.length > 0 && mappedSheets < tabs.length,
+    };
+  }, [approvedSlugs.length, exportFileState, exportResult, resourceMap, savedBrandSchemaSlugs, tabs]);
 
   const persistBrandSchema = useCallback((sheetSlug: string, schema: BrandListExportSchema) => {
     if (!projectId) {
@@ -524,6 +600,7 @@ export function MultiSheetPrintModal({
             brandSchema: payload.schema,
           },
         }));
+        setSavedBrandSchemaSlugs((prev) => Array.from(new Set([...prev, sheetSlug])));
       })
       .catch((error) => {
         toast({
@@ -560,6 +637,15 @@ export function MultiSheetPrintModal({
         brandSchema: normalizedSchema,
       },
     }));
+    setApprovedSlugs((prev) => prev.filter((slug) => slug !== activeSlug));
+    setSheetReviews((prev) => {
+      const next = { ...prev };
+      delete next[activeSlug];
+      return next;
+    });
+    setExportResult(null);
+    setExportFileState(null);
+    setSavedBrandSchemaSlugs((prev) => Array.from(new Set([...prev, activeSlug])));
     persistBrandSchema(activeSlug, normalizedSchema);
   }, [activeBrandSchema, activeSlug, persistBrandSchema]);
 
@@ -867,6 +953,11 @@ export function MultiSheetPrintModal({
       })()
       .then((result) => {
         setExportResult(result);
+        setExportFileState({
+          brandingWorkbookExists: Boolean(result.brandingWorkbook),
+          wireListSchemaExists: Boolean(result.wireListSchema),
+          manifestFileExists: Boolean(result.manifestFile),
+        });
         toast({
           title: "Combined export ready",
           description: `${result.approvedSheets.length} sheets merged into shared project exports.`,
@@ -1219,6 +1310,16 @@ export function MultiSheetPrintModal({
                     </p>
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-9 gap-2"
+                      onClick={() => setStateReviewOpen(true)}
+                    >
+                      <Info className="h-4 w-4" />
+                      Review State
+                    </Button>
                     <div className="rounded-xl border bg-background p-1">
                       <Button
                         type="button"
@@ -1865,6 +1966,96 @@ export function MultiSheetPrintModal({
             </motion.div>
         ) : null}
       </AnimatePresence>
+
+      <Dialog open={stateReviewOpen} onOpenChange={setStateReviewOpen}>
+        <DialogContent className="max-w-3xl rounded-3xl p-0" showCloseButton>
+          <DialogHeader className="border-b px-6 py-5">
+            <DialogTitle>Review Current Brand List State</DialogTitle>
+            <DialogDescription>
+              A quick checkpoint before approving or exporting. This catches missing schemas, weak layout references, and stale export files.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid gap-4 px-6 py-5 md:grid-cols-4">
+            <div className="rounded-2xl border bg-muted/20 p-4">
+              <div className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Sheets</div>
+              <div className="mt-2 text-2xl font-semibold">{reviewState.totalSheets}</div>
+              <p className="mt-1 text-xs text-muted-foreground">Operational sheets in this review.</p>
+            </div>
+            <div className="rounded-2xl border bg-muted/20 p-4">
+              <div className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Schemas</div>
+              <div className="mt-2 text-2xl font-semibold">{reviewState.savedSchemas}/{reviewState.totalSheets}</div>
+              <p className="mt-1 text-xs text-muted-foreground">Saved editable brand-list schemas.</p>
+            </div>
+            <div className="rounded-2xl border bg-muted/20 p-4">
+              <div className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Layout Maps</div>
+              <div className="mt-2 text-2xl font-semibold">{reviewState.mappedSheets}/{reviewState.totalSheets}</div>
+              <p className="mt-1 text-xs text-muted-foreground">High-confidence layout references.</p>
+            </div>
+            <div className="rounded-2xl border bg-muted/20 p-4">
+              <div className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Approved</div>
+              <div className="mt-2 text-2xl font-semibold">{reviewState.approvedSheets}/{reviewState.totalSheets}</div>
+              <p className="mt-1 text-xs text-muted-foreground">Editing a sheet removes approval.</p>
+            </div>
+          </div>
+
+          <div className="space-y-3 border-t bg-muted/10 px-6 py-5">
+            <div className="flex items-start gap-3 rounded-2xl border bg-background p-4">
+              <CheckCircle2 className={cn("mt-0.5 h-5 w-5", reviewState.savedSchemas === reviewState.totalSheets ? "text-emerald-600" : "text-muted-foreground")} />
+              <div>
+                <div className="font-semibold">1. Generate and edit brand schemas</div>
+                <p className="text-sm text-muted-foreground">
+                  Brand mode is the source of truth. Length edits, duplicated rows, removed rows, bundle names, and header fields save to Share state.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 rounded-2xl border bg-background p-4">
+              <CheckCircle2 className={cn("mt-0.5 h-5 w-5", !reviewState.mappingNeedsReview ? "text-emerald-600" : "text-amber-600")} />
+              <div>
+                <div className="font-semibold">2. Confirm layout references</div>
+                <p className="text-sm text-muted-foreground">
+                  Layout previews now prefer stored assignment mapping and ignore low-confidence fallback matches, so page 1 is no longer trusted by default.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 rounded-2xl border bg-background p-4">
+              <CheckCircle2 className={cn("mt-0.5 h-5 w-5", reviewState.allApproved ? "text-emerald-600" : "text-muted-foreground")} />
+              <div>
+                <div className="font-semibold">3. Approve after final edits</div>
+                <p className="text-sm text-muted-foreground">
+                  Any schema edit clears that sheet approval and clears the combined export so the next workbook can’t accidentally use stale review state.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 rounded-2xl border bg-background p-4">
+              <CheckCircle2 className={cn("mt-0.5 h-5 w-5", reviewState.brandingWorkbookReady ? "text-emerald-600" : "text-muted-foreground")} />
+              <div>
+                <div className="font-semibold">4. Combine and download</div>
+                <p className="text-sm text-muted-foreground">
+                  Combined export readiness is only shown when the workbook path exists in the exports directory.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter className="border-t px-6 py-4">
+            <Button type="button" variant="outline" onClick={() => setStateReviewOpen(false)}>
+              Close
+            </Button>
+            <Button
+              type="button"
+              onClick={() => {
+                setStateReviewOpen(false);
+                if (!activeSlug && tabs[0]) {
+                  setActiveSlug(tabs[0].slug);
+                }
+              }}
+            >
+              Start Review
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <LoginPopup open={loginOpen} onOpenChange={setLoginOpen} />
     </>
